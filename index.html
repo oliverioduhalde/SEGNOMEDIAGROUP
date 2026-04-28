@@ -245,7 +245,7 @@
 
     .project-row {
       display: grid;
-      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.25fr);
+      grid-template-columns: minmax(0, 1fr) minmax(250px, 0.72fr);
       align-items: stretch;
       gap: 14px;
       padding: 12px;
@@ -298,7 +298,8 @@
 
     .film-card {
       position: relative;
-      min-height: 232px;
+      min-height: 158px;
+      aspect-ratio: 16 / 9;
       overflow: hidden;
       border: 1px solid rgba(220, 226, 232, 0.13);
       border-radius: 8px;
@@ -361,6 +362,77 @@
       color: rgba(255, 255, 255, 0.52);
       font-size: 9px;
       letter-spacing: 0.16em;
+    }
+
+    .video-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(3, 5, 8, 0.72);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+
+    .video-lightbox.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .video-lightbox__frame {
+      position: relative;
+      width: min(900px, calc(100vw - 48px));
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border: 1px solid rgba(220, 226, 232, 0.2);
+      border-radius: 8px;
+      background: #000;
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.48);
+      transform: scale(0.72);
+      transition: transform 0.24s ease, width 0.24s ease;
+    }
+
+    .video-lightbox.is-open .video-lightbox__frame {
+      transform: scale(1);
+    }
+
+    .video-lightbox__frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-lightbox__tools {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 1;
+      display: flex;
+      gap: 8px;
+    }
+
+    .video-lightbox__tools button {
+      width: 34px;
+      min-height: 34px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(8, 10, 12, 0.72);
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .video-lightbox__tools svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      fill: none;
     }
 
     .contact-strip {
@@ -719,7 +791,20 @@
       }
 
       .film-card {
-        min-height: 210px;
+        min-height: 178px;
+      }
+
+      .video-lightbox {
+        padding: 14px;
+      }
+
+      .video-lightbox__frame {
+        width: calc(100vw - 28px);
+      }
+
+      .video-lightbox__tools {
+        top: 10px;
+        right: 10px;
       }
 
       .controls {
@@ -1090,6 +1175,26 @@
     </div>
   </aside>
 
+  <div class="video-lightbox" id="videoLightbox" aria-hidden="true">
+    <div class="video-lightbox__tools">
+      <button id="videoFullscreen" type="button" aria-label="Pantalla completa" title="Pantalla completa">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8 3H3v5"></path>
+          <path d="M16 3h5v5"></path>
+          <path d="M21 16v5h-5"></path>
+          <path d="M3 16v5h5"></path>
+        </svg>
+      </button>
+      <button id="videoClose" type="button" aria-label="Cerrar video" title="Cerrar">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="video-lightbox__frame" id="videoFrameHost"></div>
+  </div>
+
   <div class="toast" id="toast"></div>
 
   <script>
@@ -1103,6 +1208,10 @@
       const voiceLabel = document.getElementById("voiceLabel");
       const toast = document.getElementById("toast");
       const scenesEl = document.getElementById("scenes");
+      const videoLightbox = document.getElementById("videoLightbox");
+      const videoFrameHost = document.getElementById("videoFrameHost");
+      const videoClose = document.getElementById("videoClose");
+      const videoFullscreen = document.getElementById("videoFullscreen");
       const storeKey = "SEGNOMEDIAGROUP_SCENES_V1";
       const MAX_CLICKS = 32;
 
@@ -1475,7 +1584,7 @@
         return Math.exp(Math.log(lo) + u * (Math.log(hi) - Math.log(lo)));
       };
 
-      const isControlsEvent = (event) => controls.contains(event.target);
+      const isControlsEvent = (event) => controls.contains(event.target) || videoLightbox.contains(event.target);
 
       const dropWave = (clientX, clientY, strength = 1) => {
         const rect = canvas.getBoundingClientRect();
@@ -1509,6 +1618,10 @@
           controls.classList.toggle("is-visible");
           controls.classList.remove("collapsed");
         }
+        if (event.key === "Escape" && videoLightbox.classList.contains("is-open")) {
+          closeVideo();
+          return;
+        }
         if (event.key === "Escape" && controls.classList.contains("is-visible")) {
           controls.classList.toggle("collapsed");
         }
@@ -1516,6 +1629,9 @@
       });
 
       const filmCards = Array.from(document.querySelectorAll(".film-card"));
+      let activeFilmCard = null;
+      let activeModalFrame = null;
+
       const postVimeo = (frame, method, value) => {
         if (!frame?.contentWindow) return;
         frame.contentWindow.postMessage(JSON.stringify({ method, value }), "*");
@@ -1531,6 +1647,86 @@
         }
       };
 
+      function closeVideo() {
+        if (activeModalFrame) {
+          postVimeo(activeModalFrame, "pause");
+        }
+        videoLightbox.classList.remove("is-open");
+        videoLightbox.setAttribute("aria-hidden", "true");
+        videoFrameHost.replaceChildren();
+        videoFrameHost.removeAttribute("style");
+        filmCards.forEach(muteFilm);
+        activeFilmCard = null;
+        activeModalFrame = null;
+      }
+
+      const openVideo = (card) => {
+        const id = card.dataset.vimeoId;
+        const hash = card.dataset.vimeoHash;
+        if (!id) return;
+
+        filmCards.forEach(muteFilm);
+        card.classList.add("is-audible");
+        activeFilmCard = card;
+
+        const rect = card.getBoundingClientRect();
+        const gutter = window.innerWidth <= 720 ? 28 : 48;
+        const minWidth = window.innerWidth <= 720 ? 280 : 420;
+        const targetWidth = Math.min(window.innerWidth - gutter, Math.max(minWidth, rect.width * 1.5));
+        videoFrameHost.style.width = `${Math.round(targetWidth)}px`;
+
+        const params = new URLSearchParams({
+          autoplay: "1",
+          muted: "0",
+          loop: "0",
+          playsinline: "1",
+          api: "1",
+          title: "0",
+          byline: "0",
+          portrait: "0"
+        });
+        if (hash) params.set("h", hash);
+
+        activeModalFrame = document.createElement("iframe");
+        activeModalFrame.allow = "autoplay; fullscreen; picture-in-picture";
+        activeModalFrame.allowFullscreen = true;
+        activeModalFrame.src = `https://player.vimeo.com/video/${id}?${params.toString()}`;
+        videoFrameHost.replaceChildren(activeModalFrame);
+        videoLightbox.classList.add("is-open");
+        videoLightbox.setAttribute("aria-hidden", "false");
+
+        activeModalFrame.addEventListener("load", () => {
+          postVimeo(activeModalFrame, "setMuted", false);
+          postVimeo(activeModalFrame, "setVolume", 0.5);
+          postVimeo(activeModalFrame, "addEventListener", "ended");
+        }, { once: true });
+      };
+
+      videoClose.addEventListener("click", closeVideo);
+
+      videoLightbox.addEventListener("click", (event) => {
+        if (event.target === videoLightbox) closeVideo();
+      });
+
+      videoFullscreen.addEventListener("click", () => {
+        const target = videoFrameHost;
+        const request = target.requestFullscreen || target.webkitRequestFullscreen;
+        if (request) request.call(target);
+      });
+
+      window.addEventListener("message", (event) => {
+        if (!activeModalFrame || event.source !== activeModalFrame.contentWindow) return;
+        let data = event.data;
+        if (typeof data === "string") {
+          try {
+            data = JSON.parse(data);
+          } catch {
+            return;
+          }
+        }
+        if (data?.event === "ended") closeVideo();
+      });
+
       filmCards.forEach((card) => {
         const video = card.querySelector("video");
         if (video) {
@@ -1539,17 +1735,7 @@
         }
 
         card.addEventListener("click", () => {
-          const wasAudible = card.classList.contains("is-audible");
-          filmCards.forEach(muteFilm);
-          if (wasAudible) return;
-
-          card.classList.add("is-audible");
-          const activeFrame = card.querySelector("iframe");
-          if (activeFrame) {
-            postVimeo(activeFrame, "setMuted", false);
-            postVimeo(activeFrame, "setVolume", 0.5);
-            postVimeo(activeFrame, "play");
-          }
+          openVideo(card);
         });
       });
 
