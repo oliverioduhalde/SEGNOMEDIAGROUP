@@ -401,6 +401,10 @@
       backdrop-filter: blur(22px) saturate(150%);
     }
 
+    .controls:not(.is-visible) {
+      display: none;
+    }
+
     .controls.collapsed {
       width: auto;
       padding: 8px;
@@ -1419,6 +1423,8 @@
         return Math.exp(Math.log(lo) + u * (Math.log(hi) - Math.log(lo)));
       };
 
+      const isControlsEvent = (event) => controls.contains(event.target);
+
       const dropWave = (clientX, clientY, strength = 1) => {
         const rect = canvas.getBoundingClientRect();
         const x = (clientX - rect.left) / rect.width;
@@ -1427,22 +1433,30 @@
         clicks.push({ x, y, t, strength, freqMul: sampleFreq() });
       };
 
-      canvas.addEventListener("pointerdown", (event) => {
-        event.preventDefault();
+      document.addEventListener("pointerdown", (event) => {
+        if (isControlsEvent(event)) return;
         dropWave(event.clientX, event.clientY, event.pressure || 1);
-      });
+      }, { capture: true });
 
-      canvas.addEventListener("pointermove", (event) => {
+      document.addEventListener("pointermove", (event) => {
+        if (isControlsEvent(event)) return;
         if (event.buttons !== 1) return;
         const now = performance.now();
-        if (!canvas._lastDragWave || now - canvas._lastDragWave > 95) {
-          canvas._lastDragWave = now;
+        if (!document._lastDragWave || now - document._lastDragWave > 95) {
+          document._lastDragWave = now;
           dropWave(event.clientX, event.clientY, 0.5);
         }
-      });
+      }, { capture: true });
 
       window.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") controls.classList.toggle("collapsed");
+        if (event.key === "F12") {
+          event.preventDefault();
+          controls.classList.toggle("is-visible");
+          controls.classList.remove("collapsed");
+        }
+        if (event.key === "Escape" && controls.classList.contains("is-visible")) {
+          controls.classList.toggle("collapsed");
+        }
         if (event.key.toLowerCase() === "c") clicks = [];
       });
 
