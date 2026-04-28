@@ -238,14 +238,23 @@
       text-transform: uppercase;
     }
 
-    .project-grid {
+    .project-list {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
 
+    .project-row {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.25fr);
+      align-items: stretch;
+      gap: 14px;
+      padding: 12px;
+      border: 1px solid rgba(220, 226, 232, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
     .project-card {
-      min-height: 178px;
       display: grid;
       align-content: space-between;
       gap: 18px;
@@ -289,7 +298,7 @@
 
     .film-card {
       position: relative;
-      min-height: 220px;
+      min-height: 232px;
       overflow: hidden;
       border: 1px solid rgba(220, 226, 232, 0.13);
       border-radius: 8px;
@@ -702,7 +711,8 @@
         padding: 17px;
       }
 
-      .project-grid,
+      .project-list,
+      .project-row,
       .film-wall,
       .contact-strip {
         grid-template-columns: 1fr;
@@ -767,44 +777,50 @@
       <section class="service-block" id="experiencias-inmersivas" data-kicker="Inmersivas">
         <h2>Espacios inmersivos</h2>
         <p>Diseño y producción de entornos envolventes para marcas, instituciones y audiencias en vivo.</p>
-        <div class="project-grid">
-          <article class="project-card">
-            <h3>AstraZeneca</h3>
-            <p>Túnel 360 con pantalla LED y narrativa inmersiva.</p>
-            <span>Immersive</span>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card">
+              <h3>AstraZeneca</h3>
+              <p>Túnel 360 con pantalla LED y narrativa inmersiva.</p>
+              <span>Immersive</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187481909" data-vimeo-hash="340d6dd016">
+              <iframe title="AstraZeneca 360 LED" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187481909?h=340d6dd016&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>AstraZeneca</strong><span>360 LED</span></div>
+            </div>
           </article>
-          <article class="project-card">
-            <h3>Casa FOA 2024</h3>
-            <p>Auditorio 360 inmersivo para mogetta.studio, reconocido con medalla de oro 2024.</p>
-            <span>Immersive 360</span>
+          <article class="project-row">
+            <div class="project-card">
+              <h3>Casa FOA 2024</h3>
+              <p>Auditorio 360 inmersivo para mogetta.studio, reconocido con medalla de oro 2024.</p>
+              <span>Immersive 360</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187343725" data-vimeo-hash="e2d7d55e31">
+              <iframe title="Casa FOA immersive 360" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187343725?h=e2d7d55e31&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Casa FOA</strong><span>Immersive 360</span></div>
+            </div>
           </article>
-          <article class="project-card">
-            <h3>Parque de la Innovación</h3>
-            <p>Experiencia fulldome interactiva con inteligencia artificial para Gobierno de la Ciudad de Buenos Aires.</p>
-            <span>Fulldome</span>
+          <article class="project-row">
+            <div class="project-card">
+              <h3>Parque de la Innovación</h3>
+              <p>Experiencia fulldome interactiva con inteligencia artificial para Gobierno de la Ciudad de Buenos Aires.</p>
+              <span>Fulldome</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187344931" data-vimeo-hash="cadae4b574">
+              <iframe title="Fulldome AI PI" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187344931?h=cadae4b574&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Fulldome AI</strong><span>PI</span></div>
+            </div>
           </article>
-          <article class="project-card">
-            <h3>Museo C3</h3>
-            <p>Performance audiovisual de cine expandido con imagen microscópica en vivo.</p>
-            <span>Performance</span>
-          </article>
-        </div>
-        <div class="film-wall" aria-label="Videos inmersivos">
-          <article class="film-card" data-vimeo-id="1187481909" data-vimeo-hash="340d6dd016">
-            <iframe title="AstraZeneca 360 LED" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187481909?h=340d6dd016&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>AstraZeneca</strong><span>360 LED</span></div>
-          </article>
-          <article class="film-card" data-vimeo-id="1187343725" data-vimeo-hash="e2d7d55e31">
-            <iframe title="Casa FOA immersive 360" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187343725?h=e2d7d55e31&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>Casa FOA</strong><span>Immersive 360</span></div>
-          </article>
-          <article class="film-card" data-vimeo-id="1187344931" data-vimeo-hash="cadae4b574">
-            <iframe title="Fulldome AI PI" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187344931?h=cadae4b574&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>Fulldome AI</strong><span>PI</span></div>
-          </article>
-          <article class="film-card" data-vimeo-id="1187383990" data-vimeo-hash="d3a1cec41d">
-            <iframe title="Museo C3 performance" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187383990?h=d3a1cec41d&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>Museo C3</strong><span>Performance</span></div>
+          <article class="project-row">
+            <div class="project-card">
+              <h3>Museo C3</h3>
+              <p>Performance audiovisual de cine expandido con imagen microscópica en vivo.</p>
+              <span>Performance</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187383990" data-vimeo-hash="d3a1cec41d">
+              <iframe title="Museo C3 performance" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187383990?h=d3a1cec41d&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Museo C3</strong><span>Performance</span></div>
+            </div>
           </article>
         </div>
       </section>
@@ -812,44 +828,50 @@
       <section class="service-block" id="instalaciones-interactivas" data-kicker="Interactivas">
         <h2>Instalaciones interactivas</h2>
         <p>Plataformas, interfaces y dinámicas hechas a medida para activar espacios, stands y recorridos de marca.</p>
-        <div class="project-grid">
-          <article class="project-card">
-            <h3>Syngenta, The Seedcare Institute Singapore</h3>
-            <p>Dinámicas interactivas y web app para facilitar acceso a información dentro del espacio.</p>
-            <span>Interactive</span>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card">
+              <h3>Syngenta, The Seedcare Institute Singapore</h3>
+              <p>Dinámicas interactivas y web app para facilitar acceso a información dentro del espacio.</p>
+              <span>Interactive</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187337917" data-vimeo-hash="d17a8fd3e5">
+              <iframe title="Seedcare Institute Singapore" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187337917?h=d17a8fd3e5&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Seedcare Institute</strong><span>Singapore</span></div>
+            </div>
           </article>
-          <article class="project-card">
-            <h3>Syngenta Interactive Wall</h3>
-            <p>Instalación adaptada a cinco países, activa en tres sedes con soporte técnico propio.</p>
-            <span>Interactive wall</span>
+          <article class="project-row">
+            <div class="project-card">
+              <h3>Syngenta Interactive Wall</h3>
+              <p>Instalación adaptada a cinco países, activa en tres sedes con soporte técnico propio.</p>
+              <span>Interactive wall</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187339661" data-vimeo-hash="5d514def08">
+              <iframe title="Syngenta interactive wall" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187339661?h=5d514def08&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Syngenta</strong><span>Interactive Wall</span></div>
+            </div>
           </article>
-          <article class="project-card">
-            <h3>Chevrolet, NOS, Lollapalooza</h3>
-            <p>Plataforma de personalización vehicular en tiempo real, proyectada sobre las paredes del stand.</p>
-            <span>Mass events</span>
+          <article class="project-row">
+            <div class="project-card">
+              <h3>Chevrolet, NOS, Lollapalooza</h3>
+              <p>Plataforma de personalización vehicular en tiempo real, proyectada sobre las paredes del stand.</p>
+              <span>Mass events</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187397067" data-vimeo-hash="7c8b29f35f">
+              <iframe title="Chevrolet NOS Lollapalooza" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187397067?h=7c8b29f35f&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Chevrolet NOS</strong><span>Lollapalooza</span></div>
+            </div>
           </article>
-          <article class="project-card">
-            <h3>ADAMA</h3>
-            <p>Juegos de storytelling para 300 personas simultáneas en mobile, cerrando con show láser sincronizado.</p>
-            <span>Mass events</span>
-          </article>
-        </div>
-        <div class="film-wall" aria-label="Videos interactivos">
-          <article class="film-card" data-vimeo-id="1187337917" data-vimeo-hash="d17a8fd3e5">
-            <iframe title="Seedcare Institute Singapore" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187337917?h=d17a8fd3e5&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>Seedcare Institute</strong><span>Singapore</span></div>
-          </article>
-          <article class="film-card" data-vimeo-id="1187339661" data-vimeo-hash="5d514def08">
-            <iframe title="Syngenta interactive wall" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187339661?h=5d514def08&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>Syngenta</strong><span>Interactive Wall</span></div>
-          </article>
-          <article class="film-card" data-vimeo-id="1187395320" data-vimeo-hash="d885cd137a">
-            <iframe title="ADAMA interactive laser show" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187395320?h=d885cd137a&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>ADAMA</strong><span>Interactive Laser Show</span></div>
-          </article>
-          <article class="film-card" data-vimeo-id="1187397067" data-vimeo-hash="7c8b29f35f">
-            <iframe title="Chevrolet NOS Lollapalooza" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187397067?h=7c8b29f35f&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>Chevrolet NOS</strong><span>Lollapalooza</span></div>
+          <article class="project-row">
+            <div class="project-card">
+              <h3>ADAMA</h3>
+              <p>Juegos de storytelling para 300 personas simultáneas en mobile, cerrando con show láser sincronizado.</p>
+              <span>Mass events</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187395320" data-vimeo-hash="d885cd137a">
+              <iframe title="ADAMA interactive laser show" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187395320?h=d885cd137a&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>ADAMA</strong><span>Interactive Laser Show</span></div>
+            </div>
           </article>
         </div>
       </section>
@@ -857,44 +879,50 @@
       <section class="service-block" id="aplicaciones-web-moviles" data-kicker="Apps & web">
         <h2>Aplicaciones web y móviles</h2>
         <p>Herramientas digitales para campo, retail, eventos y activaciones que necesitan operar simple y verse precisas.</p>
-        <div class="project-grid">
-          <article class="project-card">
-            <h3>Syngenta AR</h3>
-            <p>App de realidad aumentada activa en más de 20 países, con analytics, branding regional y modo offline para eventos de campo.</p>
-            <span>Augmented reality</span>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card">
+              <h3>Syngenta AR</h3>
+              <p>App de realidad aumentada activa en más de 20 países, con analytics, branding regional y modo offline para eventos de campo.</p>
+              <span>Augmented reality</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187342935" data-vimeo-hash="2fc95448a3">
+              <iframe title="Syngenta AR" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187342935?h=2fc95448a3&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Syngenta AR</strong><span>Augmented Reality</span></div>
+            </div>
           </article>
-          <article class="project-card">
-            <h3>AFA Studio Adidas</h3>
-            <p>Conexión mobile para visitantes del stand, infografía de camiseta y oportunidad fotográfica interactiva.</p>
-            <span>Retail</span>
+          <article class="project-row">
+            <div class="project-card">
+              <h3>AFA Studio Adidas</h3>
+              <p>Conexión mobile para visitantes del stand, infografía de camiseta y oportunidad fotográfica interactiva.</p>
+              <span>Retail</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187340367" data-vimeo-hash="30a04cc1ac">
+              <iframe title="AFA Studio Adidas" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187340367?h=30a04cc1ac&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>AFA Studio Adidas</strong><span>Retail</span></div>
+            </div>
           </article>
-          <article class="project-card">
-            <h3>Havanna</h3>
-            <p>Catálogo interactivo para mejorar exploración, compra y experiencia de usuario.</p>
-            <span>Retail</span>
+          <article class="project-row">
+            <div class="project-card">
+              <h3>Havanna</h3>
+              <p>Catálogo interactivo para mejorar exploración, compra y experiencia de usuario.</p>
+              <span>Retail</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187468578" data-vimeo-hash="8807545cd0">
+              <iframe title="Havanna retail" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187468578?h=8807545cd0&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Havanna</strong><span>Retail</span></div>
+            </div>
           </article>
-          <article class="project-card">
-            <h3>Distrito Arcos</h3>
-            <p>Personalización de productos en vivo, procesamiento de pedidos y entrega en el momento.</p>
-            <span>Retail</span>
-          </article>
-        </div>
-        <div class="film-wall" aria-label="Videos de apps y web">
-          <article class="film-card" data-vimeo-id="1187342935" data-vimeo-hash="2fc95448a3">
-            <iframe title="Syngenta AR" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187342935?h=2fc95448a3&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>Syngenta AR</strong><span>Augmented Reality</span></div>
-          </article>
-          <article class="film-card" data-vimeo-id="1187340367" data-vimeo-hash="30a04cc1ac">
-            <iframe title="AFA Studio Adidas" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187340367?h=30a04cc1ac&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>AFA Studio Adidas</strong><span>Retail</span></div>
-          </article>
-          <article class="film-card" data-vimeo-id="1187468578" data-vimeo-hash="8807545cd0">
-            <iframe title="Havanna retail" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187468578?h=8807545cd0&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>Havanna</strong><span>Retail</span></div>
-          </article>
-          <article class="film-card" data-vimeo-id="1187341833" data-vimeo-hash="ec61848923">
-            <iframe title="Distrito Arcos dia del padre" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187341833?h=ec61848923&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>Distrito Arcos</strong><span>Día del Padre</span></div>
+          <article class="project-row">
+            <div class="project-card">
+              <h3>Distrito Arcos</h3>
+              <p>Personalización de productos en vivo, procesamiento de pedidos y entrega en el momento.</p>
+              <span>Retail</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187341833" data-vimeo-hash="ec61848923">
+              <iframe title="Distrito Arcos dia del padre" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187341833?h=ec61848923&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Distrito Arcos</strong><span>Día del Padre</span></div>
+            </div>
           </article>
         </div>
       </section>
@@ -902,26 +930,28 @@
       <section class="service-block" id="sound-design" data-kicker="Música & sonido">
         <h2>Eventos, música y sonido</h2>
         <p>Producción audiovisual, diseño sonoro, música original y sistemas de participación para audiencias presenciales.</p>
-        <div class="project-grid">
-          <article class="project-card">
-            <h3>Bagó</h3>
-            <p>Convención nacional de ventas con innovación en todas las etapas, team building y participación en tiempo real.</p>
-            <span>Corporate events</span>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card">
+              <h3>Bagó</h3>
+              <p>Convención nacional de ventas con innovación en todas las etapas, team building y participación en tiempo real.</p>
+              <span>Corporate events</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187390740" data-vimeo-hash="cfa3c1092b">
+              <iframe title="Bagó convención" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187390740?h=cfa3c1092b&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Bagó</strong><span>Convención</span></div>
+            </div>
           </article>
-          <article class="project-card">
-            <h3>Bresh Party</h3>
-            <p>Instalaciones para Puma, Adidas y Brahma, transformando espacios y habilitando creación de contenido de alta calidad.</p>
-            <span>Mass events</span>
-          </article>
-        </div>
-        <div class="film-wall" aria-label="Videos de música y sonido">
-          <article class="film-card" data-vimeo-id="1187390740" data-vimeo-hash="cfa3c1092b">
-            <iframe title="Bagó convención" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187390740?h=cfa3c1092b&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>Bagó</strong><span>Convención</span></div>
-          </article>
-          <article class="film-card" data-vimeo-id="1187391399" data-vimeo-hash="0ce4fdd2e4">
-            <iframe title="Bresh party Adidas" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187391399?h=0ce4fdd2e4&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-            <div class="film-meta"><strong>Bresh Party</strong><span>Adidas</span></div>
+          <article class="project-row">
+            <div class="project-card">
+              <h3>Bresh Party</h3>
+              <p>Instalaciones para Puma, Adidas y Brahma, transformando espacios y habilitando creación de contenido de alta calidad.</p>
+              <span>Mass events</span>
+            </div>
+            <div class="film-card" data-vimeo-id="1187391399" data-vimeo-hash="0ce4fdd2e4">
+              <iframe title="Bresh party Adidas" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187391399?h=0ce4fdd2e4&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Bresh Party</strong><span>Adidas</span></div>
+            </div>
           </article>
         </div>
       </section>
