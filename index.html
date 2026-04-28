@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SEGNOMEDIAGROUP</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --panel: rgba(10, 11, 13, 0.78);
+      --panel-line: rgba(255, 255, 255, 0.12);
+      --text: rgba(248, 249, 252, 0.92);
+      --muted: rgba(248, 249, 252, 0.56);
+      --soft: rgba(255, 255, 255, 0.08);
+      --hot: #76f3ff;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", "Cascadia Mono", "Roboto Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background: #030507;
+      color: var(--text);
+      font-family: var(--font);
+      overflow: hidden;
+    }
+
+    body {
+      user-select: none;
+    }
+
+    #stage {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+      background: #030507;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 18px;
+      left: 22px;
+      right: 22px;
+      z-index: 4;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      pointer-events: none;
+    }
+
+    .identity {
+      display: grid;
+      gap: 6px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      text-shadow: 0 1px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    .identity strong {
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .identity span {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.13em;
+    }
+
+    .voice-meter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      padding-top: 1px;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--hot);
+      box-shadow: 0 0 18px var(--hot);
+      opacity: 0.95;
+    }
+
+    .brand {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      z-index: 2;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      white-space: nowrap;
+      font-family: var(--mono);
+      font-size: clamp(22px, 4.4vw, 56px);
+      font-weight: 400;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: rgba(220, 226, 232, 0.78);
+      mix-blend-mode: screen;
+      text-shadow: 0 0 22px rgba(118, 243, 255, 0.14);
+    }
+
+    .controls {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 5;
+      width: min(356px, calc(100vw - 36px));
+      max-height: calc(100vh - 36px);
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+      overflow: auto;
+      background: var(--panel);
+      border: 1px solid var(--panel-line);
+      border-radius: 8px;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.34);
+      -webkit-backdrop-filter: blur(22px) saturate(150%);
+      backdrop-filter: blur(22px) saturate(150%);
+    }
+
+    .controls.collapsed {
+      width: auto;
+      padding: 8px;
+      overflow: visible;
+    }
+
+    .controls.collapsed .control-body {
+      display: none;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .panel-title {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+      font-family: var(--mono);
+      text-transform: uppercase;
+    }
+
+    .panel-title strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+    }
+
+    .panel-title span {
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+    }
+
+    .icon-row {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    button,
+    select,
+    input {
+      font: inherit;
+    }
+
+    button {
+      min-height: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .icon-button {
+      width: 30px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .button-row button,
+    .scene-row button {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .scene-row {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .scene-row button.active {
+      background: rgba(255, 255, 255, 0.9);
+      color: #080a0d;
+      border-color: rgba(255, 255, 255, 0.92);
+    }
+
+    .scene-row button.saved::after {
+      content: "";
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--hot);
+    }
+
+    .scene-row button {
+      position: relative;
+    }
+
+    .control-body {
+      display: grid;
+      gap: 14px;
+    }
+
+    .section {
+      display: grid;
+      gap: 10px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .section:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .section-title {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .control {
+      display: grid;
+      grid-template-columns: 104px 1fr 48px;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .control label {
+      color: rgba(248, 249, 252, 0.72);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .value {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--hot);
+    }
+
+    select {
+      width: 100%;
+      min-height: 30px;
+      padding: 0 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.28);
+      color: var(--text);
+    }
+
+    .toggle-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 9px;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    .toggle i {
+      width: 28px;
+      height: 16px;
+      padding: 2px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .toggle i::before {
+      content: "";
+      display: block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.72);
+      transition: transform 0.16s ease, background 0.16s ease;
+    }
+
+    .toggle[aria-pressed="true"] i {
+      background: rgba(118, 243, 255, 0.34);
+    }
+
+    .toggle[aria-pressed="true"] i::before {
+      transform: translateX(12px);
+      background: var(--hot);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      z-index: 8;
+      transform: translateX(-50%);
+      padding: 8px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      background: rgba(8, 10, 12, 0.82);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, -8px);
+    }
+
+    @media (max-width: 720px) {
+      .topbar {
+        left: 16px;
+        right: 16px;
+        top: 14px;
+      }
+
+      .brand {
+        max-width: calc(100vw - 32px);
+        overflow-wrap: anywhere;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.25;
+        letter-spacing: 0.2em;
+      }
+
+      .controls {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        width: auto;
+      }
+
+      .control {
+        grid-template-columns: 88px 1fr 42px;
+      }
+
+      .voice-meter {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stage" aria-label="SEGNOMEDIAGROUP visual"></canvas>
+
+  <header class="topbar">
+    <div class="identity">
+      <strong>SEGNOMEDIAGROUP</strong>
+      <span id="sceneLabel">Scene 1</span>
+    </div>
+    <div class="voice-meter">
+      <span class="pulse-dot"></span>
+      <span id="voiceLabel">0 voices</span>
+    </div>
+  </header>
+
+  <div class="brand" id="brand">SEGNO MEDIA GROUP</div>
+
+  <aside class="controls" id="controls">
+    <div class="panel-head">
+      <div class="panel-title">
+        <strong>SEGNOMEDIAGROUP</strong>
+        <span>local html build</span>
+      </div>
+      <div class="icon-row">
+        <button class="icon-button" id="randomize" title="Random palette" aria-label="Random palette">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+        </button>
+        <button class="icon-button" id="clear" title="Clear waves" aria-label="Clear waves">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="m19 6-1 14H6L5 6"/></svg>
+        </button>
+        <button class="icon-button" id="collapse" title="Toggle controls" aria-label="Toggle controls">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="control-body">
+      <section class="section">
+        <div class="section-title">Scenes</div>
+        <div class="scene-row" id="scenes"></div>
+        <div class="button-row">
+          <button id="saveScene">Save Scene</button>
+          <button id="eraseScene">Erase Scene</button>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">Wave System</div>
+        <div class="control">
+          <label for="density">Density</label>
+          <input id="density" data-key="density" type="range" min="0.2" max="8" step="0.1">
+          <span class="value" data-value="density"></span>
+        </div>
+        <div class="control">
+          <label for="speed">Speed</label>
+          <input id="speed" data-key="speed" type="range" min="0.03" max="1.4" step="0.01">
+          <span class="value" data-value="speed"></span>
+        </div>
+        <div class="control">
+          <label for="lifetime">Lifetime</label>
+          <input id="lifetime" data-key="lifetime" type="range" min="4" max="28" step="1">
+          <span class="value" data-value="lifetime"></span>
+        </div>
+        <div class="control">
+          <label for="thickness">Thickness</label>
+          <input id="thickness" data-key="thickness" type="range" min="0.35" max="3" step="0.05">
+          <span class="value" data-value="thickness"></span>
+        </div>
+        <div class="control">
+          <label for="polyphony">Voices</label>
+          <input id="polyphony" data-key="polyphony" type="range" min="1" max="32" step="1">
+          <span class="value" data-value="polyphony"></span>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">Look</div>
+        <div class="control">
+          <label for="palette">Palette</label>
+          <select id="palette" data-key="palette">
+            <option value="cyan">Cyan Dusk</option>
+            <option value="silver">Silver</option>
+            <option value="amber">Amber</option>
+            <option value="violet">Violet</option>
+            <option value="forest">Forest</option>
+            <option value="crimson">Crimson</option>
+            <option value="paper">Paper</option>
+            <option value="random">Random</option>
+          </select>
+          <span class="value"></span>
+        </div>
+        <div class="control">
+          <label for="alpha">Alpha</label>
+          <input id="alpha" data-key="alpha" type="range" min="0.05" max="1" step="0.01">
+          <span class="value" data-value="alpha"></span>
+        </div>
+        <div class="control">
+          <label for="brandSize">Brand</label>
+          <input id="brandSize" data-key="brandSize" type="range" min="18" max="72" step="1">
+          <span class="value" data-value="brandSize"></span>
+        </div>
+        <div class="control">
+          <label for="tracking">Tracking</label>
+          <input id="tracking" data-key="tracking" type="range" min="0" max="0.72" step="0.01">
+          <span class="value" data-value="tracking"></span>
+        </div>
+        <div class="toggle-row">
+          <button class="toggle" id="toggleHud" aria-pressed="true"><span>HUD</span><i></i></button>
+          <button class="toggle" id="toggleBrand" aria-pressed="true"><span>Brand</span><i></i></button>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById("stage");
+      const gl = canvas.getContext("webgl", { antialias: false, premultipliedAlpha: false });
+      const controls = document.getElementById("controls");
+      const brand = document.getElementById("brand");
+      const sceneLabel = document.getElementById("sceneLabel");
+      const voiceLabel = document.getElementById("voiceLabel");
+      const toast = document.getElementById("toast");
+      const scenesEl = document.getElementById("scenes");
+      const storeKey = "SEGNOMEDIAGROUP_SCENES_V1";
+      const MAX_CLICKS = 32;
+
+      if (!gl) {
+        document.body.innerHTML = "<main style='padding:24px;font-family:system-ui;background:#080a0d;color:white;min-height:100vh'>WebGL no esta disponible en este navegador.</main>";
+        return;
+      }
+
+      const defaults = {
+        density: 2.4,
+        speed: 0.115,
+        lifetime: 16,
+        thickness: 0.52,
+        polyphony: 10,
+        palette: "cyan",
+        alpha: 0.36,
+        brandSize: 34,
+        tracking: 0.34,
+        showHud: true,
+        showBrand: true,
+        randomPalette: null,
+      };
+
+      const palettes = {
+        cyan:    { bg: [0.006, 0.018, 0.035], fg: [0.38, 0.94, 1.00], accent: [0.88, 1.00, 0.62], hot: "#76f3ff" },
+        silver:  { bg: [0.035, 0.040, 0.046], fg: [0.90, 0.95, 1.00], accent: [0.58, 0.78, 1.00], hot: "#d8ecff" },
+        amber:   { bg: [0.035, 0.020, 0.010], fg: [1.00, 0.70, 0.30], accent: [1.00, 0.28, 0.12], hot: "#ffb15f" },
+        violet:  { bg: [0.025, 0.010, 0.040], fg: [0.80, 0.50, 1.00], accent: [1.00, 0.36, 0.88], hot: "#d597ff" },
+        forest:  { bg: [0.006, 0.024, 0.014], fg: [0.44, 1.00, 0.68], accent: [1.00, 0.88, 0.35], hot: "#82ffa7" },
+        crimson: { bg: [0.038, 0.005, 0.012], fg: [1.00, 0.25, 0.35], accent: [1.00, 0.84, 0.32], hot: "#ff5361" },
+        paper:   { bg: [0.92, 0.91, 0.86], fg: [0.055, 0.070, 0.090], accent: [0.10, 0.36, 0.70], hot: "#1d5d9d" },
+      };
+
+      const vertexSource = `
+        attribute vec2 a_pos;
+        void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
+      `;
+
+      const fragmentSource = `
+        precision highp float;
+        uniform vec2 u_res;
+        uniform float u_time;
+        uniform vec4 u_clicks[${MAX_CLICKS}];
+        uniform vec4 u_clicksB[${MAX_CLICKS}];
+        uniform float u_clickCount;
+        uniform float u_density;
+        uniform float u_speed;
+        uniform float u_lifetime;
+        uniform float u_thickness;
+        uniform float u_alpha;
+        uniform vec3 u_bg;
+        uniform vec3 u_fg;
+        uniform vec3 u_accent;
+
+        float hash(vec2 p) {
+          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+        }
+
+        float sourceWave(vec2 p, vec2 sp, float age, float aspect, float freqMul) {
+          if (age < 0.0 || age > u_lifetime) return 0.0;
+
+          float total = 0.0;
+          float decay = exp(-age * (3.6 / u_lifetime));
+          float front = age * u_speed;
+          float baseT = 0.014 * u_thickness / max(u_density, 0.3);
+
+          for (int ix = 0; ix < 4; ix++) {
+            for (int iy = 0; iy < 4; iy++) {
+              float sx;
+              int rx;
+              if (ix == 0) { sx = -sp.x; rx = 1; }
+              else if (ix == 1) { sx = sp.x; rx = 0; }
+              else if (ix == 2) { sx = 2.0 * aspect - sp.x; rx = 1; }
+              else { sx = 2.0 * aspect + sp.x; rx = 2; }
+
+              float sy;
+              int ry;
+              if (iy == 0) { sy = -sp.y; ry = 1; }
+              else if (iy == 1) { sy = sp.y; ry = 0; }
+              else if (iy == 2) { sy = 2.0 - sp.y; ry = 1; }
+              else { sy = 2.0 + sp.y; ry = 2; }
+
+              int order = rx + ry;
+              float refl = pow(0.78, float(order));
+              float d = distance(p, vec2(sx, sy));
+              float ring = exp(-pow((d - front) / baseT, 2.0));
+              total += ring * decay * refl;
+
+              if (order <= 1 && d < front && d > 0.001) {
+                float osc = sin((front - d) * 80.0 * u_density * freqMul - age * 8.0 * freqMul)
+                  * exp(-(front - d) * 4.7)
+                  * decay
+                  * refl
+                  * 0.48;
+                total += osc;
+              }
+            }
+          }
+
+          return total;
+        }
+
+        void main() {
+          vec2 uv = gl_FragCoord.xy / u_res.xy;
+          float aspect = u_res.x / u_res.y;
+          vec2 p = vec2(uv.x * aspect, uv.y);
+
+          float wave = 0.0;
+          for (int i = 0; i < ${MAX_CLICKS}; i++) {
+            if (float(i) >= u_clickCount) break;
+            vec4 c = u_clicks[i];
+            vec2 cp = vec2(c.x * aspect, c.y);
+            float age = u_time - c.z;
+            wave += sourceWave(p, cp, age, aspect, u_clicksB[i].x) * 2.4 * c.w;
+          }
+
+          float bright = clamp(wave * 0.88, -1.5, 2.7);
+          float pos = clamp(bright, 0.0, 1.5);
+          float neg = clamp(-bright, 0.0, 1.0);
+
+          vec3 col = u_bg;
+          col = mix(col, u_fg, smoothstep(0.0, 1.0, pos) * u_alpha);
+          col = mix(col, u_fg, smoothstep(0.0, 1.4, neg) * 0.16 * u_alpha);
+          col += u_accent * pow(smoothstep(0.5, 1.4, abs(bright)), 2.0) * 0.68 * u_alpha;
+
+          col += (hash(gl_FragCoord.xy + u_time) - 0.5) * 0.018;
+          vec2 vv = uv - 0.5;
+          col *= 1.0 - dot(vv, vv) * 0.55;
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `;
+
+      const compile = (type, source) => {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          throw new Error(gl.getShaderInfoLog(shader) || "Shader compile failed");
+        }
+        return shader;
+      };
+
+      const program = gl.createProgram();
+      gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSource));
+      gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSource));
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        throw new Error(gl.getProgramInfoLog(program) || "Program link failed");
+      }
+      gl.useProgram(program);
+
+      const buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+      const pos = gl.getAttribLocation(program, "a_pos");
+      gl.enableVertexAttribArray(pos);
+      gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+
+      const uniforms = {
+        res: gl.getUniformLocation(program, "u_res"),
+        time: gl.getUniformLocation(program, "u_time"),
+        clicks: gl.getUniformLocation(program, "u_clicks[0]"),
+        clicksB: gl.getUniformLocation(program, "u_clicksB[0]"),
+        clickCount: gl.getUniformLocation(program, "u_clickCount"),
+        density: gl.getUniformLocation(program, "u_density"),
+        speed: gl.getUniformLocation(program, "u_speed"),
+        lifetime: gl.getUniformLocation(program, "u_lifetime"),
+        thickness: gl.getUniformLocation(program, "u_thickness"),
+        alpha: gl.getUniformLocation(program, "u_alpha"),
+        bg: gl.getUniformLocation(program, "u_bg"),
+        fg: gl.getUniformLocation(program, "u_fg"),
+        accent: gl.getUniformLocation(program, "u_accent"),
+      };
+
+      let state = { ...defaults };
+      let clicks = [];
+      let activeScene = 0;
+      let startedAt = performance.now();
+      let toastTimer = 0;
+
+      const loadScenes = () => {
+        try {
+          const value = JSON.parse(localStorage.getItem(storeKey) || "null");
+          return Array.isArray(value) && value.length === 5 ? value : [null, null, null, null, null];
+        } catch {
+          return [null, null, null, null, null];
+        }
+      };
+
+      let scenes = loadScenes();
+
+      const saveScenes = () => {
+        try {
+          localStorage.setItem(storeKey, JSON.stringify(scenes));
+        } catch {}
+      };
+
+      const showToast = (message) => {
+        toast.textContent = message;
+        toast.classList.add("show");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => toast.classList.remove("show"), 1200);
+      };
+
+      const randomPalette = () => {
+        const base = Math.random() * 360;
+        const light = Math.random() < 0.24;
+        const hsl = (h, s, l) => {
+          h = (((h % 360) + 360) % 360) / 360;
+          const a = s * Math.min(l, 1 - l);
+          const f = (n) => {
+            const k = (n + h * 12) % 12;
+            return l - a * Math.max(-1, Math.min(k - 3, Math.min(9 - k, 1)));
+          };
+          return [f(0), f(8), f(4)];
+        };
+        const fgHue = base + 178 + (Math.random() - 0.5) * 36;
+        const accHue = base + 34 + (Math.random() - 0.5) * 62;
+        return light
+          ? { bg: hsl(base, 0.16, 0.92), fg: hsl(fgHue, 0.55, 0.18), accent: hsl(accHue, 0.85, 0.45), hot: "#3b6fa8" }
+          : { bg: hsl(base, 0.55, 0.04), fg: hsl(fgHue, 0.66, 0.70), accent: hsl(accHue, 0.95, 0.64), hot: "#76f3ff" };
+      };
+
+      const paletteForState = () => {
+        if (state.palette === "random") {
+          if (!state.randomPalette) state.randomPalette = randomPalette();
+          return state.randomPalette;
+        }
+        return palettes[state.palette] || palettes.cyan;
+      };
+
+      const fmt = {
+        density: (v) => Number(v).toFixed(1),
+        speed: (v) => Number(v).toFixed(2),
+        lifetime: (v) => `${Math.round(v)}s`,
+        thickness: (v) => Number(v).toFixed(2),
+        polyphony: (v) => String(Math.round(v)),
+        alpha: (v) => Number(v).toFixed(2),
+        brandSize: (v) => `${Math.round(v)}px`,
+        tracking: (v) => `${Number(v).toFixed(2)}em`,
+      };
+
+      const renderScenes = () => {
+        scenesEl.innerHTML = "";
+        scenes.forEach((scene, index) => {
+          const button = document.createElement("button");
+          button.textContent = String(index + 1);
+          button.className = [
+            index === activeScene ? "active" : "",
+            scene ? "saved" : "",
+          ].filter(Boolean).join(" ");
+          button.title = scene ? "Saved scene" : "Empty scene";
+          button.addEventListener("click", () => loadScene(index));
+          scenesEl.appendChild(button);
+        });
+      };
+
+      const syncUi = () => {
+        document.querySelectorAll("[data-key]").forEach((input) => {
+          const key = input.dataset.key;
+          input.value = state[key];
+        });
+        document.querySelectorAll("[data-value]").forEach((el) => {
+          const key = el.dataset.value;
+          el.textContent = fmt[key] ? fmt[key](state[key]) : state[key];
+        });
+
+        document.getElementById("toggleHud").setAttribute("aria-pressed", String(state.showHud));
+        document.getElementById("toggleBrand").setAttribute("aria-pressed", String(state.showBrand));
+
+        brand.style.display = state.showBrand ? "block" : "none";
+        brand.style.fontSize = `${state.brandSize}px`;
+        brand.style.letterSpacing = `${state.tracking}em`;
+        document.querySelector(".topbar").style.display = state.showHud ? "flex" : "none";
+        sceneLabel.textContent = `Scene ${activeScene + 1}`;
+
+        const pal = paletteForState();
+        document.documentElement.style.setProperty("--hot", pal.hot || "#76f3ff");
+        const lum = pal.bg[0] * 0.299 + pal.bg[1] * 0.587 + pal.bg[2] * 0.114;
+        brand.style.mixBlendMode = lum > 0.55 ? "multiply" : "screen";
+        brand.style.color = lum > 0.55 ? "rgba(34, 38, 42, 0.76)" : "rgba(220, 226, 232, 0.78)";
+        renderScenes();
+      };
+
+      const applyChange = (key, value) => {
+        if (key === "palette" && value === "random") {
+          state.randomPalette = randomPalette();
+        }
+        if (key === "palette" && value !== "random") {
+          state.randomPalette = null;
+        }
+        state[key] = value;
+        syncUi();
+      };
+
+      document.querySelectorAll("[data-key]").forEach((input) => {
+        input.addEventListener("input", () => {
+          const key = input.dataset.key;
+          const value = input.type === "range" ? Number(input.value) : input.value;
+          applyChange(key, value);
+        });
+      });
+
+      document.getElementById("toggleHud").addEventListener("click", () => {
+        state.showHud = !state.showHud;
+        syncUi();
+      });
+
+      document.getElementById("toggleBrand").addEventListener("click", () => {
+        state.showBrand = !state.showBrand;
+        syncUi();
+      });
+
+      document.getElementById("randomize").addEventListener("click", () => {
+        state.palette = "random";
+        state.randomPalette = randomPalette();
+        syncUi();
+        showToast("Random palette");
+      });
+
+      document.getElementById("clear").addEventListener("click", () => {
+        clicks = [];
+        showToast("Waves cleared");
+      });
+
+      document.getElementById("collapse").addEventListener("click", () => {
+        controls.classList.toggle("collapsed");
+      });
+
+      document.getElementById("saveScene").addEventListener("click", () => {
+        scenes[activeScene] = { ...state, randomPalette: state.randomPalette ? { ...state.randomPalette } : null };
+        saveScenes();
+        syncUi();
+        showToast(`Scene ${activeScene + 1} saved`);
+      });
+
+      document.getElementById("eraseScene").addEventListener("click", () => {
+        scenes[activeScene] = null;
+        saveScenes();
+        syncUi();
+        showToast(`Scene ${activeScene + 1} erased`);
+      });
+
+      const loadScene = (index) => {
+        activeScene = index;
+        if (scenes[index]) {
+          state = { ...defaults, ...scenes[index] };
+          showToast(`Scene ${index + 1} loaded`);
+        } else {
+          showToast(`Scene ${index + 1} empty`);
+        }
+        syncUi();
+      };
+
+      const resize = () => {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = Math.max(2, Math.floor(window.innerWidth * dpr));
+        const h = Math.max(2, Math.floor(window.innerHeight * dpr));
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w;
+          canvas.height = h;
+          gl.viewport(0, 0, w, h);
+        }
+      };
+
+      const sampleFreq = () => {
+        const lo = 0.25;
+        const hi = 1.8;
+        const u = Math.random();
+        return Math.exp(Math.log(lo) + u * (Math.log(hi) - Math.log(lo)));
+      };
+
+      const dropWave = (clientX, clientY, strength = 1) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = (clientX - rect.left) / rect.width;
+        const y = 1 - (clientY - rect.top) / rect.height;
+        const t = (performance.now() - startedAt) / 1000;
+        clicks.push({ x, y, t, strength, freqMul: sampleFreq() });
+      };
+
+      canvas.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        dropWave(event.clientX, event.clientY, event.pressure || 1);
+      });
+
+      canvas.addEventListener("pointermove", (event) => {
+        if (event.buttons !== 1) return;
+        const now = performance.now();
+        if (!canvas._lastDragWave || now - canvas._lastDragWave > 95) {
+          canvas._lastDragWave = now;
+          dropWave(event.clientX, event.clientY, 0.5);
+        }
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") controls.classList.toggle("collapsed");
+        if (event.key.toLowerCase() === "c") clicks = [];
+      });
+
+      const draw = () => {
+        resize();
+        const t = (performance.now() - startedAt) / 1000;
+        const poly = Math.max(1, Math.min(MAX_CLICKS, Math.floor(state.polyphony)));
+        clicks = clicks.filter((click) => t - click.t < state.lifetime).slice(-poly);
+
+        const packed = new Float32Array(MAX_CLICKS * 4);
+        const packedB = new Float32Array(MAX_CLICKS * 4);
+        clicks.forEach((click, index) => {
+          packed[index * 4] = click.x;
+          packed[index * 4 + 1] = click.y;
+          packed[index * 4 + 2] = click.t;
+          packed[index * 4 + 3] = click.strength;
+          packedB[index * 4] = click.freqMul;
+        });
+
+        const pal = paletteForState();
+        gl.uniform2f(uniforms.res, canvas.width, canvas.height);
+        gl.uniform1f(uniforms.time, t);
+        gl.uniform4fv(uniforms.clicks, packed);
+        gl.uniform4fv(uniforms.clicksB, packedB);
+        gl.uniform1f(uniforms.clickCount, clicks.length);
+        gl.uniform1f(uniforms.density, state.density);
+        gl.uniform1f(uniforms.speed, state.speed);
+        gl.uniform1f(uniforms.lifetime, state.lifetime);
+        gl.uniform1f(uniforms.thickness, state.thickness);
+        gl.uniform1f(uniforms.alpha, state.alpha);
+        gl.uniform3f(uniforms.bg, pal.bg[0], pal.bg[1], pal.bg[2]);
+        gl.uniform3f(uniforms.fg, pal.fg[0], pal.fg[1], pal.fg[2]);
+        gl.uniform3f(uniforms.accent, pal.accent[0], pal.accent[1], pal.accent[2]);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+        voiceLabel.textContent = `${clicks.length} voices`;
+        requestAnimationFrame(draw);
+      };
+
+      syncUi();
+      resize();
+      requestAnimationFrame(draw);
+
+      window.setTimeout(() => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        dropWave(w * 0.44, h * 0.52, 0.9);
+        window.setTimeout(() => dropWave(w * 0.58, h * 0.47, 0.75), 360);
+      }, 240);
+    })();
+  </script>
+</body>
+</html>
