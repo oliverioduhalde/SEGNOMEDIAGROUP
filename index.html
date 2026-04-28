@@ -371,10 +371,12 @@
       display: grid;
       place-items: center;
       padding: 24px;
-      background: rgba(3, 5, 8, 0.72);
+      background: rgba(3, 5, 8, 0.82);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.22s ease;
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
     }
 
     .video-lightbox.is-open {
@@ -382,21 +384,26 @@
       pointer-events: auto;
     }
 
-    .video-lightbox__frame {
+    .video-lightbox__wrap {
       position: relative;
-      width: min(900px, calc(100vw - 48px));
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
-      border: 1px solid rgba(220, 226, 232, 0.2);
-      border-radius: 8px;
-      background: #000;
-      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.48);
-      transform: scale(0.72);
-      transition: transform 0.24s ease, width 0.24s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      transform: scale(0.88);
+      transition: transform 0.24s ease;
     }
 
-    .video-lightbox.is-open .video-lightbox__frame {
+    .video-lightbox.is-open .video-lightbox__wrap {
       transform: scale(1);
+    }
+
+    .video-lightbox__frame {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(220, 226, 232, 0.2);
+      border-radius: 8px 8px 0 0;
+      background: #000;
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.56);
     }
 
     .video-lightbox__frame iframe {
@@ -405,15 +412,17 @@
       width: 100%;
       height: 100%;
       border: 0;
+      display: block;
     }
 
     .video-lightbox__tools {
       position: absolute;
-      top: 18px;
-      right: 18px;
-      z-index: 1;
+      top: 10px;
+      right: 10px;
+      z-index: 3;
       display: flex;
-      gap: 8px;
+      align-items: center;
+      gap: 6px;
     }
 
     .video-lightbox__tools button {
@@ -433,6 +442,159 @@
       stroke: currentColor;
       stroke-width: 1.7;
       fill: none;
+    }
+
+    .badge-360 {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px 4px 6px;
+      border: 1px solid rgba(118, 243, 255, 0.42);
+      border-radius: 999px;
+      background: rgba(3, 5, 8, 0.72);
+      color: var(--hot);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .badge-360 svg {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    .badge-360-modal {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px 5px 8px;
+      border: 1px solid rgba(118, 243, 255, 0.42);
+      border-radius: 999px;
+      background: rgba(8, 10, 12, 0.72);
+      color: var(--hot);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .badge-360-modal[aria-hidden="true"] {
+      display: none;
+    }
+
+    .badge-360-modal svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      fill: none;
+    }
+
+    .vr-controls {
+      position: absolute;
+      bottom: 52px;
+      left: 14px;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .vr-controls[aria-hidden="true"] {
+      display: none;
+    }
+
+    .vr-row {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .vr-btn {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid rgba(118, 243, 255, 0.32);
+      border-radius: 6px;
+      background: rgba(3, 5, 8, 0.78);
+      color: rgba(118, 243, 255, 0.82);
+      cursor: pointer;
+      transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .vr-btn:hover, .vr-btn:active {
+      background: rgba(118, 243, 255, 0.14);
+      color: #76f3ff;
+      border-color: rgba(118, 243, 255, 0.7);
+    }
+
+    .vr-center {
+      border-color: rgba(255, 255, 255, 0.22);
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .vr-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .video-lightbox__info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border: 1px solid rgba(220, 226, 232, 0.2);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      background: rgba(8, 10, 12, 0.72);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+    }
+
+    .video-lightbox__info[aria-hidden="true"] {
+      display: none;
+    }
+
+    .info-client {
+      color: rgba(246, 249, 252, 0.88);
+      font-weight: 600;
+    }
+
+    .info-type {
+      color: rgba(118, 243, 255, 0.82);
+    }
+
+    .info-cat {
+      color: rgba(220, 226, 232, 0.44);
+    }
+
+    .info-sep {
+      color: rgba(220, 226, 232, 0.24);
     }
 
     .contact-strip {
@@ -795,16 +957,26 @@
       }
 
       .video-lightbox {
-        padding: 14px;
+        padding: 12px;
+        align-items: center;
       }
 
-      .video-lightbox__frame {
-        width: calc(100vw - 28px);
+      .video-lightbox__info {
+        font-size: 9px;
+        padding: 8px 12px;
+        flex-wrap: wrap;
+        gap: 6px;
+        justify-content: center;
       }
 
-      .video-lightbox__tools {
-        top: 10px;
-        right: 10px;
+      .vr-controls {
+        bottom: 46px;
+        left: 10px;
+      }
+
+      .vr-btn {
+        width: 28px;
+        height: 28px;
       }
 
       .controls {
@@ -843,7 +1015,7 @@
       <div class="brand-shell" id="brandShell">
         <div class="brand" id="brand">SEGNO MEDIA GROUP</div>
         <nav class="service-links" aria-label="Servicios">
-          <a href="#experiencias-inmersivas">Inmersivas</a>
+          <a href="#experiencias-inmersivas">Experiencias</a>
           <a href="https://www.segnosound.com">Audiovisuales</a>
           <a href="#instalaciones-interactivas">Instalaciones interactivas</a>
           <a href="#aplicaciones-web-moviles">Apps &amp; web</a>
@@ -860,7 +1032,7 @@
       </div>
 
       <section class="service-block" id="experiencias-inmersivas" data-kicker="Inmersivas">
-        <h2>Espacios inmersivos</h2>
+        <h2>Experiencias inmersivas</h2>
         <p>Diseño y producción de entornos envolventes para marcas, instituciones y audiencias en vivo.</p>
         <div class="project-list">
           <article class="project-row">
@@ -869,9 +1041,13 @@
               <p>Túnel 360 con pantalla LED y narrativa inmersiva.</p>
               <span>Immersive</span>
             </div>
-            <div class="film-card" data-vimeo-id="1187481909" data-vimeo-hash="340d6dd016">
+            <div class="film-card" data-vimeo-id="1187481909" data-vimeo-hash="340d6dd016" data-vr="true">
               <iframe title="AstraZeneca 360 LED" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187481909?h=340d6dd016&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
               <div class="film-meta"><strong>AstraZeneca</strong><span>360 LED</span></div>
+              <div class="badge-360" aria-label="Video 360°">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h5l2 2h4l2-2h5a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><circle cx="9" cy="12" r="1.8"/><circle cx="15" cy="12" r="1.8"/></svg>
+                <span>360°</span>
+              </div>
             </div>
           </article>
           <article class="project-row">
@@ -1176,23 +1352,55 @@
   </aside>
 
   <div class="video-lightbox" id="videoLightbox" aria-hidden="true">
-    <div class="video-lightbox__tools">
-      <button id="videoFullscreen" type="button" aria-label="Pantalla completa" title="Pantalla completa">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M8 3H3v5"></path>
-          <path d="M16 3h5v5"></path>
-          <path d="M21 16v5h-5"></path>
-          <path d="M3 16v5h5"></path>
-        </svg>
-      </button>
-      <button id="videoClose" type="button" aria-label="Cerrar video" title="Cerrar">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M18 6 6 18"></path>
-          <path d="m6 6 12 12"></path>
-        </svg>
-      </button>
+    <div class="video-lightbox__wrap" id="videoWrap">
+      <div class="video-lightbox__tools">
+        <div id="badge360Modal" class="badge-360-modal" aria-hidden="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h5l2 2h4l2-2h5a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><circle cx="9" cy="12" r="1.8"/><circle cx="15" cy="12" r="1.8"/></svg>
+          <span>360°</span>
+        </div>
+        <button id="videoFullscreen" type="button" aria-label="Pantalla completa" title="Pantalla completa">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 3H3v5"></path>
+            <path d="M16 3h5v5"></path>
+            <path d="M21 16v5h-5"></path>
+            <path d="M3 16v5h5"></path>
+          </svg>
+        </button>
+        <button id="videoClose" type="button" aria-label="Cerrar video" title="Cerrar">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="video-lightbox__frame" id="videoFrameHost"></div>
+      <div class="vr-controls" id="vrControls" aria-hidden="true">
+        <button class="vr-btn" id="vrUp" aria-label="Mirar arriba">
+          <svg viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg>
+        </button>
+        <div class="vr-row">
+          <button class="vr-btn" id="vrLeft" aria-label="Mirar izquierda">
+            <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button class="vr-btn vr-center" id="vrReset" aria-label="Centrar vista">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          </button>
+          <button class="vr-btn" id="vrRight" aria-label="Mirar derecha">
+            <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+        <button class="vr-btn" id="vrDown" aria-label="Mirar abajo">
+          <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+      </div>
+      <div class="video-lightbox__info" id="videoInfo" aria-hidden="true">
+        <span class="info-client" id="infoClient"></span>
+        <span class="info-sep">·</span>
+        <span class="info-type" id="infoType"></span>
+        <span class="info-sep">·</span>
+        <span class="info-cat" id="infoCat"></span>
+      </div>
     </div>
-    <div class="video-lightbox__frame" id="videoFrameHost"></div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -1628,9 +1836,18 @@
         if (event.key.toLowerCase() === "c") clicks = [];
       });
 
+      const videoWrap = document.getElementById("videoWrap");
+      const videoInfo = document.getElementById("videoInfo");
+      const infoClient = document.getElementById("infoClient");
+      const infoType = document.getElementById("infoType");
+      const infoCat = document.getElementById("infoCat");
+      const badge360Modal = document.getElementById("badge360Modal");
+      const vrControls = document.getElementById("vrControls");
       const filmCards = Array.from(document.querySelectorAll(".film-card"));
       let activeFilmCard = null;
       let activeModalFrame = null;
+      let vrCamera = { yaw: 0, pitch: 0, fov: 90 };
+      let vrPanInterval = null;
 
       const postVimeo = (frame, method, value) => {
         if (!frame?.contentWindow) return;
@@ -1648,47 +1865,97 @@
       };
 
       function closeVideo() {
-        if (activeModalFrame) {
-          postVimeo(activeModalFrame, "pause");
-        }
+        if (activeModalFrame) postVimeo(activeModalFrame, "pause");
+        stopVrPan();
         videoLightbox.classList.remove("is-open");
         videoLightbox.setAttribute("aria-hidden", "true");
         videoFrameHost.replaceChildren();
         videoFrameHost.removeAttribute("style");
+        videoWrap.removeAttribute("style");
+        vrControls.setAttribute("aria-hidden", "true");
+        badge360Modal.setAttribute("aria-hidden", "true");
+        videoInfo.setAttribute("aria-hidden", "true");
         filmCards.forEach(muteFilm);
         activeFilmCard = null;
         activeModalFrame = null;
+        vrCamera = { yaw: 0, pitch: 0, fov: 90 };
       }
 
-      const openVideo = (card) => {
+      function applyFrameSize(w, h) {
+        videoFrameHost.style.width = w + "px";
+        videoFrameHost.style.height = h + "px";
+      }
+
+      function calcSize(nativeW, nativeH) {
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const isMobile = vw <= 720;
+        const maxW = isMobile ? vw - 24 : Math.round(vw * 0.70);
+        const infoH = 42;
+        const maxH = isMobile ? vh - 80 : Math.round((vh - infoH) * 0.92);
+        const ratio = nativeH / nativeW;
+        let w = maxW;
+        let h = Math.round(w * ratio);
+        if (h > maxH) { h = maxH; w = Math.round(h / ratio); }
+        return { w, h };
+      }
+
+      async function openVideo(card) {
         const id = card.dataset.vimeoId;
         const hash = card.dataset.vimeoHash;
+        const is360 = card.dataset.vr === "true";
         if (!id) return;
 
         filmCards.forEach(muteFilm);
         card.classList.add("is-audible");
         activeFilmCard = card;
 
-        const rect = card.getBoundingClientRect();
-        const gutter = window.innerWidth <= 720 ? 28 : 48;
-        const minWidth = window.innerWidth <= 720 ? 280 : 420;
-        const targetWidth = Math.min(window.innerWidth - gutter, Math.max(minWidth, rect.width * 1.5));
-        videoFrameHost.style.width = `${Math.round(targetWidth)}px`;
+        // populate info strip
+        const row = card.closest(".project-row");
+        const pc = row?.querySelector(".project-card");
+        const block = card.closest(".service-block");
+        const client = pc?.querySelector("h3")?.textContent?.trim() ?? "";
+        const type = pc?.querySelector("span")?.textContent?.trim() ?? "";
+        const cat = block?.dataset?.kicker ?? "";
+        infoClient.textContent = client;
+        infoType.textContent = type;
+        infoCat.textContent = cat;
+        videoInfo.setAttribute("aria-hidden", "false");
+
+        // 360 UI
+        if (is360) {
+          badge360Modal.setAttribute("aria-hidden", "false");
+          vrControls.setAttribute("aria-hidden", "false");
+        } else {
+          badge360Modal.setAttribute("aria-hidden", "true");
+          vrControls.setAttribute("aria-hidden", "true");
+        }
+
+        // fetch oEmbed for native dimensions
+        let nativeW = 1920, nativeH = 1080;
+        try {
+          const r = await fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${id}&width=1920`);
+          if (r.ok) {
+            const d = await r.json();
+            if (d.width && d.height) { nativeW = d.width; nativeH = d.height; }
+          }
+        } catch {}
+
+        // for 360, use standard 16:9 (player renders sphere, not letterboxed)
+        if (is360) { nativeW = 16; nativeH = 9; }
+
+        const { w, h } = calcSize(nativeW, nativeH);
+        applyFrameSize(w, h);
 
         const params = new URLSearchParams({
-          autoplay: "1",
-          muted: "0",
-          loop: "0",
-          playsinline: "1",
-          api: "1",
-          title: "0",
-          byline: "0",
-          portrait: "0"
+          autoplay: "1", muted: "0", loop: "0",
+          playsinline: "1", api: "1",
+          title: "0", byline: "0", portrait: "0"
         });
         if (hash) params.set("h", hash);
 
         activeModalFrame = document.createElement("iframe");
-        activeModalFrame.allow = "autoplay; fullscreen; picture-in-picture";
+        activeModalFrame.allow = "autoplay; fullscreen; picture-in-picture; xr-spatial-tracking";
         activeModalFrame.allowFullscreen = true;
         activeModalFrame.src = `https://player.vimeo.com/video/${id}?${params.toString()}`;
         videoFrameHost.replaceChildren(activeModalFrame);
@@ -1697,10 +1964,50 @@
 
         activeModalFrame.addEventListener("load", () => {
           postVimeo(activeModalFrame, "setMuted", false);
-          postVimeo(activeModalFrame, "setVolume", 0.5);
+          postVimeo(activeModalFrame, "setVolume", 0.85);
           postVimeo(activeModalFrame, "addEventListener", "ended");
+          if (is360) {
+            vrCamera = { yaw: 0, pitch: 0, fov: 90 };
+            postVimeo(activeModalFrame, "setCameraProps", vrCamera);
+          }
         }, { once: true });
+      }
+
+      // 360 controls
+      function stopVrPan() {
+        if (vrPanInterval) { clearInterval(vrPanInterval); vrPanInterval = null; }
+      }
+
+      function startVrPan(dyaw, dpitch) {
+        stopVrPan();
+        const step = () => {
+          vrCamera.yaw = (vrCamera.yaw + dyaw + 360) % 360;
+          vrCamera.pitch = Math.max(-85, Math.min(85, vrCamera.pitch + dpitch));
+          postVimeo(activeModalFrame, "setCameraProps", { yaw: vrCamera.yaw, pitch: vrCamera.pitch, roll: 0, fov: vrCamera.fov });
+        };
+        step();
+        vrPanInterval = setInterval(step, 80);
+      }
+
+      const vrBtns = {
+        vrUp:    [0, -8],
+        vrDown:  [0, +8],
+        vrLeft:  [-8, 0],
+        vrRight: [+8, 0],
       };
+
+      Object.entries(vrBtns).forEach(([id, [dy, dp]]) => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        btn.addEventListener("pointerdown", (e) => { e.preventDefault(); startVrPan(dy, dp); });
+        btn.addEventListener("pointerup", stopVrPan);
+        btn.addEventListener("pointerleave", stopVrPan);
+      });
+
+      document.getElementById("vrReset")?.addEventListener("click", () => {
+        vrCamera = { yaw: 0, pitch: 0, fov: 90 };
+        postVimeo(activeModalFrame, "setCameraProps", { yaw: 0, pitch: 0, roll: 0, fov: 90 });
+      });
 
       videoClose.addEventListener("click", closeVideo);
 
@@ -1718,25 +2025,15 @@
         if (!activeModalFrame || event.source !== activeModalFrame.contentWindow) return;
         let data = event.data;
         if (typeof data === "string") {
-          try {
-            data = JSON.parse(data);
-          } catch {
-            return;
-          }
+          try { data = JSON.parse(data); } catch { return; }
         }
         if (data?.event === "ended") closeVideo();
       });
 
       filmCards.forEach((card) => {
         const video = card.querySelector("video");
-        if (video) {
-          video.volume = 0;
-          video.play().catch(() => {});
-        }
-
-        card.addEventListener("click", () => {
-          openVideo(card);
-        });
+        if (video) { video.volume = 0; video.play().catch(() => {}); }
+        card.addEventListener("click", () => openVideo(card));
       });
 
       const draw = () => {
