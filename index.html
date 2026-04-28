@@ -1069,7 +1069,7 @@
         alpha: 0.36,
         brandSize: 34,
         tracking: 0.34,
-        showHud: true,
+        showHud: false,
         showBrand: true,
         randomPalette: null,
       };
@@ -1449,7 +1449,10 @@
       }, { capture: true });
 
       window.addEventListener("keydown", (event) => {
-        if (event.key === "F12") {
+        const togglesTweaks = event.metaKey
+          && event.shiftKey
+          && (event.key === "+" || event.key === "=" || event.code === "Equal");
+        if (togglesTweaks) {
           event.preventDefault();
           controls.classList.toggle("is-visible");
           controls.classList.remove("collapsed");
