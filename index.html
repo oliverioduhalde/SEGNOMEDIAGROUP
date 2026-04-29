@@ -1184,6 +1184,47 @@
       color: rgba(220,226,232,0.48);
     }
 
+    /* Client logo grid */
+    .sonido-client-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+    .sonido-client-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(220,226,232,0.1);
+      border-radius: 12px;
+      padding: 22px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.2s, border-color 0.2s;
+      cursor: default;
+    }
+    .sonido-client-card:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(220,226,232,0.2);
+    }
+    .sonido-client-card img {
+      width: 80px;
+      height: 44px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      opacity: 0.65;
+      transition: opacity 0.2s;
+    }
+    .sonido-client-card:hover img { opacity: 1; }
+    .sonido-client-card span {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: rgba(220,226,232,0.45);
+      text-align: center;
+    }
+
     .sonido-contact-strip { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 12px; margin-top: 20px; }
     .sonido-contact-item {
       padding: 18px 20px;
@@ -1738,18 +1779,82 @@
           </div>
           <div class="sonido-service-block" data-kicker="Industry">
             <h3>What we serve</h3>
-            <p>Musical productions, film, TV, advertising, sonic branding, video games, broadcasting and podcasts. Our work has reached audiences across Netflix, Disney+, HBO, ESPN, Apple TV+, Spotify and Apple Music.</p>
+            <p>Musical productions, film, TV, advertising, sonic branding, video games, broadcasting and podcasts.</p>
           </div>
           <div class="sonido-stat-row">
             <div class="sonido-stat"><strong>300+</strong><span>Projects</span></div>
             <div class="sonido-stat"><strong>10+</strong><span>Years</span></div>
             <div class="sonido-stat"><strong>Global</strong><span>Reach</span></div>
           </div>
-          <div class="sonido-platforms">
-            <span class="sonido-platform-tag">Netflix</span><span class="sonido-platform-tag">Disney+</span>
-            <span class="sonido-platform-tag">HBO</span><span class="sonido-platform-tag">ESPN</span>
-            <span class="sonido-platform-tag">Apple TV+</span><span class="sonido-platform-tag">Spotify</span>
-            <span class="sonido-platform-tag">Apple Music</span>
+          <div class="sonido-client-grid">
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/netflix.com" alt="Netflix" loading="lazy">
+              <span>Netflix</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/disneyplus.com" alt="Disney+" loading="lazy">
+              <span>Disney+</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/hbo.com" alt="HBO" loading="lazy">
+              <span>HBO</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/espn.com" alt="ESPN" loading="lazy">
+              <span>ESPN</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/apple.com" alt="Apple TV+" loading="lazy">
+              <span>Apple TV+</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/spotify.com" alt="Spotify" loading="lazy">
+              <span>Spotify</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/nationalgeographic.com" alt="NatGeo" loading="lazy">
+              <span>Nat Geo</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/foxsports.com" alt="FOX Sports" loading="lazy">
+              <span>FOX Sports</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/fox.com" alt="FOX" loading="lazy">
+              <span>FOX</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/starplus.com" alt="Star+" loading="lazy">
+              <span>Star+</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/history.com" alt="History" loading="lazy">
+              <span>History</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/apple.com" alt="Apple Music" loading="lazy">
+              <span>Apple Music</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/ford.com" alt="Ford" loading="lazy">
+              <span>Ford</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/adidas.com" alt="Adidas" loading="lazy">
+              <span>Adidas</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/trapiche.com.ar" alt="Trapiche" loading="lazy">
+              <span>Trapiche</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/buenosaires.gob.ar" alt="GCBA" loading="lazy">
+              <span>GCBA</span>
+            </div>
+            <div class="sonido-client-card">
+              <img src="https://logo.clearbit.com/hirezstudios.com" alt="Hi-Rez / SMITE" loading="lazy">
+              <span>Hi-Rez Studios</span>
+            </div>
           </div>
         </div>
       </div>
