@@ -994,6 +994,208 @@
         display: none;
       }
     }
+
+    /* ============================================================
+       SEGNO SOUND — sección interna
+       ============================================================ */
+
+    .sonido-section {
+      position: fixed;
+      inset: 0;
+      z-index: 6;
+      background: #030507;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .sonido-section[hidden] { display: none; }
+
+    .sonido-topbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 11px 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.09);
+      background: rgba(3,5,7,0.92);
+      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(18px);
+      flex-shrink: 0;
+    }
+
+    .sonido-back-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      background: transparent;
+      color: rgba(220,226,232,0.55);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color .18s ease, border-color .18s ease;
+    }
+    .sonido-back-btn:hover { color: rgba(255,255,255,0.88); border-color: rgba(255,255,255,0.34); }
+    .sonido-back-btn svg { width: 11px; height: 11px; stroke: currentColor; stroke-width: 2.2; fill: none; }
+
+    .sonido-brand {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(248,249,252,0.82);
+      flex-shrink: 0;
+    }
+
+    .sonido-nav {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-left: auto;
+    }
+    .sonido-nav::-webkit-scrollbar { display: none; }
+
+    .sonido-nav-link {
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: rgba(220,226,232,0.46);
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color .15s ease, background .15s ease;
+    }
+    .sonido-nav-link:hover { color: rgba(255,255,255,0.86); background: rgba(255,255,255,0.06); }
+    .sonido-nav-link.is-active { color: var(--hot); background: rgba(118,243,255,0.1); }
+
+    .sonido-main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 22px 60px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+
+    .sonido-view { display: block; }
+    .sonido-view[hidden] { display: none; }
+
+    .sonido-view-header { margin-bottom: 20px; }
+
+    .sonido-kicker {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(118,243,255,0.6);
+    }
+
+    .sonido-view-title {
+      margin: 6px 0 0;
+      font-family: var(--mono);
+      font-size: clamp(18px,2.4vw,32px);
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(240,244,248,0.9);
+    }
+
+    .sonido-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+      gap: 12px;
+    }
+    #sv-home .sonido-grid { grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); }
+
+    .sonido-card { cursor: pointer; }
+
+    /* Text pages */
+    .sonido-text-page { max-width: 860px; }
+
+    .sonido-service-block {
+      position: relative;
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(220,226,232,0.11);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.028);
+    }
+    .sonido-service-block::before {
+      content: attr(data-kicker);
+      display: block;
+      margin-bottom: 8px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(118,243,255,0.58);
+    }
+    .sonido-service-block h3 {
+      margin: 0 0 9px;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(246,249,252,0.9);
+    }
+    .sonido-service-block p { margin: 0; color: rgba(220,226,232,0.56); font-size: 13px; line-height: 1.72; }
+
+    .sonido-stat-row { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+    .sonido-stat {
+      display: flex; flex-direction: column; gap: 4px;
+      padding: 12px 18px;
+      border: 1px solid rgba(220,226,232,0.1);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.03);
+    }
+    .sonido-stat strong { font-family: var(--mono); font-size: 22px; font-weight: 400; color: var(--hot); letter-spacing: 0.06em; }
+    .sonido-stat span { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(220,226,232,0.48); }
+
+    .sonido-platforms { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 16px; }
+    .sonido-platform-tag {
+      padding: 4px 10px;
+      border: 1px solid rgba(220,226,232,0.15);
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(220,226,232,0.48);
+    }
+
+    .sonido-contact-strip { display: grid; grid-template-columns: repeat(auto-fill,minmax(240px,1fr)); gap: 12px; margin-top: 20px; }
+    .sonido-contact-item {
+      padding: 18px 20px;
+      border: 1px solid rgba(220,226,232,0.12);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(220,226,232,0.76);
+      line-height: 1.7;
+    }
+    .sonido-contact-item a { color: inherit; text-decoration: none; }
+    .sonido-contact-item a:hover { color: var(--hot); }
+
+    @media (max-width: 720px) {
+      .sonido-topbar { padding: 9px 14px; gap: 8px; }
+      .sonido-brand { display: none; }
+      .sonido-main { padding: 16px 14px 64px; }
+      .sonido-grid, #sv-home .sonido-grid { grid-template-columns: repeat(auto-fill,minmax(145px,1fr)); gap: 8px; }
+    }
   </style>
 </head>
 <body>
@@ -1016,7 +1218,7 @@
         <div class="brand" id="brand">SEGNO MEDIA GROUP</div>
         <nav class="service-links" aria-label="Servicios">
           <a href="#experiencias-inmersivas">Experiencias</a>
-          <a href="https://www.segnosound.com">Audiovisuales</a>
+          <a href="#sonido">Audiovisuales</a>
           <a href="#instalaciones-interactivas">Instalaciones interactivas</a>
           <a href="#aplicaciones-web-moviles">Apps &amp; web</a>
           <a href="#sound-design">Música &amp; sonido</a>
@@ -1404,6 +1606,169 @@
   </div>
 
   <div class="toast" id="toast"></div>
+
+  <!-- ============================================================
+       SEGNO SOUND — sección interna
+       ============================================================ -->
+  <div id="sonidoSection" class="sonido-section" hidden aria-hidden="true">
+    <header class="sonido-topbar">
+      <button id="sonidoBack" class="sonido-back-btn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Segno Media Group</span>
+      </button>
+      <div class="sonido-brand">Segno Sound</div>
+      <nav class="sonido-nav" aria-label="Segno Sound">
+        <a href="#sonido"            class="sonido-nav-link" data-view="home">Home</a>
+        <a href="#sonido/film"       class="sonido-nav-link" data-view="film">Film / Series</a>
+        <a href="#sonido/animation"  class="sonido-nav-link" data-view="animation">Animation</a>
+        <a href="#sonido/sonic"      class="sonido-nav-link" data-view="sonic">Sonic Brand</a>
+        <a href="#sonido/openings"   class="sonido-nav-link" data-view="openings">Openings</a>
+        <a href="#sonido/advertising" class="sonido-nav-link" data-view="advertising">Advertising</a>
+        <a href="#sonido/services"   class="sonido-nav-link" data-view="services">Services</a>
+        <a href="#sonido/about"      class="sonido-nav-link" data-view="about">About</a>
+        <a href="#sonido/contact"    class="sonido-nav-link" data-view="contact">Contact</a>
+      </nav>
+    </header>
+
+    <main class="sonido-main" id="sonidoMain">
+
+      <div class="sonido-view" id="sv-home" hidden>
+        <div class="sonido-view-header">
+          <p class="sonido-kicker">Portfolio</p>
+          <h2 class="sonido-view-title">All Work</h2>
+        </div>
+        <div class="sonido-grid"></div>
+      </div>
+
+      <div class="sonido-view" id="sv-film" hidden>
+        <div class="sonido-view-header">
+          <p class="sonido-kicker">Film &amp; Series</p>
+          <h2 class="sonido-view-title">Film / Series</h2>
+        </div>
+        <div class="sonido-grid"></div>
+      </div>
+
+      <div class="sonido-view" id="sv-animation" hidden>
+        <div class="sonido-view-header">
+          <p class="sonido-kicker">Animation &amp; Gaming</p>
+          <h2 class="sonido-view-title">Animation / Gaming</h2>
+        </div>
+        <div class="sonido-grid"></div>
+      </div>
+
+      <div class="sonido-view" id="sv-sonic" hidden>
+        <div class="sonido-view-header">
+          <p class="sonido-kicker">Sonic Brand</p>
+          <h2 class="sonido-view-title">Sonic Brand</h2>
+        </div>
+        <div class="sonido-grid"></div>
+      </div>
+
+      <div class="sonido-view" id="sv-openings" hidden>
+        <div class="sonido-view-header">
+          <p class="sonido-kicker">Openings</p>
+          <h2 class="sonido-view-title">Openings</h2>
+        </div>
+        <div class="sonido-grid"></div>
+      </div>
+
+      <div class="sonido-view" id="sv-advertising" hidden>
+        <div class="sonido-view-header">
+          <p class="sonido-kicker">Advertising</p>
+          <h2 class="sonido-view-title">Advertising</h2>
+        </div>
+        <div class="sonido-grid"></div>
+      </div>
+
+      <div class="sonido-view" id="sv-services" hidden>
+        <div class="sonido-text-page">
+          <div class="sonido-view-header">
+            <p class="sonido-kicker">What we do</p>
+            <h2 class="sonido-view-title">Services</h2>
+          </div>
+          <div class="sonido-service-block" data-kicker="Original Music">
+            <h3>Music Composition &amp; Supervision</h3>
+            <p>We help artists and brands soar to new heights and cultivate a more personalized musical identity through attentive listening, collaborative work, and creative conception.</p>
+          </div>
+          <div class="sonido-service-block" data-kicker="Sound Design">
+            <h3>Audio Post Production</h3>
+            <p>Sound design, dubbing, mixing and audio experimentation for film, series, advertising and interactive media. We just love sound.</p>
+          </div>
+          <div class="sonido-service-block" data-kicker="Voice">
+            <h3>Voiceovers, Voice Actors &amp; Dubbing</h3>
+            <p>Extensive network of professionally acclaimed voiceover artists, voice actors, and dubbing talents. Native English and Latin American Spanish speakers, supported by professional translators and scriptwriters.</p>
+          </div>
+          <div class="sonido-service-block" data-kicker="Post Production">
+            <h3>Mixing / Mastering</h3>
+            <p>Where everything fits together. Upgrade your sound experience to the next level — Stereo, Ambisonics, Surround sound, Dolby Atmos.</p>
+          </div>
+          <div class="sonido-stat-row">
+            <div class="sonido-stat"><strong>300+</strong><span>Projects</span></div>
+            <div class="sonido-stat"><strong>20+</strong><span>Countries</span></div>
+            <div class="sonido-stat"><strong>5</strong><span>Categories</span></div>
+          </div>
+          <div class="sonido-platforms">
+            <span class="sonido-platform-tag">Netflix</span><span class="sonido-platform-tag">Disney+</span>
+            <span class="sonido-platform-tag">HBO</span><span class="sonido-platform-tag">ESPN</span>
+            <span class="sonido-platform-tag">Apple TV+</span><span class="sonido-platform-tag">Spotify</span>
+            <span class="sonido-platform-tag">Apple Music</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sonido-view" id="sv-about" hidden>
+        <div class="sonido-text-page">
+          <div class="sonido-view-header">
+            <p class="sonido-kicker">Who we are</p>
+            <h2 class="sonido-view-title">About</h2>
+          </div>
+          <div class="sonido-service-block" data-kicker="Studio">
+            <h3>Segno Sound</h3>
+            <p>A production company specializing in Original Music, Sound Design, Sonic Branding, Sound Editing, Dubbing, and Surround Mixing. With over 300 projects delivered across global platforms, we bring technical precision and creative vision to every production.</p>
+          </div>
+          <div class="sonido-service-block" data-kicker="Industry">
+            <h3>What we serve</h3>
+            <p>Musical productions, film, TV, advertising, sonic branding, video games, broadcasting and podcasts. Our work has reached audiences across Netflix, Disney+, HBO, ESPN, Apple TV+, Spotify and Apple Music.</p>
+          </div>
+          <div class="sonido-stat-row">
+            <div class="sonido-stat"><strong>300+</strong><span>Projects</span></div>
+            <div class="sonido-stat"><strong>10+</strong><span>Years</span></div>
+            <div class="sonido-stat"><strong>Global</strong><span>Reach</span></div>
+          </div>
+          <div class="sonido-platforms">
+            <span class="sonido-platform-tag">Netflix</span><span class="sonido-platform-tag">Disney+</span>
+            <span class="sonido-platform-tag">HBO</span><span class="sonido-platform-tag">ESPN</span>
+            <span class="sonido-platform-tag">Apple TV+</span><span class="sonido-platform-tag">Spotify</span>
+            <span class="sonido-platform-tag">Apple Music</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sonido-view" id="sv-contact" hidden>
+        <div class="sonido-text-page">
+          <div class="sonido-view-header">
+            <p class="sonido-kicker">Get in touch</p>
+            <h2 class="sonido-view-title">Contact</h2>
+          </div>
+          <div class="sonido-contact-strip">
+            <div class="sonido-contact-item">
+              <p class="sonido-kicker" style="margin:0 0 10px">Email</p>
+              <a href="mailto:segnosound@gmail.com">segnosound@gmail.com</a>
+            </div>
+            <div class="sonido-contact-item">
+              <p class="sonido-kicker" style="margin:0 0 10px">Phone</p>
+              <a href="tel:+5491141494885">+54 911 4149 4885</a>
+            </div>
+            <div class="sonido-contact-item">
+              <p class="sonido-kicker" style="margin:0 0 10px">Address</p>
+              Tronador 2030<br>Buenos Aires, Argentina
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
 
   <script>
     (() => {
@@ -1911,12 +2276,19 @@
         activeFilmCard = card;
 
         // populate info strip
-        const row = card.closest(".project-row");
-        const pc = row?.querySelector(".project-card");
-        const block = card.closest(".service-block");
-        const client = pc?.querySelector("h3")?.textContent?.trim() ?? "";
-        const type = pc?.querySelector("span")?.textContent?.trim() ?? "";
-        const cat = block?.dataset?.kicker ?? "";
+        let client, type, cat;
+        if (card.dataset.sonidoTitle) {
+          client = card.dataset.sonidoTitle;
+          type   = card.dataset.sonidoType;
+          cat    = card.dataset.sonidoCat;
+        } else {
+          const row = card.closest(".project-row");
+          const pc  = row?.querySelector(".project-card");
+          const block = card.closest(".service-block");
+          client = pc?.querySelector("h3")?.textContent?.trim() ?? "";
+          type   = pc?.querySelector("span")?.textContent?.trim() ?? "";
+          cat    = block?.dataset?.kicker ?? "";
+        }
         infoClient.textContent = client;
         infoType.textContent = type;
         infoCat.textContent = cat;
@@ -2075,6 +2447,145 @@
       syncUi();
       resize();
       requestAnimationFrame(draw);
+
+      // ============================================================
+      // SEGNO SOUND — router + video data
+      // ============================================================
+
+      const SONIDO_VIDEOS = {
+        film: [
+          { id: "1843374344", title: "Los Ladrones", type: "Netflix" },
+          { id: "1843322157", title: "El vendedor de ilusiones", type: "Netflix" },
+          { id: "1843703601", title: "Jugada peligrosa", type: "HBO" },
+          { id: "1843331023", title: "Phantom Sky Japan", type: "Shortfilm" },
+          { id: "1843699278", title: "Shared Vision", type: "Documentary" },
+          { id: "1843381834", title: "Fire Earth Air Water", type: "Shortfilm" },
+          { id: "1843698126", title: "Sammy Carlson", type: "Documentary" },
+          { id: "1843686727", title: "Del Potro, El Último Match Point", type: "Doc Series" },
+        ],
+        animation: [
+          { id: "1841750139", title: "Game of Thrones", type: "Mobile Game Trailer" },
+          { id: "1843763420", title: "Harry Potter Magic Awakened", type: "Mobile Game" },
+          { id: "1844082110", title: "Battle of Toys", type: "Mobile Game" },
+          { id: "1843716637", title: "Brotheroids", type: "Animated Series" },
+          { id: "1843754263", title: "Darwin and the Evolution of the Finch", type: "Animation" },
+          { id: "1843711078", title: "SMITE — Ragnarok Hades", type: "Gaming" },
+          { id: "1843751813", title: "Civilizaciones", type: "Animated Series" },
+          { id: "1841752981", title: "Javi y el Club del Árbol", type: "Animated Series" },
+        ],
+        sonic: [
+          { id: "1843711513", title: "FOX ID", type: "FIS Digital Content" },
+          { id: "1841755318", title: "Encuentro ID — Puertas", type: "Sonic Brand" },
+          { id: "1841753557", title: "Protección al menor ID", type: "TVP" },
+          { id: "1841752637", title: "NatGeo ID", type: "Latam Branding" },
+          { id: "1841749047", title: "Astrolab", type: "Sonic Brand" },
+          { id: "1841755286", title: "FOX Sports ID Christmas", type: "Sonic Brand" },
+        ],
+        openings: [
+          { id: "1841755333", title: "Encuentro ID — Rating ATP", type: "Opening" },
+          { id: "1841755308", title: "Encuentro ID — ATP Noche", type: "Opening" },
+          { id: "1843720637", title: "Café San Juan", type: "Opening" },
+          { id: "1843725178", title: "Soccer Idols", type: "Opening" },
+          { id: "1843729418", title: "El Retrovisor", type: "Opening" },
+          { id: "1843722869", title: "Charged", type: "Opening" },
+          { id: "1843727435", title: "Explora", type: "Opening" },
+          { id: "1841751455", title: "Vinos de Francia", type: "Opening" },
+          { id: "1841751905", title: "Narda", type: "Opening" },
+          { id: "1841751718", title: "Huellas del arte argentino", type: "Opening" },
+          { id: "1843710359", title: "Festival Intern. Santa Lucía", type: "Opening" },
+        ],
+        advertising: [
+          { id: "1843694647", title: "Ford Raptor", type: "Advertising" },
+          { id: "1843712854", title: "ArteBa", type: "Advertising" },
+          { id: "1843707252", title: "SI-NO Alto Palermo", type: "Advertising" },
+          { id: "1843713243", title: "Trapiche", type: "Advertising" },
+          { id: "1843608391", title: "Movilidad Segura — GCBA", type: "Advertising" },
+          { id: "1841750582", title: "Naturaleza Alto Palermo", type: "Advertising" },
+        ],
+      };
+
+      const CAT_LABELS = {
+        film: "Film / Series", animation: "Animation / Gaming",
+        sonic: "Sonic Brand", openings: "Openings", advertising: "Advertising",
+      };
+
+      const sonidoSection  = document.getElementById("sonidoSection");
+      const sonidoMain     = document.getElementById("sonidoMain");
+      const sonidoRendered = {};
+
+      function buildSonidoCard(v, catKey) {
+        const card = document.createElement("div");
+        card.className = "film-card sonido-card";
+        card.dataset.vimeoId    = v.id;
+        card.dataset.sonidoTitle = v.title;
+        card.dataset.sonidoType  = v.type;
+        card.dataset.sonidoCat   = CAT_LABELS[catKey] ?? catKey;
+        card.innerHTML = `
+          <iframe title="${v.title}"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+            src="https://player.vimeo.com/video/${v.id}?background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"
+          ></iframe>
+          <div class="film-meta">
+            <strong>${v.title}</strong>
+            <span>${v.type}</span>
+          </div>`;
+        return card;
+      }
+
+      function renderSonidoView(viewId) {
+        if (sonidoRendered[viewId]) return;
+        const el = document.getElementById("sv-" + viewId);
+        if (!el) return;
+        const grid = el.querySelector(".sonido-grid");
+        if (!grid) return;
+        grid.innerHTML = "";
+        const data = viewId === "home"
+          ? Object.entries(SONIDO_VIDEOS).flatMap(([k, arr]) => arr.map(v => ({ ...v, _cat: k })))
+          : (SONIDO_VIDEOS[viewId] ?? []).map(v => ({ ...v, _cat: viewId }));
+        data.forEach(v => grid.appendChild(buildSonidoCard(v, v._cat)));
+        sonidoRendered[viewId] = true;
+      }
+
+      const TEXT_VIEWS = new Set(["services", "about", "contact"]);
+
+      function showSonidoView(view) {
+        const allViews = ["home","film","animation","sonic","openings","advertising","services","about","contact"];
+        const v = allViews.includes(view) ? view : "home";
+        document.querySelectorAll(".sonido-nav-link").forEach(a =>
+          a.classList.toggle("is-active", a.dataset.view === v));
+        document.querySelectorAll(".sonido-view").forEach(el => { el.hidden = true; });
+        const active = document.getElementById("sv-" + v);
+        if (active) active.hidden = false;
+        if (!TEXT_VIEWS.has(v)) renderSonidoView(v);
+        sonidoMain.scrollTop = 0;
+      }
+
+      function routeSonido() {
+        const hash = location.hash;
+        const inSonido = hash === "#sonido" || hash.startsWith("#sonido/");
+        document.querySelector(".page-shell").hidden = inSonido;
+        canvas.hidden = inSonido;
+        sonidoSection.hidden = !inSonido;
+        sonidoSection.setAttribute("aria-hidden", String(!inSonido));
+        if (inSonido) {
+          const sub = hash.slice("#sonido".length).replace(/^\//, "") || "home";
+          showSonidoView(sub);
+        }
+      }
+
+      window.addEventListener("hashchange", routeSonido);
+
+      document.getElementById("sonidoBack").addEventListener("click", () => {
+        location.hash = "";
+        window.scrollTo(0, 0);
+      });
+
+      sonidoSection.addEventListener("click", (e) => {
+        const card = e.target.closest(".sonido-card");
+        if (card) openVideo(card);
+      });
+
+      routeSonido();
 
       window.setTimeout(() => {
         const w = window.innerWidth;
