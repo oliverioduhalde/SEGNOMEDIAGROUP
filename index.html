@@ -1118,6 +1118,14 @@
     #sv-home .sonido-grid { grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); }
 
     .sonido-card { cursor: pointer; }
+    .sonido-still {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
     /* Text pages */
     .sonido-text-page { max-width: 860px; }
@@ -1618,7 +1626,7 @@
       </button>
       <div class="sonido-brand">Segno Sound</div>
       <nav class="sonido-nav" aria-label="Segno Sound">
-        <a href="#sonido"            class="sonido-nav-link" data-view="home">Home</a>
+        <a href="#sonido"            class="sonido-nav-link" data-view="home">Works</a>
         <a href="#sonido/film"       class="sonido-nav-link" data-view="film">Film / Series</a>
         <a href="#sonido/animation"  class="sonido-nav-link" data-view="animation">Animation</a>
         <a href="#sonido/sonic"      class="sonido-nav-link" data-view="sonic">Sonic Brand</a>
@@ -1635,7 +1643,7 @@
       <div class="sonido-view" id="sv-home" hidden>
         <div class="sonido-view-header">
           <p class="sonido-kicker">Portfolio</p>
-          <h2 class="sonido-view-title">All Work</h2>
+          <h2 class="sonido-view-title">Works</h2>
         </div>
         <div class="sonido-grid"></div>
       </div>
@@ -2513,22 +2521,32 @@
       const sonidoMain     = document.getElementById("sonidoMain");
       const sonidoRendered = {};
 
-      function buildSonidoCard(v, catKey) {
+      function buildSonidoCard(v, catKey, useStill) {
         const card = document.createElement("div");
         card.className = "film-card sonido-card";
-        card.dataset.vimeoId    = v.id;
+        card.dataset.vimeoId     = v.id;
         card.dataset.sonidoTitle = v.title;
         card.dataset.sonidoType  = v.type;
         card.dataset.sonidoCat   = CAT_LABELS[catKey] ?? catKey;
-        card.innerHTML = `
-          <iframe title="${v.title}"
-            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-            src="https://player.vimeo.com/video/${v.id}?background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"
-          ></iframe>
-          <div class="film-meta">
-            <strong>${v.title}</strong>
-            <span>${v.type}</span>
-          </div>`;
+        const meta = `<div class="film-meta"><strong>${v.title}</strong><span>${v.type}</span></div>`;
+        if (useStill) {
+          const img = document.createElement("img");
+          img.alt = v.title;
+          img.loading = "lazy";
+          img.className = "sonido-still";
+          fetch(`https://vimeo.com/api/v2/video/${v.id}.json`)
+            .then(r => r.json())
+            .then(d => { img.src = d[0].thumbnail_large; })
+            .catch(() => {});
+          card.appendChild(img);
+          card.insertAdjacentHTML("beforeend", meta);
+        } else {
+          card.innerHTML = `
+            <iframe title="${v.title}"
+              allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+              src="https://player.vimeo.com/video/${v.id}?background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"
+            ></iframe>${meta}`;
+        }
         return card;
       }
 
@@ -2539,10 +2557,11 @@
         const grid = el.querySelector(".sonido-grid");
         if (!grid) return;
         grid.innerHTML = "";
-        const data = viewId === "home"
+        const isHome = viewId === "home";
+        const data = isHome
           ? Object.entries(SONIDO_VIDEOS).flatMap(([k, arr]) => arr.map(v => ({ ...v, _cat: k })))
           : (SONIDO_VIDEOS[viewId] ?? []).map(v => ({ ...v, _cat: viewId }));
-        data.forEach(v => grid.appendChild(buildSonidoCard(v, v._cat)));
+        data.forEach(v => grid.appendChild(buildSonidoCard(v, v._cat, isHome)));
         sonidoRendered[viewId] = true;
       }
 
