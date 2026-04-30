@@ -1004,7 +1004,7 @@
       position: fixed;
       inset: 0;
       z-index: 6;
-      background: #030507;
+      background: rgba(3, 5, 7, 0.82);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -2713,7 +2713,6 @@
         const hash = location.hash;
         const inSonido = hash === "#sonido" || hash.startsWith("#sonido/");
         document.querySelector(".page-shell").hidden = inSonido;
-        canvas.hidden = inSonido;
         sonidoSection.hidden = !inSonido;
         sonidoSection.setAttribute("aria-hidden", String(!inSonido));
         if (inSonido) {
