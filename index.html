@@ -948,13 +948,17 @@
 
       .project-list,
       .project-row,
-      .film-wall,
       .contact-strip {
         grid-template-columns: 1fr;
       }
 
+      .film-wall {
+        grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+        gap: 8px;
+      }
+
       .film-card {
-        min-height: 178px;
+        min-height: 0;
       }
 
       .video-lightbox {
@@ -1294,7 +1298,7 @@
               <p>Túnel 360 con pantalla LED y narrativa inmersiva.</p>
               <span>Immersive</span>
             </div>
-            <div class="film-card" data-vimeo-id="1187481909" data-vimeo-hash="340d6dd016" data-vr="true">
+            <div class="film-card" data-vimeo-id="1187515817" data-vimeo-hash="596540eeb9" data-vr="true">
               <iframe title="AstraZeneca 360 LED" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187481909?h=340d6dd016&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
               <div class="film-meta"><strong>AstraZeneca</strong><span>360 LED</span></div>
               <div class="badge-360" aria-label="Video 360°">
