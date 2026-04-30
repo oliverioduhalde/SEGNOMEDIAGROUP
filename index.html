@@ -2593,9 +2593,9 @@
           { id: "939757587", title: "Fire Earth Air Water", type: "Shortfilm" },
           { id: "939754958", title: "Sammy Carlson", type: "Documentary" },
           { id: "939757779", title: "Del Potro, El Último Match Point", type: "Doc Series" },
-          { id: "1187928872", title: "Eternia", type: "Shortfilm" },
+          { id: "1187928872", title: "Eternia", type: "Shortfilm", thumbnail: "https://img.youtube.com/vi/Phu2yQamdBE/maxresdefault.jpg" },
           { id: "1187928955", title: "Lali: La que le gana al tiempo", type: "Netflix" },
-          { id: "1187928975", title: "Adiós Madrid", type: "Shortfilm" },
+          { id: "1187928975", title: "Adiós Madrid", type: "Film", thumbnail: "https://img.youtube.com/vi/gTKOJjX1TgM/maxresdefault.jpg" },
         ],
         animation: [
           { id: "939754996", title: "Game of Thrones", type: "Mobile Game Trailer" },
@@ -2660,10 +2660,14 @@
           img.alt = v.title;
           img.loading = "lazy";
           img.className = "sonido-still";
-          fetch(`https://vimeo.com/api/v2/video/${v.id}.json`)
-            .then(r => r.json())
-            .then(d => { img.src = d[0].thumbnail_large; })
-            .catch(() => {});
+          if (v.thumbnail) {
+            img.src = v.thumbnail;
+          } else {
+            fetch(`https://vimeo.com/api/v2/video/${v.id}.json`)
+              .then(r => r.json())
+              .then(d => { img.src = d[0].thumbnail_large; })
+              .catch(() => {});
+          }
           card.appendChild(img);
           card.insertAdjacentHTML("beforeend", meta);
         } else {
