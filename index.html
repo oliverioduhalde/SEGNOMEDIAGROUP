@@ -1015,6 +1015,44 @@
     }
     .sonido-section[hidden] { display: none; }
 
+    /* SPA sections — misma arquitectura que sonido-section */
+    .spa-section {
+      position: fixed;
+      inset: 0;
+      z-index: 6;
+      background: rgba(3, 5, 7, 0.82);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .spa-section[hidden] { display: none; }
+
+    /* Workshop rich-page styles */
+    .ws-desc { max-width: 700px; line-height: 1.75; color: rgba(220,226,232,0.78); font-size: 14px; margin: 0 0 24px; }
+    .ws-quote { margin: 0 0 24px; padding: 12px 18px; border-left: 2px solid rgba(118,243,255,0.4); color: rgba(220,226,232,0.6); font-style: italic; font-size: 13px; line-height: 1.6; }
+    .ws-section-title { font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(118,243,255,0.6); margin: 28px 0 12px; }
+    .ws-tag-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 24px; }
+    .ws-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.11em; text-transform: uppercase; padding: 4px 10px; border: 1px solid rgba(118,243,255,0.28); border-radius: 999px; color: var(--hot); }
+    .ws-photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 6px; margin-bottom: 28px; }
+    .ws-photo-grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 6px; display: block; filter: brightness(0.85); transition: filter 0.2s; cursor: zoom-in; }
+    .ws-photo-grid img:hover { filter: brightness(1); }
+    .ws-video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-bottom: 28px; }
+    .ws-video-grid .film-card { min-height: 0; }
+    .ws-team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; margin-bottom: 28px; }
+    .ws-team-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(220,226,232,0.09); border-radius: 10px; padding: 14px; }
+    .ws-team-card strong { display: block; font-size: 13px; margin-bottom: 5px; }
+    .ws-team-card span { font-size: 11px; color: var(--muted); line-height: 1.5; }
+    .ws-awards { margin-bottom: 24px; }
+    .ws-award-item { font-size: 12px; color: rgba(220,226,232,0.6); padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .ws-partner-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 28px; }
+    .ws-partner { font-size: 11px; color: var(--muted); background: rgba(255,255,255,0.04); border-radius: 6px; padding: 5px 10px; }
+    .ws-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .ws-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(220,226,232,0.1); border-radius: 12px; padding: 18px; cursor: pointer; text-decoration: none; display: block; color: inherit; transition: background 0.2s, border-color 0.2s; }
+    .ws-card:hover { background: rgba(255,255,255,0.07); border-color: rgba(118,243,255,0.28); }
+    .ws-card h3 { font-size: 14px; margin: 0 0 7px; letter-spacing: 0.04em; }
+    .ws-card p { font-size: 11px; color: var(--muted); margin: 0 0 12px; line-height: 1.5; }
+    .ws-card-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.11em; text-transform: uppercase; color: var(--hot); }
+
     .sonido-topbar {
       display: flex;
       align-items: center;
@@ -1272,234 +1310,17 @@
       <div class="brand-shell" id="brandShell">
         <div class="brand" id="brand">SEGNO MEDIA GROUP</div>
         <nav class="service-links" aria-label="Servicios">
-          <a href="#experiencias-inmersivas">Experiencias</a>
+          <a href="#experiencias">Experiencias</a>
           <a href="#sonido">Audiovisuales</a>
-          <a href="#instalaciones-interactivas">Instalaciones interactivas</a>
-          <a href="#aplicaciones-web-moviles">Apps &amp; web</a>
-          <a href="#sound-design">Música &amp; sonido</a>
-          <a href="#workshops-laboratorios">Workshops</a>
+          <a href="#instalaciones">Instalaciones interactivas</a>
+          <a href="#apps">Apps &amp; web</a>
+          <a href="#musica">Música &amp; sonido</a>
+          <a href="#workshops">Workshops</a>
         </nav>
       </div>
     </section>
 
-    <section class="portfolio-scroll" id="presentation" aria-label="SEGNO Studio portfolio">
-      <div class="portfolio-intro">
-        <h2>SEGNO Studio</h2>
-        <p>Experiencias únicas que integran diseño y tecnología. Ideas, creatividad y producción conectando lo físico, lo digital, lo visual y lo sonoro.</p>
-      </div>
-
-      <section class="service-block" id="experiencias-inmersivas" data-kicker="Inmersivas">
-        <h2>Experiencias inmersivas</h2>
-        <p>Diseño y producción de entornos envolventes para marcas, instituciones y audiencias en vivo.</p>
-        <div class="project-list">
-          <article class="project-row">
-            <div class="project-card">
-              <h3>AstraZeneca</h3>
-              <p>Túnel 360 con pantalla LED y narrativa inmersiva.</p>
-              <span>Immersive</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187515817" data-vimeo-hash="596540eeb9" data-vr="true">
-              <iframe title="AstraZeneca 360 LED" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187481909?h=340d6dd016&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>AstraZeneca</strong><span>360 LED</span></div>
-              <div class="badge-360" aria-label="Video 360°">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h5l2 2h4l2-2h5a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><circle cx="9" cy="12" r="1.8"/><circle cx="15" cy="12" r="1.8"/></svg>
-                <span>360°</span>
-              </div>
-            </div>
-          </article>
-          <article class="project-row">
-            <div class="project-card">
-              <h3>Casa FOA 2024</h3>
-              <p>Auditorio 360 inmersivo para mogetta.studio, reconocido con medalla de oro 2024.</p>
-              <span>Immersive 360</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187343725" data-vimeo-hash="e2d7d55e31">
-              <iframe title="Casa FOA immersive 360" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187343725?h=e2d7d55e31&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>Casa FOA</strong><span>Immersive 360</span></div>
-            </div>
-          </article>
-          <article class="project-row">
-            <div class="project-card">
-              <h3>Parque de la Innovación</h3>
-              <p>Experiencia fulldome interactiva con inteligencia artificial para Gobierno de la Ciudad de Buenos Aires.</p>
-              <span>Fulldome</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187344931" data-vimeo-hash="cadae4b574">
-              <iframe title="Fulldome AI PI" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187344931?h=cadae4b574&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>Fulldome AI</strong><span>PI</span></div>
-            </div>
-          </article>
-          <article class="project-row">
-            <div class="project-card">
-              <h3>Museo C3</h3>
-              <p>Performance audiovisual de cine expandido con imagen microscópica en vivo.</p>
-              <span>Performance</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187383990" data-vimeo-hash="d3a1cec41d">
-              <iframe title="Museo C3 performance" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187383990?h=d3a1cec41d&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>Museo C3</strong><span>Performance</span></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="service-block" id="instalaciones-interactivas" data-kicker="Interactivas">
-        <h2>Instalaciones interactivas</h2>
-        <p>Plataformas, interfaces y dinámicas hechas a medida para activar espacios, stands y recorridos de marca.</p>
-        <div class="project-list">
-          <article class="project-row">
-            <div class="project-card">
-              <h3>Syngenta, The Seedcare Institute Singapore</h3>
-              <p>Dinámicas interactivas y web app para facilitar acceso a información dentro del espacio.</p>
-              <span>Interactive</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187337917" data-vimeo-hash="d17a8fd3e5">
-              <iframe title="Seedcare Institute Singapore" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187337917?h=d17a8fd3e5&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>Seedcare Institute</strong><span>Singapore</span></div>
-            </div>
-          </article>
-          <article class="project-row">
-            <div class="project-card">
-              <h3>Syngenta Interactive Wall</h3>
-              <p>Instalación adaptada a cinco países, activa en tres sedes con soporte técnico propio.</p>
-              <span>Interactive wall</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187339661" data-vimeo-hash="5d514def08">
-              <iframe title="Syngenta interactive wall" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187339661?h=5d514def08&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>Syngenta</strong><span>Interactive Wall</span></div>
-            </div>
-          </article>
-          <article class="project-row">
-            <div class="project-card">
-              <h3>Chevrolet, NOS, Lollapalooza</h3>
-              <p>Plataforma de personalización vehicular en tiempo real, proyectada sobre las paredes del stand.</p>
-              <span>Mass events</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187397067" data-vimeo-hash="7c8b29f35f">
-              <iframe title="Chevrolet NOS Lollapalooza" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187397067?h=7c8b29f35f&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>Chevrolet NOS</strong><span>Lollapalooza</span></div>
-            </div>
-          </article>
-          <article class="project-row">
-            <div class="project-card">
-              <h3>ADAMA</h3>
-              <p>Juegos de storytelling para 300 personas simultáneas en mobile, cerrando con show láser sincronizado.</p>
-              <span>Mass events</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187395320" data-vimeo-hash="d885cd137a">
-              <iframe title="ADAMA interactive laser show" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187395320?h=d885cd137a&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>ADAMA</strong><span>Interactive Laser Show</span></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="service-block" id="aplicaciones-web-moviles" data-kicker="Apps & web">
-        <h2>Aplicaciones web y móviles</h2>
-        <p>Herramientas digitales para campo, retail, eventos y activaciones que necesitan operar simple y verse precisas.</p>
-        <div class="project-list">
-          <article class="project-row">
-            <div class="project-card">
-              <h3>Syngenta AR</h3>
-              <p>App de realidad aumentada activa en más de 20 países, con analytics, branding regional y modo offline para eventos de campo.</p>
-              <span>Augmented reality</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187342935" data-vimeo-hash="2fc95448a3">
-              <iframe title="Syngenta AR" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187342935?h=2fc95448a3&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>Syngenta AR</strong><span>Augmented Reality</span></div>
-            </div>
-          </article>
-          <article class="project-row">
-            <div class="project-card">
-              <h3>AFA Studio Adidas</h3>
-              <p>Conexión mobile para visitantes del stand, infografía de camiseta y oportunidad fotográfica interactiva.</p>
-              <span>Retail</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187340367" data-vimeo-hash="30a04cc1ac">
-              <iframe title="AFA Studio Adidas" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187340367?h=30a04cc1ac&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>AFA Studio Adidas</strong><span>Retail</span></div>
-            </div>
-          </article>
-          <article class="project-row">
-            <div class="project-card">
-              <h3>Havanna</h3>
-              <p>Catálogo interactivo para mejorar exploración, compra y experiencia de usuario.</p>
-              <span>Retail</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187468578" data-vimeo-hash="8807545cd0">
-              <iframe title="Havanna retail" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187468578?h=8807545cd0&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>Havanna</strong><span>Retail</span></div>
-            </div>
-          </article>
-          <article class="project-row">
-            <div class="project-card">
-              <h3>Distrito Arcos</h3>
-              <p>Personalización de productos en vivo, procesamiento de pedidos y entrega en el momento.</p>
-              <span>Retail</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187341833" data-vimeo-hash="ec61848923">
-              <iframe title="Distrito Arcos dia del padre" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187341833?h=ec61848923&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>Distrito Arcos</strong><span>Día del Padre</span></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="service-block" id="sound-design" data-kicker="Música & sonido">
-        <h2>Eventos, música y sonido</h2>
-        <p>Producción audiovisual, diseño sonoro, música original y sistemas de participación para audiencias presenciales.</p>
-        <div class="project-list">
-          <article class="project-row">
-            <div class="project-card">
-              <h3>Bagó</h3>
-              <p>Convención nacional de ventas con innovación en todas las etapas, team building y participación en tiempo real.</p>
-              <span>Corporate events</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187390740" data-vimeo-hash="cfa3c1092b">
-              <iframe title="Bagó convención" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187390740?h=cfa3c1092b&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>Bagó</strong><span>Convención</span></div>
-            </div>
-          </article>
-          <article class="project-row">
-            <div class="project-card">
-              <h3>Bresh Party</h3>
-              <p>Instalaciones para Puma, Adidas y Brahma, transformando espacios y habilitando creación de contenido de alta calidad.</p>
-              <span>Mass events</span>
-            </div>
-            <div class="film-card" data-vimeo-id="1187391399" data-vimeo-hash="0ce4fdd2e4">
-              <iframe title="Bresh party Adidas" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187391399?h=0ce4fdd2e4&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
-              <div class="film-meta"><strong>Bresh Party</strong><span>Adidas</span></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="service-block" id="workshops-laboratorios" data-kicker="Workshops">
-        <h2>Laboratorios creativos</h2>
-        <p>Diseñamos workshops y laboratorios para equipos que necesitan prototipar cruces entre experiencia, tecnología, imagen, sonido e interacción.</p>
-        <div class="project-list">
-          <article class="project-card">
-            <h3>BANDA DE ROBOTS</h3>
-            <p>Información en desarrollo.</p>
-            <span>Workshop</span>
-          </article>
-          <article class="project-card">
-            <h3>MICROPRAXISCOPIO</h3>
-            <p>Información en desarrollo.</p>
-            <span>Workshop</span>
-          </article>
-          <article class="project-card">
-            <h3>ASTRO.LOG.IO</h3>
-            <p>Información en desarrollo.</p>
-            <span>Workshop</span>
-          </article>
-          <article class="project-card">
-            <h3>CICLOMUSIC</h3>
-            <p>Información en desarrollo.</p>
-            <span>Workshop</span>
-          </article>
-        </div>
-      </section>
+    <section class="portfolio-scroll" id="contacto-wrap">
 
       <section class="service-block" id="contacto" data-kicker="Contacto">
         <h2>Contacto</h2>
@@ -1510,6 +1331,567 @@
       </section>
     </section>
   </main>
+
+
+  <!-- ============================================================
+       SPA SECTIONS — 5 secciones independientes (hash routing)
+  ============================================================ -->
+
+  <!-- EXPERIENCIAS INMERSIVAS -->
+  <div id="secExperiencias" class="spa-section" hidden aria-hidden="true">
+    <header class="sonido-topbar">
+      <button class="spa-back sonido-back-btn" data-target="">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Segno Media Group</span>
+      </button>
+      <div class="sonido-brand">Experiencias</div>
+      <nav class="sonido-nav" aria-label="Experiencias inmersivas">
+        <a href="#experiencias"      class="sonido-nav-link" data-view="home">Works</a>
+        <a href="#experiencias/360"  class="sonido-nav-link" data-view="360">360 · Inmersivas</a>
+        <a href="#experiencias/dome" class="sonido-nav-link" data-view="dome">Fulldome</a>
+        <a href="#experiencias/perf" class="sonido-nav-link" data-view="perf">Performance</a>
+      </nav>
+    </header>
+    <main class="sonido-main" id="spaMainExp">
+
+      <div class="sonido-view" id="sv-experiencias-home" data-kicker="Inmersivas" hidden>
+        <div class="sonido-view-header">
+          <p class="sonido-kicker">Inmersivas</p>
+          <h2 class="sonido-view-title">Experiencias</h2>
+        </div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>AstraZeneca</h3><p>Túnel 360 con pantalla LED y narrativa inmersiva.</p><span>Immersive</span></div>
+            <div class="film-card" data-vimeo-id="1187515817" data-vimeo-hash="596540eeb9" data-vr="true">
+              <iframe title="AstraZeneca 360 LED" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187515817?h=596540eeb9&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>AstraZeneca</strong><span>360 LED</span></div>
+              <div class="badge-360" aria-label="Video 360°"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h5l2 2h4l2-2h5a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><circle cx="9" cy="12" r="1.8"/><circle cx="15" cy="12" r="1.8"/></svg><span>360°</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Casa FOA 2024</h3><p>Auditorio 360 inmersivo para mogetta.studio, reconocido con medalla de oro 2024.</p><span>Immersive 360</span></div>
+            <div class="film-card" data-vimeo-id="1187343725" data-vimeo-hash="e2d7d55e31">
+              <iframe title="Casa FOA immersive 360" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187343725?h=e2d7d55e31&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Casa FOA</strong><span>Immersive 360</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Parque de la Innovación</h3><p>Experiencia fulldome interactiva con IA para Gobierno de la Ciudad de Buenos Aires.</p><span>Fulldome</span></div>
+            <div class="film-card" data-vimeo-id="1187344931" data-vimeo-hash="cadae4b574">
+              <iframe title="Fulldome AI PI" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187344931?h=cadae4b574&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Fulldome AI</strong><span>PI</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Museo C3</h3><p>Performance audiovisual de cine expandido con imagen microscópica en vivo.</p><span>Performance</span></div>
+            <div class="film-card" data-vimeo-id="1187383990" data-vimeo-hash="d3a1cec41d">
+              <iframe title="Museo C3 performance" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187383990?h=d3a1cec41d&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Museo C3</strong><span>Performance</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="sonido-view" id="sv-experiencias-360" data-kicker="Inmersivas" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">360 &amp; Inmersivas</p><h2 class="sonido-view-title">360</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>AstraZeneca</h3><p>Túnel 360 con pantalla LED y narrativa inmersiva.</p><span>Immersive</span></div>
+            <div class="film-card" data-vimeo-id="1187515817" data-vimeo-hash="596540eeb9" data-vr="true">
+              <iframe title="AstraZeneca 360 LED" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187515817?h=596540eeb9&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>AstraZeneca</strong><span>360 LED</span></div>
+              <div class="badge-360" aria-label="Video 360°"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 7H3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h5l2 2h4l2-2h5a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2Z"/><circle cx="9" cy="12" r="1.8"/><circle cx="15" cy="12" r="1.8"/></svg><span>360°</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Casa FOA 2024</h3><p>Auditorio 360 inmersivo para mogetta.studio, reconocido con medalla de oro 2024.</p><span>Immersive 360</span></div>
+            <div class="film-card" data-vimeo-id="1187343725" data-vimeo-hash="e2d7d55e31">
+              <iframe title="Casa FOA immersive 360" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187343725?h=e2d7d55e31&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Casa FOA</strong><span>Immersive 360</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="sonido-view" id="sv-experiencias-dome" data-kicker="Inmersivas" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Fulldome</p><h2 class="sonido-view-title">Fulldome</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>Parque de la Innovación</h3><p>Experiencia fulldome interactiva con IA para Gobierno de la Ciudad de Buenos Aires.</p><span>Fulldome</span></div>
+            <div class="film-card" data-vimeo-id="1187344931" data-vimeo-hash="cadae4b574">
+              <iframe title="Fulldome AI PI" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187344931?h=cadae4b574&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Fulldome AI</strong><span>PI</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="sonido-view" id="sv-experiencias-perf" data-kicker="Inmersivas" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Performance</p><h2 class="sonido-view-title">Performance</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>Museo C3</h3><p>Performance audiovisual de cine expandido con imagen microscópica en vivo.</p><span>Performance</span></div>
+            <div class="film-card" data-vimeo-id="1187383990" data-vimeo-hash="d3a1cec41d">
+              <iframe title="Museo C3 performance" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187383990?h=d3a1cec41d&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Museo C3</strong><span>Performance</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- INSTALACIONES INTERACTIVAS -->
+  <div id="secInstalaciones" class="spa-section" hidden aria-hidden="true">
+    <header class="sonido-topbar">
+      <button class="spa-back sonido-back-btn" data-target="">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Segno Media Group</span>
+      </button>
+      <div class="sonido-brand">Instalaciones</div>
+      <nav class="sonido-nav" aria-label="Instalaciones interactivas">
+        <a href="#instalaciones"             class="sonido-nav-link" data-view="home">Works</a>
+        <a href="#instalaciones/interactive" class="sonido-nav-link" data-view="interactive">Interactive</a>
+        <a href="#instalaciones/events"      class="sonido-nav-link" data-view="events">Events</a>
+      </nav>
+    </header>
+    <main class="sonido-main" id="spaMainInst">
+
+      <div class="sonido-view" id="sv-instalaciones-home" data-kicker="Interactivas" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Interactivas</p><h2 class="sonido-view-title">Instalaciones</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>Syngenta, The Seedcare Institute Singapore</h3><p>Dinámicas interactivas y web app para facilitar acceso a información dentro del espacio.</p><span>Interactive</span></div>
+            <div class="film-card" data-vimeo-id="1187337917" data-vimeo-hash="d17a8fd3e5">
+              <iframe title="Seedcare Institute Singapore" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187337917?h=d17a8fd3e5&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Seedcare Institute</strong><span>Singapore</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Syngenta Interactive Wall</h3><p>Instalación adaptada a cinco países, activa en tres sedes con soporte técnico propio.</p><span>Interactive wall</span></div>
+            <div class="film-card" data-vimeo-id="1187339661" data-vimeo-hash="5d514def08">
+              <iframe title="Syngenta interactive wall" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187339661?h=5d514def08&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Syngenta</strong><span>Interactive Wall</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Chevrolet, NOS, Lollapalooza</h3><p>Plataforma de personalización vehicular en tiempo real, proyectada sobre las paredes del stand.</p><span>Mass events</span></div>
+            <div class="film-card" data-vimeo-id="1187397067" data-vimeo-hash="7c8b29f35f">
+              <iframe title="Chevrolet NOS Lollapalooza" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187397067?h=7c8b29f35f&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Chevrolet NOS</strong><span>Lollapalooza</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>ADAMA</h3><p>Juegos de storytelling para 300 personas simultáneas en mobile, cerrando con show láser sincronizado.</p><span>Mass events</span></div>
+            <div class="film-card" data-vimeo-id="1187395320" data-vimeo-hash="d885cd137a">
+              <iframe title="ADAMA interactive laser show" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187395320?h=d885cd137a&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>ADAMA</strong><span>Interactive Laser Show</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="sonido-view" id="sv-instalaciones-interactive" data-kicker="Interactivas" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Interactive</p><h2 class="sonido-view-title">Interactive</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>Syngenta, The Seedcare Institute Singapore</h3><p>Dinámicas interactivas y web app para facilitar acceso a información dentro del espacio.</p><span>Interactive</span></div>
+            <div class="film-card" data-vimeo-id="1187337917" data-vimeo-hash="d17a8fd3e5">
+              <iframe title="Seedcare Institute Singapore" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187337917?h=d17a8fd3e5&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Seedcare Institute</strong><span>Singapore</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Syngenta Interactive Wall</h3><p>Instalación adaptada a cinco países, activa en tres sedes con soporte técnico propio.</p><span>Interactive wall</span></div>
+            <div class="film-card" data-vimeo-id="1187339661" data-vimeo-hash="5d514def08">
+              <iframe title="Syngenta interactive wall" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187339661?h=5d514def08&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Syngenta</strong><span>Interactive Wall</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="sonido-view" id="sv-instalaciones-events" data-kicker="Interactivas" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Events</p><h2 class="sonido-view-title">Events</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>Chevrolet, NOS, Lollapalooza</h3><p>Plataforma de personalización vehicular en tiempo real, proyectada sobre las paredes del stand.</p><span>Mass events</span></div>
+            <div class="film-card" data-vimeo-id="1187397067" data-vimeo-hash="7c8b29f35f">
+              <iframe title="Chevrolet NOS Lollapalooza" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187397067?h=7c8b29f35f&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Chevrolet NOS</strong><span>Lollapalooza</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>ADAMA</h3><p>Juegos de storytelling para 300 personas simultáneas en mobile, cerrando con show láser sincronizado.</p><span>Mass events</span></div>
+            <div class="film-card" data-vimeo-id="1187395320" data-vimeo-hash="d885cd137a">
+              <iframe title="ADAMA interactive laser show" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187395320?h=d885cd137a&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>ADAMA</strong><span>Interactive Laser Show</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- APPS & WEB -->
+  <div id="secApps" class="spa-section" hidden aria-hidden="true">
+    <header class="sonido-topbar">
+      <button class="spa-back sonido-back-btn" data-target="">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Segno Media Group</span>
+      </button>
+      <div class="sonido-brand">Apps &amp; web</div>
+      <nav class="sonido-nav" aria-label="Apps y web móviles">
+        <a href="#apps"        class="sonido-nav-link" data-view="home">Works</a>
+        <a href="#apps/ar"     class="sonido-nav-link" data-view="ar">AR</a>
+        <a href="#apps/retail" class="sonido-nav-link" data-view="retail">Retail</a>
+      </nav>
+    </header>
+    <main class="sonido-main" id="spaMainApps">
+
+      <div class="sonido-view" id="sv-apps-home" data-kicker="Apps & web" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Apps &amp; web</p><h2 class="sonido-view-title">Aplicaciones</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>Syngenta AR</h3><p>App de realidad aumentada activa en más de 20 países, con analytics, branding regional y modo offline para eventos de campo.</p><span>Augmented reality</span></div>
+            <div class="film-card" data-vimeo-id="1187342935" data-vimeo-hash="2fc95448a3">
+              <iframe title="Syngenta AR" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187342935?h=2fc95448a3&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Syngenta AR</strong><span>Augmented Reality</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>AFA Studio Adidas</h3><p>Conexión mobile para visitantes del stand, infografía de camiseta y oportunidad fotográfica interactiva.</p><span>Retail</span></div>
+            <div class="film-card" data-vimeo-id="1187340367" data-vimeo-hash="30a04cc1ac">
+              <iframe title="AFA Studio Adidas" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187340367?h=30a04cc1ac&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>AFA Studio Adidas</strong><span>Retail</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Havanna</h3><p>Catálogo interactivo para mejorar exploración, compra y experiencia de usuario.</p><span>Retail</span></div>
+            <div class="film-card" data-vimeo-id="1187468578" data-vimeo-hash="8807545cd0">
+              <iframe title="Havanna retail" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187468578?h=8807545cd0&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Havanna</strong><span>Retail</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Distrito Arcos</h3><p>Personalización de productos en vivo, procesamiento de pedidos y entrega en el momento.</p><span>Retail</span></div>
+            <div class="film-card" data-vimeo-id="1187341833" data-vimeo-hash="ec61848923">
+              <iframe title="Distrito Arcos dia del padre" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187341833?h=ec61848923&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Distrito Arcos</strong><span>Día del Padre</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="sonido-view" id="sv-apps-ar" data-kicker="Apps & web" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Augmented Reality</p><h2 class="sonido-view-title">AR</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>Syngenta AR</h3><p>App de realidad aumentada activa en más de 20 países, con analytics, branding regional y modo offline para eventos de campo.</p><span>Augmented reality</span></div>
+            <div class="film-card" data-vimeo-id="1187342935" data-vimeo-hash="2fc95448a3">
+              <iframe title="Syngenta AR" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187342935?h=2fc95448a3&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Syngenta AR</strong><span>Augmented Reality</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="sonido-view" id="sv-apps-retail" data-kicker="Apps & web" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Retail</p><h2 class="sonido-view-title">Retail</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>AFA Studio Adidas</h3><p>Conexión mobile para visitantes del stand, infografía de camiseta y oportunidad fotográfica interactiva.</p><span>Retail</span></div>
+            <div class="film-card" data-vimeo-id="1187340367" data-vimeo-hash="30a04cc1ac">
+              <iframe title="AFA Studio Adidas" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187340367?h=30a04cc1ac&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>AFA Studio Adidas</strong><span>Retail</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Havanna</h3><p>Catálogo interactivo para mejorar exploración, compra y experiencia de usuario.</p><span>Retail</span></div>
+            <div class="film-card" data-vimeo-id="1187468578" data-vimeo-hash="8807545cd0">
+              <iframe title="Havanna retail" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187468578?h=8807545cd0&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Havanna</strong><span>Retail</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Distrito Arcos</h3><p>Personalización de productos en vivo, procesamiento de pedidos y entrega en el momento.</p><span>Retail</span></div>
+            <div class="film-card" data-vimeo-id="1187341833" data-vimeo-hash="ec61848923">
+              <iframe title="Distrito Arcos dia del padre" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187341833?h=ec61848923&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Distrito Arcos</strong><span>Día del Padre</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MÚSICA & SONIDO -->
+  <div id="secMusica" class="spa-section" hidden aria-hidden="true">
+    <header class="sonido-topbar">
+      <button class="spa-back sonido-back-btn" data-target="">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Segno Media Group</span>
+      </button>
+      <div class="sonido-brand">Música &amp; sonido</div>
+      <nav class="sonido-nav" aria-label="Música y sonido">
+        <a href="#musica"          class="sonido-nav-link" data-view="home">Works</a>
+        <a href="#musica/corporate" class="sonido-nav-link" data-view="corporate">Corporate</a>
+        <a href="#musica/events"   class="sonido-nav-link" data-view="events">Events</a>
+      </nav>
+    </header>
+    <main class="sonido-main" id="spaMainMusica">
+
+      <div class="sonido-view" id="sv-musica-home" data-kicker="Música & sonido" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Música &amp; sonido</p><h2 class="sonido-view-title">Eventos</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>Bagó</h3><p>Convención nacional de ventas con innovación en todas las etapas, team building y participación en tiempo real.</p><span>Corporate events</span></div>
+            <div class="film-card" data-vimeo-id="1187390740" data-vimeo-hash="cfa3c1092b">
+              <iframe title="Bagó convención" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187390740?h=cfa3c1092b&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Bagó</strong><span>Convención</span></div>
+            </div>
+          </article>
+          <article class="project-row">
+            <div class="project-card"><h3>Bresh Party</h3><p>Instalaciones para Puma, Adidas y Brahma, transformando espacios y habilitando creación de contenido de alta calidad.</p><span>Mass events</span></div>
+            <div class="film-card" data-vimeo-id="1187391399" data-vimeo-hash="0ce4fdd2e4">
+              <iframe title="Bresh party Adidas" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187391399?h=0ce4fdd2e4&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Bresh Party</strong><span>Adidas</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="sonido-view" id="sv-musica-corporate" data-kicker="Música & sonido" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Corporate</p><h2 class="sonido-view-title">Corporate</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>Bagó</h3><p>Convención nacional de ventas con innovación en todas las etapas, team building y participación en tiempo real.</p><span>Corporate events</span></div>
+            <div class="film-card" data-vimeo-id="1187390740" data-vimeo-hash="cfa3c1092b">
+              <iframe title="Bagó convención" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187390740?h=cfa3c1092b&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Bagó</strong><span>Convención</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="sonido-view" id="sv-musica-events" data-kicker="Música & sonido" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Mass Events</p><h2 class="sonido-view-title">Events</h2></div>
+        <div class="project-list">
+          <article class="project-row">
+            <div class="project-card"><h3>Bresh Party</h3><p>Instalaciones para Puma, Adidas y Brahma, transformando espacios y habilitando creación de contenido de alta calidad.</p><span>Mass events</span></div>
+            <div class="film-card" data-vimeo-id="1187391399" data-vimeo-hash="0ce4fdd2e4">
+              <iframe title="Bresh party Adidas" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1187391399?h=0ce4fdd2e4&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+              <div class="film-meta"><strong>Bresh Party</strong><span>Adidas</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- WORKSHOPS & LABORATORIOS -->
+  <div id="secWorkshops" class="spa-section" hidden aria-hidden="true">
+    <header class="sonido-topbar">
+      <button class="spa-back sonido-back-btn" data-target="">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        <span>Segno Media Group</span>
+      </button>
+      <div class="sonido-brand">Workshops</div>
+      <nav class="sonido-nav" aria-label="Workshops y laboratorios">
+        <a href="#workshops"                    class="sonido-nav-link" data-view="home">Home</a>
+        <a href="#workshops/banda-de-robots"    class="sonido-nav-link" data-view="banda-de-robots">Banda de Robots</a>
+        <a href="#workshops/micra"              class="sonido-nav-link" data-view="micra">MicRA</a>
+        <a href="#workshops/astrologio"         class="sonido-nav-link" data-view="astrologio">Astro.log.io</a>
+        <a href="#workshops/ciclomusic"         class="sonido-nav-link" data-view="ciclomusic">Ciclomusic</a>
+      </nav>
+    </header>
+    <main class="sonido-main" id="spaMainWs">
+
+      <!-- HOME -->
+      <div class="sonido-view" id="sv-workshops-home" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Laboratorios creativos</p><h2 class="sonido-view-title">Workshops</h2></div>
+        <p class="ws-desc">Diseñamos workshops y laboratorios para equipos que necesitan prototipar cruces entre experiencia, tecnología, imagen, sonido e interacción.</p>
+        <div class="ws-card-grid">
+          <a href="#workshops/banda-de-robots" class="ws-card">
+            <h3>Banda de Robots</h3>
+            <p>Proyecto de innovación educativa que combina ingeniería, electrónica, luthería, artes plásticas y música.</p>
+            <span class="ws-card-tag">Workshop · Laboratorio</span>
+          </a>
+          <a href="#workshops/micra" class="ws-card">
+            <h3>MicRA · Micropraxiscopio</h3>
+            <p>Laboratorio de creación colectiva con microscopía, bioinstalaciones y sonido interaural.</p>
+            <span class="ws-card-tag">Laboratorio · Bioart</span>
+          </a>
+          <a href="#workshops/astrologio" class="ws-card">
+            <h3>Astro.log.io</h3>
+            <p>Información en desarrollo.</p>
+            <span class="ws-card-tag">Workshop</span>
+          </a>
+          <a href="#workshops/ciclomusic" class="ws-card">
+            <h3>Ciclomusic</h3>
+            <p>Información en desarrollo.</p>
+            <span class="ws-card-tag">Workshop</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- BANDA DE ROBOTS -->
+      <div class="sonido-view" id="sv-workshops-banda-de-robots" hidden>
+        <div class="sonido-view-header">
+          <p class="sonido-kicker">Workshop · Innovación educativa</p>
+          <h2 class="sonido-view-title">Banda de Robots</h2>
+        </div>
+        <p class="ws-desc">Proyecto de innovación educativa que combina ingeniería, electrónica, programación, luthería, artes plásticas y música para crear una orquesta de robots. Edades 9–99. Tres niveles progresivos liderados por docentes universitarios con alcance inter-regional vía internet.</p>
+        <div class="ws-tag-row">
+          <span class="ws-tag">Robótica</span>
+          <span class="ws-tag">Electrónica</span>
+          <span class="ws-tag">Luthería</span>
+          <span class="ws-tag">Programación</span>
+          <span class="ws-tag">Arte sonoro</span>
+          <span class="ws-tag">Educación</span>
+        </div>
+
+        <p class="ws-section-title">Videos</p>
+        <div class="ws-video-grid">
+          <div class="film-card" data-vimeo-id="1010417683">
+            <iframe title="Banda de Robots en el San Martin" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1010417683?background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+            <div class="film-meta"><strong>Banda de Robots</strong><span>Teatro San Martín</span></div>
+          </div>
+          <div class="film-card" data-vimeo-id="1010414840" data-vimeo-hash="76436318ab">
+            <iframe title="Banda de Robots Adultos" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1010414840?h=76436318ab&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+            <div class="film-meta"><strong>Banda de Robots</strong><span>Adultos</span></div>
+          </div>
+          <div class="film-card" data-vimeo-id="1010403188">
+            <iframe title="Banda de Robots San Martin" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1010403188?background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+            <div class="film-meta"><strong>Banda de Robots</strong><span>San Martín</span></div>
+          </div>
+        </div>
+
+        <p class="ws-section-title">Musicbots — galería</p>
+        <div class="ws-photo-grid">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_ff99ebbedbd84e259e02d6dc43740bcd~mv2_d_4851_3253_s_4_2.jpg">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_52c6bd0c68eb4f57b43f5d3510752683~mv2_d_4288_3198_s_4_2.jpg">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_1613a6705f9c4b22b600404a22ddb695~mv2_d_4019_2996_s_4_2.jpg">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_030dadd31ade40a4ba5f5d164accb02b~mv2_d_4968_3191_s_4_2.jpg">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_55b70d9500cc4c48a516207fe9e31a64~mv2_d_5250_3143_s_4_2.jpg">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_d162cc42a07f48f08260a342ac96f80e~mv2_d_3599_4525_s_4_2.jpg">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_2844fd7c981f4b65bca5eb8f2cd48984~mv2_d_4321_2572_s_4_2.jpg">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_3dba75832dab40598c98e7a37d03c018~mv2_d_4445_2642_s_4_2.jpg">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_cf01d40f528644feaec0723a0e6128b0~mv2_d_3368_2997_s_4_2.jpg">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_09333fbf400e4131884563cb16420e7a~mv2_d_5082_3390_s_4_2.jpg">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_469532a4bc73482082d053cddc6ca494~mv2_d_4633_2939_s_4_2.jpg">
+          <img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_d3d03245a010428ab385168c3fd5bdd2~mv2.jpg">
+        </div>
+
+        <p class="ws-section-title">Programa</p>
+        <p class="ws-desc">Tres niveles progresivos de complejidad y compromiso. Estimula el pensamiento divergente combinando arte, ciencia y tecnología. Habilidades transferibles a automatización, biomecánica, domótica e industria automotriz. Los participantes desarrollan robótica, software, física, diseño industrial, electrónica, electromecánica, música, programación y arte visual.</p>
+
+        <p class="ws-section-title">Equipo</p>
+        <div class="ws-team-grid">
+          <div class="ws-team-card"><strong>Oliverio Duhalde</strong><span>Director · Compositor · Tecnólogo artístico<br>Premio Antorchas · Prix Jeunesse</span></div>
+          <div class="ws-team-card"><strong>Federico Wiman</strong><span>Coordinación y programación · Pianista-compositor<br>Premio Alberto Ginastera</span></div>
+          <div class="ws-team-card"><strong>Esteban Vivo Cháneton</strong><span>Asesor · 30 años en medios y televisión · MBA IAE</span></div>
+          <div class="ws-team-card"><strong>Hugo Domínguez</strong><span>Luthería y prototipos<br>Luthier de Les Luthiers desde 1997</span></div>
+          <div class="ws-team-card"><strong>Joaquín Batinic Rey</strong><span>Percusión y electrónica<br>Medalla de oro Olimpiada Argentina de Biología 2017</span></div>
+        </div>
+
+        <p class="ws-section-title">Premios y reconocimientos</p>
+        <div class="ws-awards">
+          <div class="ws-award-item">Premio Innovación Educativa · Fondo Nacional de las Artes · 2016</div>
+          <div class="ws-award-item">Beca Bicentenario · Fondo Nacional de las Artes · 2016</div>
+          <div class="ws-award-item">Samsung Innova · Finalista · 2017 y 2018</div>
+          <div class="ws-award-item">Beca Creación · Fondo Nacional de las Artes · 2018</div>
+          <div class="ws-award-item">Sello de Mecenazgo Cultural · Ciudad de Buenos Aires · 2018</div>
+        </div>
+
+        <p class="ws-section-title">Instituciones y socios</p>
+        <div class="ws-partner-row">
+          <span class="ws-partner">Fundación Ruta 40</span>
+          <span class="ws-partner">Universidad Católica Argentina</span>
+          <span class="ws-partner">Espacio CCEEBA</span>
+          <span class="ws-partner">FASE</span>
+          <span class="ws-partner">ODSA</span>
+          <span class="ws-partner">Fundación Telefónica</span>
+          <span class="ws-partner">Paka Paka</span>
+          <span class="ws-partner">Casa del Bicentenario</span>
+          <span class="ws-partner">CaSO · Centro de Arte Sonoro</span>
+        </div>
+      </div>
+
+      <!-- MICRA -->
+      <div class="sonido-view" id="sv-workshops-micra" hidden>
+        <div class="sonido-view-header">
+          <p class="sonido-kicker">Laboratorio de creación colectiva</p>
+          <h2 class="sonido-view-title">MicRA · Micropraxiscopio</h2>
+        </div>
+        <p class="ws-desc">Laboratorio de creación colectiva para el desarrollo de interfaces expresivas mediante experimentación microscópica y macroscópica con organismos vivos, materia inerte y reacciones químicas. El proyecto transforma fenómenos microscópicos en material artístico, cultivando en el público la curiosidad por mundos biológicos invisibles.</p>
+        <blockquote class="ws-quote">"La experiencia más bella que podemos tener es la del misterio… quien no la conoce es como una lámpara apagada." — A. Einstein</blockquote>
+        <div class="ws-tag-row">
+          <span class="ws-tag">Microscopía</span>
+          <span class="ws-tag">Estereoscopía</span>
+          <span class="ws-tag">Fotografía gigante</span>
+          <span class="ws-tag">Bioinstalaciones</span>
+          <span class="ws-tag">Sonido interaural</span>
+          <span class="ws-tag">Video art</span>
+        </div>
+
+        <p class="ws-section-title">Videos</p>
+        <div class="ws-video-grid">
+          <div class="film-card" data-vimeo-id="1062927893">
+            <iframe title="MicRA µ" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1062927893?background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+            <div class="film-meta"><strong>MicRA µ</strong><span>Bioinstalación</span></div>
+          </div>
+          <div class="film-card" data-vimeo-id="1062928041" data-vimeo-hash="116617aa77">
+            <iframe title="MicRA MINCYT" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1062928041?h=116617aa77&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+            <div class="film-meta"><strong>MicRA</strong><span>MINCYT</span></div>
+          </div>
+          <div class="film-card" data-vimeo-id="1062928004" data-vimeo-hash="a64a1a67a7">
+            <iframe title="Micropraxiscopio CAECE" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1062928004?h=a64a1a67a7&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+            <div class="film-meta"><strong>Micropraxiscopio</strong><span>CAECE</span></div>
+          </div>
+          <div class="film-card" data-vimeo-id="1062927977" data-vimeo-hash="b2077648e2">
+            <iframe title="Micropraxiscopio IBYME" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" src="https://player.vimeo.com/video/1062927977?h=b2077648e2&background=1&autoplay=1&muted=1&loop=1&playsinline=1&api=1"></iframe>
+            <div class="film-meta"><strong>Micropraxiscopio</strong><span>IBYME</span></div>
+          </div>
+        </div>
+
+        <p class="ws-section-title">Equipo</p>
+        <div class="ws-team-grid">
+          <div class="ws-team-card"><strong>Arq. Sebastián Aznar</strong><span>FADU · Arquitecto, artista, docente universitario</span></div>
+          <div class="ws-team-card"><strong>Dr. Martín Bonadeo</strong><span>UCA · Artista visual, docente universitario</span></div>
+          <div class="ws-team-card"><strong>Lic. Oliverio Duhalde</strong><span>UCA · Artista sonoro, compositor, docente universitario</span></div>
+          <div class="ws-team-card"><strong>Dra. Patricia Saragueta</strong><span>IBYME · Artista, científica, docente universitaria</span></div>
+          <div class="ws-team-card"><strong>Dr. Pablo Lapadula</strong><span>UBA-UnTref · Artista, científico, docente universitario</span></div>
+        </div>
+
+        <p class="ws-section-title">Instituciones</p>
+        <div class="ws-partner-row">
+          <span class="ws-partner">Laboratorio de Biología Comparada de Protistas · UBA</span>
+          <span class="ws-partner">Zona Imaginaria</span>
+          <span class="ws-partner">IBYME-CONICET</span>
+        </div>
+      </div>
+
+      <!-- ASTRO.LOG.IO -->
+      <div class="sonido-view" id="sv-workshops-astrologio" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Workshop</p><h2 class="sonido-view-title">Astro.log.io</h2></div>
+        <p class="ws-desc">Información en desarrollo. Próximamente se publicará contenido sobre este laboratorio.</p>
+      </div>
+
+      <!-- CICLOMUSIC -->
+      <div class="sonido-view" id="sv-workshops-ciclomusic" hidden>
+        <div class="sonido-view-header"><p class="sonido-kicker">Workshop</p><h2 class="sonido-view-title">Ciclomusic</h2></div>
+        <p class="ws-desc">Información en desarrollo. Próximamente se publicará contenido sobre este laboratorio.</p>
+      </div>
+
+    </main>
+  </div>
+
+
 
   <aside class="controls" id="controls">
     <div class="panel-head">
@@ -2419,7 +2801,7 @@
         } else {
           const row = card.closest(".project-row");
           const pc  = row?.querySelector(".project-card");
-          const block = card.closest(".service-block");
+          const block = card.closest("[data-kicker]");
           client = pc?.querySelector("h3")?.textContent?.trim() ?? "";
           type   = pc?.querySelector("span")?.textContent?.trim() ?? "";
           cat    = block?.dataset?.kicker ?? "";
@@ -2704,40 +3086,94 @@
       function showSonidoView(view) {
         const allViews = ["home","film","animation","sonic","openings","advertising","services","about","contact"];
         const v = allViews.includes(view) ? view : "home";
-        document.querySelectorAll(".sonido-nav-link").forEach(a =>
+        sonidoSection.querySelectorAll(".sonido-nav-link").forEach(a =>
           a.classList.toggle("is-active", a.dataset.view === v));
-        document.querySelectorAll(".sonido-view").forEach(el => { el.hidden = true; });
+        sonidoSection.querySelectorAll(".sonido-view").forEach(el => { el.hidden = true; });
         const active = document.getElementById("sv-" + v);
         if (active) active.hidden = false;
         if (!TEXT_VIEWS.has(v)) renderSonidoView(v);
         sonidoMain.scrollTop = 0;
       }
 
-      function routeSonido() {
+      // ── Generic SPA router ──────────────────────────────────────────
+      const SPA_SECTIONS = {
+        experiencias:  { el: document.getElementById("secExperiencias"),  mainId: "spaMainExp"    },
+        instalaciones: { el: document.getElementById("secInstalaciones"), mainId: "spaMainInst"   },
+        apps:          { el: document.getElementById("secApps"),          mainId: "spaMainApps"   },
+        musica:        { el: document.getElementById("secMusica"),        mainId: "spaMainMusica" },
+        workshops:     { el: document.getElementById("secWorkshops"),     mainId: "spaMainWs"     },
+      };
+
+      function showSpaView(sectionKey, viewId) {
+        const cfg = SPA_SECTIONS[sectionKey];
+        if (!cfg) return;
+        const prefix = "sv-" + sectionKey + "-";
+        cfg.el.querySelectorAll(".sonido-view").forEach(el => { el.hidden = true; });
+        const target = document.getElementById(prefix + viewId)
+                    || document.getElementById(prefix + "home");
+        if (target) target.hidden = false;
+        cfg.el.querySelectorAll(".sonido-nav-link").forEach(a =>
+          a.classList.toggle("is-active", a.dataset.view === viewId)
+        );
+        const main = document.getElementById(cfg.mainId);
+        if (main) main.scrollTop = 0;
+      }
+
+      function routeHash() {
         const hash = location.hash;
-        const inSonido = hash === "#sonido" || hash.startsWith("#sonido/");
-        document.querySelector(".page-shell").hidden = inSonido;
+        const parts = hash.replace("#", "").split("/");
+        const rawSection = parts[0] || "";
+        const rawView    = parts[1] || "home";
+        const pageShell  = document.querySelector(".page-shell");
+
+        const inSonido = rawSection === "sonido";
+        const inSpa    = rawSection in SPA_SECTIONS;
+        const inAny    = inSonido || inSpa;
+
+        pageShell.hidden = inAny;
+
+        // Show/hide all SPA sections
+        for (const [key, cfg] of Object.entries(SPA_SECTIONS)) {
+          const active = key === rawSection;
+          cfg.el.hidden = !active;
+          cfg.el.setAttribute("aria-hidden", String(!active));
+        }
+
+        // Sonido section
         sonidoSection.hidden = !inSonido;
         sonidoSection.setAttribute("aria-hidden", String(!inSonido));
+
         if (inSonido) {
-          const sub = hash.slice("#sonido".length).replace(/^\//, "") || "home";
-          showSonidoView(sub);
+          showSonidoView(rawView);
+        } else if (inSpa) {
+          showSpaView(rawSection, rawView);
         }
       }
 
-      window.addEventListener("hashchange", routeSonido);
-
+      // Back buttons — all spa sections + sonido
+      document.querySelectorAll(".spa-back").forEach(btn =>
+        btn.addEventListener("click", () => { location.hash = ""; window.scrollTo(0, 0); })
+      );
       document.getElementById("sonidoBack").addEventListener("click", () => {
         location.hash = "";
         window.scrollTo(0, 0);
       });
+
+      // Film-card clicks inside SPA sections
+      document.querySelectorAll(".spa-section").forEach(sec =>
+        sec.addEventListener("click", e => {
+          const card = e.target.closest(".film-card");
+          if (card) openVideo(card);
+        })
+      );
 
       sonidoSection.addEventListener("click", (e) => {
         const card = e.target.closest(".sonido-card");
         if (card) openVideo(card);
       });
 
-      routeSonido();
+      window.addEventListener("hashchange", routeHash);
+      routeHash();
 
       window.setTimeout(() => {
         const w = window.innerWidth;
