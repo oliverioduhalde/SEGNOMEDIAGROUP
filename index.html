@@ -113,8 +113,7 @@
 
     .brand-shell {
       position: relative;
-      width: fit-content;
-      max-width: calc(100vw - 44px);
+      width: min(340px, calc(100vw - 44px));
       pointer-events: none;
       display: grid;
       justify-items: center;
@@ -122,8 +121,8 @@
     }
 
     .segno-avatar {
-      width: 100%;
-      max-width: 220px;
+      width: auto;
+      max-width: 180px;
       height: auto;
       border-radius: 50%;
       opacity: 0.22;
@@ -135,12 +134,13 @@
 
     .brand {
       font-family: var(--mono);
-      font-size: clamp(68px, 19vw, 112px);
+      font-size: clamp(52px, 19vw, 72px);
       font-weight: 400;
       letter-spacing: 0.34em;
       text-transform: uppercase;
       text-align: center;
       line-height: 1.05;
+      width: 100%;
       color: rgba(220, 226, 232, 0.78);
       mix-blend-mode: screen;
       text-shadow: 0 0 22px rgba(118, 243, 255, 0.14);
@@ -914,7 +914,7 @@
       }
 
       .brand-shell {
-        max-width: calc(100vw - 28px);
+        width: min(300px, calc(100vw - 28px));
         gap: 12px;
       }
 
