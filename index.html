@@ -128,8 +128,17 @@
       opacity: 0.22;
       mix-blend-mode: screen;
       filter: grayscale(0.5) saturate(0.5) contrast(1.1);
-      pointer-events: none;
+      pointer-events: auto;
       user-select: none;
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .segno-avatar:hover {
+      opacity: 0.36;
+      transform: scale(1.06);
+    }
+    .segno-avatar:active {
+      transform: scale(0.96);
     }
 
     .brand {
@@ -2594,6 +2603,11 @@
           const value = input.type === "range" ? Number(input.value) : input.value;
           applyChange(key, value);
         });
+      });
+
+      // Logo click → random palette (always starts as cyan on load)
+      document.querySelector(".segno-avatar").addEventListener("click", () => {
+        applyChange("palette", "random");
       });
 
       document.getElementById("toggleHud").addEventListener("click", () => {
