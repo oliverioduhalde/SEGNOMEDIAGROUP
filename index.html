@@ -2259,7 +2259,7 @@
         polyphony: 10,
         palette: "cyan",
         alpha: 0.36,
-        brandSize: 34,
+        brandSize: 68,
         tracking: 0.34,
         showHud: false,
         showBrand: true,
@@ -2500,6 +2500,22 @@
         });
       };
 
+      // Fit brand text to exact container width
+      const _fitCanvas = Object.assign(document.createElement("canvas"), { width: 1, height: 1 }).getContext("2d");
+      const fitBrand = () => {
+        if (!brand || !brandShell) return;
+        const containerW = brandShell.getBoundingClientRect().width;
+        if (containerW === 0) return;
+        const fs = parseFloat(brand.style.fontSize) || 68;
+        const ff = getComputedStyle(brand).fontFamily;
+        _fitCanvas.font = `400 ${fs}px ${ff}`;
+        const textW = _fitCanvas.measureText("SEGNO").width; // all words are 5 chars
+        const ls = Math.max(0, (containerW - textW) / 5);
+        brand.style.letterSpacing = ls + "px";
+      };
+      new ResizeObserver(fitBrand).observe(brandShell);
+      document.fonts.ready.then(fitBrand);
+
       const syncUi = () => {
         document.querySelectorAll("[data-key]").forEach((input) => {
           const key = input.dataset.key;
@@ -2515,7 +2531,7 @@
 
         brandShell.style.display = state.showBrand ? "grid" : "none";
         brand.style.fontSize = `${state.brandSize}px`;
-        brand.style.letterSpacing = `${state.tracking}em`;
+        fitBrand();
         document.querySelector(".topbar").style.display = state.showHud ? "flex" : "none";
         sceneLabel.textContent = `Scene ${activeScene + 1}`;
 
