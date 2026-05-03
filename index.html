@@ -1054,7 +1054,7 @@
       position: fixed;
       inset: 0;
       z-index: 6;
-      background: rgba(3, 5, 7, 0.82);
+      background: rgba(3, 5, 7, 0.72);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -1066,7 +1066,7 @@
       position: fixed;
       inset: 0;
       z-index: 6;
-      background: rgba(3, 5, 7, 0.82);
+      background: rgba(3, 5, 7, 0.72);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -2586,6 +2586,26 @@
         renderScenes();
       };
 
+      const PALETTE_KEY = "SEGNOMEDIAGROUP_PALETTE_V1";
+      const savePalette = () => {
+        try {
+          localStorage.setItem(PALETTE_KEY, JSON.stringify({
+            palette: state.palette,
+            randomPalette: state.randomPalette || null
+          }));
+        } catch {}
+      };
+      const loadPalette = () => {
+        try {
+          const saved = JSON.parse(localStorage.getItem(PALETTE_KEY) || "null");
+          if (saved && saved.palette) {
+            state.palette = saved.palette;
+            state.randomPalette = saved.randomPalette || null;
+          }
+        } catch {}
+      };
+      loadPalette();
+
       const applyChange = (key, value) => {
         if (key === "palette" && value === "random") {
           state.randomPalette = randomPalette();
@@ -2594,6 +2614,7 @@
           state.randomPalette = null;
         }
         state[key] = value;
+        if (key === "palette") savePalette();
         syncUi();
       };
 
