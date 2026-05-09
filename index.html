@@ -2875,7 +2875,7 @@
         applyFrameSize(w, h);
 
         const params = new URLSearchParams({
-          autoplay: "1", muted: "0", loop: "0",
+          autoplay: "1", muted: "1", loop: "0",
           playsinline: "1", api: "1",
           title: "0", byline: "0", portrait: "0"
         });
@@ -2890,8 +2890,6 @@
         videoLightbox.setAttribute("aria-hidden", "false");
 
         activeModalFrame.addEventListener("load", () => {
-          postVimeo(activeModalFrame, "setMuted", false);
-          postVimeo(activeModalFrame, "setVolume", 0.85);
           postVimeo(activeModalFrame, "play");
           postVimeo(activeModalFrame, "addEventListener", "ended");
           if (is360) {
