@@ -2871,20 +2871,7 @@
           vrControls.setAttribute("aria-hidden", "true");
         }
 
-        // fetch oEmbed for native dimensions
-        let nativeW = 1920, nativeH = 1080;
-        try {
-          const r = await fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${id}&width=1920`);
-          if (r.ok) {
-            const d = await r.json();
-            if (d.width && d.height) { nativeW = d.width; nativeH = d.height; }
-          }
-        } catch {}
-
-        // for 360, use standard 16:9 (player renders sphere, not letterboxed)
-        if (is360) { nativeW = 16; nativeH = 9; }
-
-        const { w, h } = calcSize(nativeW, nativeH);
+        const { w, h } = calcSize(16, 9);
         applyFrameSize(w, h);
 
         const params = new URLSearchParams({
@@ -2895,7 +2882,7 @@
         if (hash) params.set("h", hash);
 
         activeModalFrame = document.createElement("iframe");
-        activeModalFrame.allow = "autoplay; fullscreen; picture-in-picture; xr-spatial-tracking";
+        activeModalFrame.allow = "autoplay; encrypted-media; fullscreen; picture-in-picture; xr-spatial-tracking";
         activeModalFrame.allowFullscreen = true;
         activeModalFrame.src = `https://player.vimeo.com/video/${id}?${params.toString()}`;
         videoFrameHost.replaceChildren(activeModalFrame);
@@ -2905,12 +2892,25 @@
         activeModalFrame.addEventListener("load", () => {
           postVimeo(activeModalFrame, "setMuted", false);
           postVimeo(activeModalFrame, "setVolume", 0.85);
+          postVimeo(activeModalFrame, "play");
           postVimeo(activeModalFrame, "addEventListener", "ended");
           if (is360) {
             vrCamera = { yaw: 0, pitch: 0, fov: 90 };
             postVimeo(activeModalFrame, "setCameraProps", vrCamera);
           }
         }, { once: true });
+
+        try {
+          const url = encodeURIComponent(vimeoPageUrl(id, hash));
+          const r = await fetch(`https://vimeo.com/api/oembed.json?url=${url}&width=1920`);
+          if (!r.ok) return;
+          const d = await r.json();
+          if (!activeModalFrame || activeFilmCard !== card || is360) return;
+          if (d.width && d.height) {
+            const size = calcSize(d.width, d.height);
+            applyFrameSize(size.w, size.h);
+          }
+        } catch {}
       }
 
       // 360 controls
