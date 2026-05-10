@@ -322,14 +322,17 @@
 
     .film-card {
       position: relative;
+      display: block;
       min-height: 158px;
       aspect-ratio: 16 / 9;
       overflow: hidden;
       border: 1px solid rgba(220, 226, 232, 0.13);
       border-radius: 8px;
       background: rgba(0, 0, 0, 0.56);
+      color: inherit;
       cursor: pointer;
       margin: 4px;
+      text-decoration: none;
     }
 
     .film-card video,
@@ -2840,7 +2843,9 @@
         if (!id) return;
 
         if (isLocalPreview() && card.dataset.sonidoTitle) {
-          window.open(vimeoPageUrl(id, hash), "_blank", "noopener,noreferrer");
+          const pageUrl = vimeoPageUrl(id, hash);
+          const opened = window.open(pageUrl, "_blank", "noopener,noreferrer");
+          if (!opened) window.location.href = pageUrl;
           return;
         }
 
@@ -3138,12 +3143,17 @@
       }
 
       function buildSonidoCard(v, catKey, useStill) {
-        const card = document.createElement("div");
+        const card = document.createElement(isLocalPreview() ? "a" : "div");
         card.className = "film-card sonido-card";
         card.dataset.vimeoId     = v.id;
         card.dataset.sonidoTitle = v.title;
         card.dataset.sonidoType  = v.type;
         card.dataset.sonidoCat   = CAT_LABELS[catKey] ?? catKey;
+        if (card.tagName === "A") {
+          card.href = vimeoPageUrl(v.id, v.hash);
+          card.target = "_blank";
+          card.rel = "noopener noreferrer";
+        }
         const meta = `<div class="film-meta"><strong>${v.title}</strong><span>${v.type}</span></div>`;
         if (useStill) {
           const img = document.createElement("img");
@@ -3271,7 +3281,13 @@
 
       sonidoSection.addEventListener("click", (e) => {
         const card = e.target.closest(".sonido-card");
-        if (card) openVideo(card);
+        if (!card) return;
+        if (isLocalPreview() && card.tagName === "A") {
+          e.preventDefault();
+          window.location.href = card.href;
+          return;
+        }
+        openVideo(card);
       });
 
       window.addEventListener("hashchange", routeHash);
