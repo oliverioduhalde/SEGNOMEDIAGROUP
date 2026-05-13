@@ -1411,6 +1411,74 @@
       .sonido-grid, #sv-home .sonido-grid { grid-template-columns: 1fr; gap: 12px; }
     }
 
+    /* ── Studio photo lightbox ─────────────────────────────── */
+    .photo-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(3, 5, 8, 0.92);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      cursor: zoom-out;
+    }
+    .photo-lightbox.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .photo-lightbox__img {
+      max-width: min(1200px, calc(100vw - 48px));
+      max-height: calc(100vh - 80px);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 6px;
+      box-shadow: 0 32px 100px rgba(0,0,0,0.7);
+      transform: scale(0.92);
+      transition: transform 0.22s ease;
+      cursor: default;
+    }
+    .photo-lightbox.is-open .photo-lightbox__img {
+      transform: scale(1);
+    }
+    .photo-lightbox__caption {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .photo-lightbox__close {
+      position: fixed;
+      top: 16px;
+      right: 18px;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 6px;
+      background: rgba(8,10,12,0.72);
+      color: rgba(255,255,255,0.88);
+      cursor: pointer;
+    }
+    .photo-lightbox__close svg {
+      width: 15px; height: 15px;
+      stroke: currentColor; stroke-width: 1.8; fill: none;
+    }
+
     /* ── Studio photo gallery ───────────────────────────────── */
     .studio-gallery {
       display: grid;
@@ -1429,6 +1497,7 @@
       display: block;
       filter: brightness(0.88);
       transition: filter 0.3s;
+      cursor: zoom-in;
     }
     .studio-gallery__main:hover img { filter: brightness(1); }
     .studio-gallery__side {
@@ -1450,6 +1519,7 @@
       display: block;
       filter: brightness(0.82);
       transition: filter 0.3s;
+      cursor: zoom-in;
     }
     .studio-gallery__side-item:hover img,
     .studio-gallery__row-item:hover img { filter: brightness(1); }
@@ -2203,6 +2273,15 @@
         <span class="info-cat" id="infoCat"></span>
       </div>
     </div>
+  </div>
+
+  <!-- Photo lightbox -->
+  <div class="photo-lightbox" id="photoLightbox" aria-hidden="true">
+    <button class="photo-lightbox__close" id="photoLightboxClose" aria-label="Cerrar foto">
+      <svg viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+    <img class="photo-lightbox__img" id="photoLightboxImg" src="" alt="">
+    <span class="photo-lightbox__caption" id="photoLightboxCaption"></span>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -3814,6 +3893,42 @@
         dropWave(w * 0.44, h * 0.52, 0.9);
         window.setTimeout(() => dropWave(w * 0.58, h * 0.47, 0.75), 360);
       }, 240);
+
+      // ── Photo lightbox ────────────────────────────────────────
+      const photoLightbox       = document.getElementById("photoLightbox");
+      const photoLightboxImg    = document.getElementById("photoLightboxImg");
+      const photoLightboxCap    = document.getElementById("photoLightboxCaption");
+      const photoLightboxClose  = document.getElementById("photoLightboxClose");
+
+      const openPhoto = (src, caption) => {
+        photoLightboxImg.src = src;
+        photoLightboxImg.alt = caption || "";
+        photoLightboxCap.textContent = caption || "";
+        photoLightbox.classList.add("is-open");
+        photoLightbox.setAttribute("aria-hidden", "false");
+      };
+
+      const closePhoto = () => {
+        photoLightbox.classList.remove("is-open");
+        photoLightbox.setAttribute("aria-hidden", "true");
+        setTimeout(() => { photoLightboxImg.src = ""; }, 220);
+      };
+
+      photoLightboxClose.addEventListener("click", closePhoto);
+      photoLightbox.addEventListener("click", e => { if (e.target === photoLightbox) closePhoto(); });
+      window.addEventListener("keydown", e => {
+        if (e.key === "Escape" && photoLightbox.classList.contains("is-open")) closePhoto();
+      });
+
+      // Delegated click on all studio gallery images
+      document.addEventListener("click", e => {
+        const img = e.target.closest(".studio-gallery img");
+        if (!img) return;
+        const caption = img.closest("[class*='studio-gallery__']")
+          ?.querySelector(".studio-caption")?.textContent || "";
+        openPhoto(img.src, caption);
+      });
+
     })();
   </script>
 </body>
