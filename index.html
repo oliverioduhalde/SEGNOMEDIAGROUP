@@ -2705,7 +2705,7 @@
       const _easeInOut = t => t < 0.5 ? 2*t*t : -1 + (4 - 2*t) * t;
       let _tweenRaf = null;
 
-      const tweenPalette = (newPal, duration = 5000) => {
+      const tweenPalette = (newPal, duration = 15000) => {
         if (_tweenRaf) cancelAnimationFrame(_tweenRaf);
 
         const cells = [...document.querySelectorAll('.bl')];
@@ -3231,14 +3231,15 @@
       requestAnimationFrame(draw);
       requestAnimationFrame(fitBrand); // asegura ancho correcto tras primer layout
 
-      // ── Auto-rotate paleta cada 20s ──────────────────────────────
+      // ── Auto-rotate paleta: ciclo 30s = 15s cross + 15s estable ──
+      // Nunca transiciones violentas: el tween de 15s es el único cambio visible
       let _autoRotateTimer = null;
       const resetAutoRotate = () => {
         clearTimeout(_autoRotateTimer);
         _autoRotateTimer = setTimeout(() => {
           tweenPalette(randomPalette());
           resetAutoRotate();
-        }, 20000);
+        }, 30000);
       };
       resetAutoRotate();
 
