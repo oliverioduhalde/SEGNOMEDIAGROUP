@@ -183,8 +183,14 @@
       align-items: center;
       justify-content: center;
       aspect-ratio: 1;
+      min-width: 0;
+      min-height: 0;
       transition: color 0.55s ease, text-shadow 0.55s ease;
     }
+
+    .brand { overflow: visible; }
+    body[data-device="mobile"] .brand,
+    body[data-device="tablet"] .brand { overflow: hidden; }
 
     /* O cruzada — el trazo no supera el óvalo */
     .bl-cx {
@@ -2622,7 +2628,11 @@
         const w = window.innerWidth, h = window.innerHeight;
         const isTouch = navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches;
         const isPortrait = h > w;
-        document.body.dataset.device = !isTouch ? 'desktop' : (Math.max(w, h) >= 768 ? 'tablet' : 'mobile');
+        // El criterio tablet/mobile se basa en el LADO CORTO (≥600px = tablet)
+        // así un S23 (412×915) queda como mobile (lado corto 412 < 600)
+        // y un iPad (768×1024) queda como tablet (lado corto 768 ≥ 600)
+        const shortSide = Math.min(w, h);
+        document.body.dataset.device = !isTouch ? 'desktop' : (shortSide >= 600 ? 'tablet' : 'mobile');
         document.body.dataset.orientation = isPortrait ? 'portrait' : 'landscape';
       };
       detectDevice();
@@ -2640,7 +2650,13 @@
         const ff = getComputedStyle(brand).fontFamily || "monospace";
         _fitCanvas.font = `400 ${fs}px ${ff}`;
         const charW = _fitCanvas.measureText("S").width || fs * 0.6;
-        const newFs = Math.max(10, Math.round(fs * (cellW * 0.90) / charW));
+        let newFs = Math.max(10, Math.round(fs * (cellW * 0.90) / charW));
+        // En mobile/tablet, cap por altura de celda (aspect-ratio:1 → cellH = cellW)
+        // para que las letras no desborden vertical/horizontalmente
+        const dev = document.body.dataset.device;
+        if (dev === "mobile" || dev === "tablet") {
+          newFs = Math.min(newFs, Math.floor(cellW * 0.95));
+        }
         brand.style.fontSize = `${newFs}px`;
         brand.style.letterSpacing = "0";
         // Ancho de botones = 5 × ancho real del carácter al nuevo font-size
