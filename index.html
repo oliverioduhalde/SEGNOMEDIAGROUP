@@ -120,6 +120,24 @@
       row-gap: 0;
     }
 
+    /* ── Responsive brand-shell por device + orientación ─────────── */
+    /* Mobile portrait: casi full-width */
+    body[data-device="mobile"][data-orientation="portrait"] .brand-shell {
+      width: calc(100vw - 16px);
+    }
+    /* Mobile landscape: reducido, la altura manda */
+    body[data-device="mobile"][data-orientation="landscape"] .brand-shell {
+      width: min(260px, 38vw);
+    }
+    /* Tablet portrait */
+    body[data-device="tablet"][data-orientation="portrait"] .brand-shell {
+      width: min(420px, calc(100vw - 40px));
+    }
+    /* Tablet landscape */
+    body[data-device="tablet"][data-orientation="landscape"] .brand-shell {
+      width: min(380px, calc(100vw - 60px));
+    }
+
     .segno-avatar {
       display: none; /* pasivo — activar cuando se necesite */
       width: 80%;
@@ -1011,10 +1029,7 @@
         top: 14px;
       }
 
-      .brand-shell {
-        width: min(calc(100vw - 20px), 420px);
-        gap: 12px;
-      }
+      /* brand-shell override por device/orientación se hace vía data-attrs en JS */
 
       .service-links {
         gap: 6px;
@@ -2602,6 +2617,18 @@
         });
       };
 
+      // ── Device + orientation detection ──────────────────────────
+      const detectDevice = () => {
+        const w = window.innerWidth, h = window.innerHeight;
+        const isTouch = navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches;
+        const isPortrait = h > w;
+        document.body.dataset.device = !isTouch ? 'desktop' : (Math.max(w, h) >= 768 ? 'tablet' : 'mobile');
+        document.body.dataset.orientation = isPortrait ? 'portrait' : 'landscape';
+      };
+      detectDevice();
+      window.addEventListener('resize', () => { detectDevice(); requestAnimationFrame(fitBrand); });
+      window.addEventListener('orientationchange', () => { detectDevice(); requestAnimationFrame(fitBrand); });
+
       // Fit brand grid — scale font so each char fills ~75% of its cell
       const _fitCanvas = Object.assign(document.createElement("canvas"), { width: 1, height: 1 }).getContext("2d");
       const fitBrand = () => {
@@ -2654,6 +2681,66 @@
           const [r, g, b] = hsl2rgb(hue, sat, lit);
           return `rgb(${(r*255)|0},${(g*255)|0},${(b*255)|0})`;
         });
+      };
+
+      // ── Palette tween (degradé 5s) ───────────────────────────────
+      const _parseRgb  = s => { const m = (s||'').match(/\d+/g); return m ? [+m[0],+m[1],+m[2]] : [220,226,232]; };
+      const _lerpC     = (a, b, t) => Math.round(a + (b - a) * t);
+      const _easeInOut = t => t < 0.5 ? 2*t*t : -1 + (4 - 2*t) * t;
+      let _tweenRaf = null;
+
+      const tweenPalette = (newPal, duration = 5000) => {
+        if (_tweenRaf) cancelAnimationFrame(_tweenRaf);
+
+        const cells = [...document.querySelectorAll('.bl')];
+        const links = [...document.querySelectorAll('.service-links a')];
+
+        // Snapshot colores actuales
+        const oldCellRgb = cells.map(c => _parseRgb(getComputedStyle(c).color));
+        const oldLinkRgb = links.map(a => _parseRgb(a.style.getPropertyValue('--link-color') || 'rgb(220,226,232)'));
+
+        // Colores destino
+        const newLum = newPal.bg[0]*0.299 + newPal.bg[1]*0.587 + newPal.bg[2]*0.114;
+        const newCellColors = letterColorsN(newPal, cells.length);
+        const newCellRgb    = newCellColors.map(_parseRgb);
+        const mlc = letterColorsN(newPal, links.length);
+        const newLinkRgb = mlc.map(c => {
+          let [r,g,b] = _parseRgb(c);
+          if (newLum > 0.55) { r=Math.round(r*0.35); g=Math.round(g*0.35); b=Math.round(b*0.35); }
+          return [r,g,b];
+        });
+
+        // Actualizar estado (WebGL canvas snapea, UI hace degradé)
+        state.randomPalette = newPal;
+
+        const start = performance.now();
+        const tick = now => {
+          const raw = Math.min((now - start) / duration, 1);
+          const t   = _easeInOut(raw);
+
+          cells.forEach((cell, i) => {
+            const [or,og,ob] = oldCellRgb[i], [nr,ng,nb] = newCellRgb[i];
+            const rc=_lerpC(or,nr,t), gc=_lerpC(og,ng,t), bc=_lerpC(ob,nb,t);
+            cell.style.color      = `rgb(${rc},${gc},${bc})`;
+            cell.style.textShadow = `0 0 14px rgb(${rc},${gc},${bc})55`;
+          });
+
+          links.forEach((a, i) => {
+            const [or,og,ob] = oldLinkRgb[i], [nr,ng,nb] = newLinkRgb[i];
+            const rc=_lerpC(or,nr,t), gc=_lerpC(og,ng,t), bc=_lerpC(ob,nb,t);
+            a.style.setProperty('--link-color',     `rgba(${rc},${gc},${bc},0.92)`);
+            a.style.setProperty('--link-color-mid', `rgba(${rc},${gc},${bc},0.40)`);
+            a.style.setProperty('--link-color-dim', `rgba(${rc},${gc},${bc},0.11)`);
+          });
+
+          if (raw < 1) {
+            _tweenRaf = requestAnimationFrame(tick);
+          } else {
+            _tweenRaf = null;
+            syncUi(); // snap final — sincroniza HUD, blend-mode, etc.
+          }
+        };
+        _tweenRaf = requestAnimationFrame(tick);
       };
 
       const syncUi = () => {
@@ -2761,9 +2848,10 @@
         });
       });
 
-      // Logo click → random palette (always starts as cyan on load)
+      // Logo click → random palette con tween
       document.querySelector(".segno-avatar").addEventListener("click", () => {
-        applyChange("palette", "random");
+        tweenPalette(randomPalette());
+        resetAutoRotate();
       });
 
       document.getElementById("toggleHud").addEventListener("click", () => {
@@ -2778,8 +2866,8 @@
 
       document.getElementById("randomize").addEventListener("click", () => {
         state.palette = "random";
-        state.randomPalette = randomPalette();
-        syncUi();
+        tweenPalette(randomPalette());
+        resetAutoRotate();
         showToast("Random palette");
       });
 
@@ -3127,6 +3215,17 @@
       requestAnimationFrame(draw);
       requestAnimationFrame(fitBrand); // asegura ancho correcto tras primer layout
 
+      // ── Auto-rotate paleta cada 20s ──────────────────────────────
+      let _autoRotateTimer = null;
+      const resetAutoRotate = () => {
+        clearTimeout(_autoRotateTimer);
+        _autoRotateTimer = setTimeout(() => {
+          tweenPalette(randomPalette());
+          resetAutoRotate();
+        }, 20000);
+      };
+      resetAutoRotate();
+
       // ── Flap animation ───────────────────────────────────────────
       (() => {
         const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -3344,13 +3443,13 @@
         const rawView    = parts[1] || "home";
         const routeKey   = rawSection + "/" + rawView;
 
-        // Randomizar paleta en cada cambio de página o subpágina (no en la carga inicial)
+        // Cambiar paleta con degradé en cada navegación (no en la carga inicial)
         if (routeKey !== _lastRouteKey) {
           const isInit = _lastRouteKey === "__init__";
           _lastRouteKey = routeKey;
           if (!isInit) {
-            state.randomPalette = randomPalette();
-            syncUi();
+            tweenPalette(randomPalette());
+            resetAutoRotate();
           }
         }
 
