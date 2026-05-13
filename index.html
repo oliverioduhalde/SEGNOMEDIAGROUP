@@ -3156,12 +3156,13 @@
           avatar.style.filter = "contrast(3) brightness(0.42) saturate(1.6)";
         }
 
-        // Color the letter grid — unique color per cell, no repetition
+        // Color the letter grid — one color per word (row of 5)
         const cells = document.querySelectorAll(".bl");
-        const lc = letterColorsN(pal, cells.length);
+        const lc = letterColorsN(pal, 3);
         cells.forEach((el, i) => {
-          el.style.color = lc[i];
-          el.style.textShadow = `0 0 14px ${lc[i]}55`;
+          const c = lc[Math.floor(i / 5)];
+          el.style.color = c;
+          el.style.textShadow = `0 0 14px ${c}55`;
         });
 
         // Color the service-links — cada link toma un color de la paleta
@@ -3786,9 +3787,65 @@
           a.classList.toggle("is-active", a.dataset.view === v));
         sonidoSection.querySelectorAll(".sonido-view").forEach(el => { el.hidden = true; });
         const active = document.getElementById("sv-" + v);
-        if (active) active.hidden = false;
+        if (active) { active.hidden = false; flapViewHeaders(active); }
         if (!TEXT_VIEWS.has(v)) renderSonidoView(v);
         sonidoMain.scrollTop = 0;
+      }
+
+      // ── Flap text — reutilizable para cualquier elemento ────────────
+      function flapText(el, duration = 820) {
+        if (!el || el._flapActive) return;
+        const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const original = el.textContent;
+        const chars    = original.split('');
+        const isFlap   = c => /[A-Za-zÀ-ÖØ-öø-ÿ0-9]/.test(c);
+
+        const letterIdx = chars.reduce((a, c, i) => { if (isFlap(c)) a.push(i); return a; }, []);
+        if (!letterIdx.length) return;
+
+        // Random lock order across all letter positions
+        const shuffled = [...letterIdx].sort(() => Math.random() - 0.5);
+        const lockAt   = {};
+        shuffled.forEach((idx, k) => {
+          lockAt[idx] = 80 + (k / shuffled.length) * duration * 0.82 + Math.random() * duration * 0.18;
+        });
+
+        const locked   = new Set();
+        const startTime = performance.now();
+        const rnd = () => CHARS[Math.floor(Math.random() * CHARS.length)];
+        el._flapActive = true;
+
+        // Start scrambled
+        el.textContent = chars.map(c => isFlap(c) ? rnd() : c).join('');
+
+        const tick = () => {
+          const elapsed  = performance.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const interval = 38 + progress * 110;
+          let alive = false;
+
+          const result = chars.map((c, i) => {
+            if (!isFlap(c))   return c;
+            if (locked.has(i)) return original[i];
+            alive = true;
+            const ttl = lockAt[i] - elapsed;
+            if (ttl <= 0)        { locked.add(i); return original[i]; }
+            if (ttl < 240)       return Math.random() < (1 - ttl / 240) ? original[i] : rnd();
+            return rnd();
+          });
+
+          el.textContent = result.join('');
+          if (alive) setTimeout(tick, interval);
+          else { el.textContent = original; el._flapActive = false; }
+        };
+        setTimeout(tick, 40);
+      }
+
+      // Flap all .sonido-view-title + .sonido-kicker inside a container
+      function flapViewHeaders(container) {
+        container.querySelectorAll('.sonido-view-title, .sonido-kicker, .rider-cat').forEach((el, i) => {
+          setTimeout(() => flapText(el, 700 + i * 60), i * 90);
+        });
       }
 
       // ── Generic SPA router ──────────────────────────────────────────
@@ -3805,7 +3862,7 @@
         cfg.el.querySelectorAll(".sonido-view").forEach(el => { el.hidden = true; });
         const target = document.getElementById(prefix + viewId)
                     || document.getElementById(prefix + "home");
-        if (target) target.hidden = false;
+        if (target) { target.hidden = false; flapViewHeaders(target); }
         cfg.el.querySelectorAll(".sonido-nav-link").forEach(a =>
           a.classList.toggle("is-active", a.dataset.view === viewId)
         );
@@ -3857,8 +3914,11 @@
 
         if (inSonido) {
           showSonidoView(rawView);
+          flapText(sonidoSection.querySelector('.sonido-brand'), 600);
         } else if (inSpa) {
           showSpaView(rawSection, rawView);
+          const activeSec = SPA_SECTIONS[rawSection];
+          if (activeSec) flapText(activeSec.el.querySelector('.sonido-brand'), 600);
         }
       }
 
