@@ -520,6 +520,7 @@
       border: 0;
       display: block;
       background: transparent;
+      z-index: 1; /* always below .video-end-card z-index:10 */
       opacity: 0;
       transition: opacity 0.35s ease;
     }
@@ -1585,58 +1586,67 @@
     .video-end-card {
       position: absolute;
       inset: 0;
-      z-index: 4;
+      z-index: 10; /* above iframe always */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 24px;
-      background: rgba(3,5,8,0.90);
-      -webkit-backdrop-filter: blur(6px);
-      backdrop-filter: blur(6px);
+      gap: 28px;
+      background: rgba(3,5,8,0.92);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
       border-radius: 8px 8px 0 0;
-      transition: opacity 0.2s;
     }
     .video-end-card[aria-hidden="true"] { display: none; }
     .vec-kicker {
       margin: 0;
       font-family: var(--mono);
       font-size: 9px;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: rgba(118,243,255,0.55);
+      color: rgba(118,243,255,0.5);
     }
     .vec-actions {
       display: flex;
-      gap: 10px;
+      gap: 18px;
       align-items: center;
-      flex-wrap: wrap;
-      justify-content: center;
     }
+    /* icon-only circular buttons */
     .vec-btn {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 10px 18px;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
       border: 1px solid rgba(220,226,232,0.2);
-      border-radius: 6px;
-      background: rgba(255,255,255,0.04);
-      color: rgba(220,226,232,0.72);
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
+      background: rgba(255,255,255,0.05);
+      color: rgba(220,226,232,0.7);
       cursor: pointer;
-      transition: color .15s, border-color .15s, background .15s;
+      transition: color .15s, border-color .15s, background .15s, transform .15s;
+      padding: 0;
     }
-    .vec-btn svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 2.2; fill: none; }
-    .vec-btn:hover { color: #fff; border-color: rgba(220,226,232,0.5); background: rgba(255,255,255,0.08); }
-    .vec-btn--menu { border-color: rgba(118,243,255,0.28); color: rgba(118,243,255,0.8); }
-    .vec-btn--menu:hover { color: #76f3ff; border-color: rgba(118,243,255,0.7); background: rgba(118,243,255,0.07); }
-    .vec-btn:disabled { opacity: 0.28; cursor: default; pointer-events: none; }
-    @media (max-width: 720px) {
-      .vec-btn { padding: 9px 13px; font-size: 9px; }
+    .vec-btn svg { width: 26px; height: 26px; }
+    .vec-btn:hover {
+      color: #fff;
+      border-color: rgba(220,226,232,0.55);
+      background: rgba(255,255,255,0.11);
+      transform: scale(1.08);
     }
+    /* down-arrow (menu) is smaller, cyan */
+    .vec-btn--menu {
+      width: 48px;
+      height: 48px;
+      border-color: rgba(118,243,255,0.28);
+      color: rgba(118,243,255,0.75);
+    }
+    .vec-btn--menu svg { width: 20px; height: 20px; }
+    .vec-btn--menu:hover {
+      color: #76f3ff;
+      border-color: rgba(118,243,255,0.7);
+      background: rgba(118,243,255,0.08);
+      transform: scale(1.08);
+    }
+    .vec-btn:disabled { opacity: 0.22; cursor: default; pointer-events: none; transform: none; }
   </style>
 </head>
 <body>
@@ -2305,19 +2315,26 @@
       <div class="video-lightbox__frame" id="videoFrameHost">
         <!-- end card — covers Vimeo's end screen, prev/next/menu -->
         <div class="video-end-card" id="videoEndCard" aria-hidden="true">
-          <p class="vec-kicker">Fin del video</p>
+          <p class="vec-kicker" id="vecKicker">Fin del video</p>
           <div class="vec-actions">
+            <!-- left triangle = anterior -->
             <button class="vec-btn" id="vecPrev" aria-label="Video anterior">
-              <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-              Anterior
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <polygon points="16,4 16,20 5,12" fill="currentColor"/>
+              </svg>
             </button>
+            <!-- down arrow = volver al menú -->
             <button class="vec-btn vec-btn--menu" id="vecMenu" aria-label="Volver al menú">
-              <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-              Menú
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="4" x2="12" y2="18"/>
+                <polyline points="6,13 12,19 18,13"/>
+              </svg>
             </button>
+            <!-- right triangle = siguiente -->
             <button class="vec-btn" id="vecNext" aria-label="Video siguiente">
-              Siguiente
-              <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <polygon points="8,4 8,20 19,12" fill="currentColor"/>
+              </svg>
             </button>
           </div>
         </div>
@@ -3439,10 +3456,21 @@
 
       function hideEndCard() {
         videoEndCard.setAttribute("aria-hidden", "true");
+        // restore iframe interactivity for next video
+        if (activeModalFrame) activeModalFrame.style.pointerEvents = "";
       }
       function showEndCard() {
+        // immediately hide iframe so Vimeo end screen can never be seen or clicked
+        if (activeModalFrame) {
+          activeModalFrame.classList.remove("is-loaded");
+          activeModalFrame.style.opacity = "0";
+          activeModalFrame.style.pointerEvents = "none";
+        }
         vecPrev.disabled = currentPlaylistIdx <= 0;
         vecNext.disabled = currentPlaylistIdx >= currentPlaylist.length - 1;
+        // flap the kicker text
+        const kicker = document.getElementById("vecKicker");
+        if (kicker && typeof flapText === "function") flapText(kicker, 900);
         videoEndCard.setAttribute("aria-hidden", "false");
       }
       vecMenu.addEventListener("click", closeVideo);
@@ -3554,6 +3582,12 @@
         infoType.textContent = type;
         infoCat.textContent = cat;
         videoInfo.setAttribute("aria-hidden", "false");
+        // flap animation on info strip — same style as airport board
+        if (typeof flapText === "function") {
+          setTimeout(() => flapText(infoClient, 1100), 80);
+          setTimeout(() => flapText(infoType,   1000), 180);
+          setTimeout(() => flapText(infoCat,     900), 280);
+        }
 
         // 360 UI
         if (is360) {
