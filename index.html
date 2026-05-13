@@ -165,7 +165,6 @@
       align-items: center;
       justify-content: center;
       aspect-ratio: 1;
-      overflow: hidden;
       transition: color 0.55s ease, text-shadow 0.55s ease;
     }
 
@@ -1013,7 +1012,7 @@
       }
 
       .brand-shell {
-        width: min(360px, calc(100vw - 20px));
+        width: min(calc(100vw - 20px), 420px);
         gap: 12px;
       }
 
@@ -2614,9 +2613,7 @@
         const ff = getComputedStyle(brand).fontFamily || "monospace";
         _fitCanvas.font = `400 ${fs}px ${ff}`;
         const charW = _fitCanvas.measureText("S").width || fs * 0.6;
-        // Cap by cell height (aspect-ratio:1 → cell height = cellW) to prevent row overlap on mobile
-        const maxFsByH = Math.floor(cellW * 0.88);
-        const newFs = Math.max(10, Math.min(Math.round(fs * (cellW * 0.90) / charW), maxFsByH));
+        const newFs = Math.max(10, Math.round(fs * (cellW * 0.90) / charW));
         brand.style.fontSize = `${newFs}px`;
         brand.style.letterSpacing = "0";
         // Ancho de botones = 5 × ancho real del carácter al nuevo font-size
@@ -3339,11 +3336,23 @@
         if (main) main.scrollTop = 0;
       }
 
+      let _lastRouteKey = "__init__";
       function routeHash() {
         const hash = location.hash;
         const parts = hash.replace("#", "").split("/");
         const rawSection = parts[0] || "";
         const rawView    = parts[1] || "home";
+        const routeKey   = rawSection + "/" + rawView;
+
+        // Randomizar paleta en cada cambio de página o subpágina (no en la carga inicial)
+        if (routeKey !== _lastRouteKey) {
+          const isInit = _lastRouteKey === "__init__";
+          _lastRouteKey = routeKey;
+          if (!isInit) {
+            state.randomPalette = randomPalette();
+            syncUi();
+          }
+        }
 
         // Marca el link activo en el menú principal
         document.querySelectorAll(".service-links a").forEach(a => {
