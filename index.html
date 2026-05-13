@@ -3625,15 +3625,8 @@
         videoLightbox.setAttribute("aria-hidden", "false");
 
         activeModalFrame.addEventListener("load", () => {
-          // fade in once iframe doc is ready — prevents white flash
+          // visual fade-in only — postMessage commands wait for Vimeo "ready"
           requestAnimationFrame(() => activeModalFrame.classList.add("is-loaded"));
-          postVimeo(activeModalFrame, "setMuted", false);
-          postVimeo(activeModalFrame, "setVolume", 0.85);
-          postVimeo(activeModalFrame, "addEventListener", "ended");
-          if (is360) {
-            vrCamera = { yaw: 0, pitch: 0, fov: 90 };
-            postVimeo(activeModalFrame, "setCameraProps", vrCamera);
-          }
         }, { once: true });
       }
 
@@ -3690,6 +3683,17 @@
         let data = event.data;
         if (typeof data === "string") {
           try { data = JSON.parse(data); } catch { return; }
+        }
+        // "ready" = Vimeo player fully initialised — safe to send commands
+        if (data?.event === "ready") {
+          postVimeo(activeModalFrame, "setMuted", false);
+          postVimeo(activeModalFrame, "setVolume", 0.85);
+          postVimeo(activeModalFrame, "addEventListener", "ended");
+          const is360 = activeFilmCard?.dataset.vr === "true";
+          if (is360) {
+            vrCamera = { yaw: 0, pitch: 0, fov: 90 };
+            postVimeo(activeModalFrame, "setCameraProps", vrCamera);
+          }
         }
         if (data?.event === "ended") showEndCard();
       });
