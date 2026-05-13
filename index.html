@@ -493,6 +493,8 @@
       display: flex;
       flex-direction: column;
       align-items: stretch;
+      width: fit-content;
+      margin: auto;
       transform: scale(0.88);
       transition: transform 0.24s ease;
     }
@@ -506,7 +508,7 @@
       overflow: hidden;
       border: 1px solid rgba(220, 226, 232, 0.2);
       border-radius: 8px 8px 0 0;
-      background: #000;
+      background: transparent;
       box-shadow: 0 28px 90px rgba(0, 0, 0, 0.56);
     }
 
@@ -517,6 +519,12 @@
       height: 100%;
       border: 0;
       display: block;
+      background: transparent;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .video-lightbox__frame iframe.is-loaded {
+      opacity: 1;
     }
 
     .video-lightbox__tools {
@@ -3591,6 +3599,8 @@
         videoLightbox.setAttribute("aria-hidden", "false");
 
         activeModalFrame.addEventListener("load", () => {
+          // fade in once iframe doc is ready — prevents white flash
+          requestAnimationFrame(() => activeModalFrame.classList.add("is-loaded"));
           postVimeo(activeModalFrame, "setMuted", false);
           postVimeo(activeModalFrame, "setVolume", 0.85);
           postVimeo(activeModalFrame, "addEventListener", "ended");
