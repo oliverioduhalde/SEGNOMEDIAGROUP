@@ -3793,7 +3793,7 @@
       }
 
       // ── Flap text — reutilizable para cualquier elemento ────────────
-      function flapText(el, duration = 820) {
+      function flapText(el, duration = 1820) {
         if (!el || el._flapActive) return;
         const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         const original = el.textContent;
@@ -3849,25 +3849,25 @@
           '.sonido-view-header h2'
         );
         targets.forEach((el, i) => {
-          setTimeout(() => flapText(el, 680 + i * 40), i * 75);
+          setTimeout(() => flapText(el, 1680 + i * 40), i * 75);
         });
       }
 
       // Flap nav links inside a section topbar
       function flapNav(section) {
         section.querySelectorAll('.sonido-nav-link').forEach((el, i) => {
-          setTimeout(() => flapText(el, 480), i * 55);
+          setTimeout(() => flapText(el, 1480), i * 55);
         });
         const back = section.querySelector('.sonido-back-btn span, #sonidoBack span');
-        if (back) setTimeout(() => flapText(back, 520), 0);
+        if (back) setTimeout(() => flapText(back, 1520), 0);
         const brand = section.querySelector('.sonido-brand');
-        if (brand) setTimeout(() => flapText(brand, 600), 80);
+        if (brand) setTimeout(() => flapText(brand, 1600), 80);
       }
 
       // Flap hero service-links on load and on return
       function flapHeroLinks() {
         document.querySelectorAll('.service-links a').forEach((el, i) => {
-          setTimeout(() => flapText(el, 600), 120 + i * 100);
+          setTimeout(() => flapText(el, 1600), 120 + i * 100);
         });
       }
 
