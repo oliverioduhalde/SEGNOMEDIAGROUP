@@ -1405,9 +1405,27 @@
     .sonido-contact-item a:hover { color: var(--hot); }
 
     @media (max-width: 720px) {
-      .sonido-topbar { padding: 9px 14px; gap: 8px; }
+      .sonido-topbar {
+        flex-wrap: wrap;
+        padding: 9px 14px 6px;
+        gap: 6px;
+      }
       .sonido-brand { display: none; }
-      .sonido-main { padding: 16px 14px 64px; }
+      /* Nav drops to its own row, all items visible */
+      .sonido-nav {
+        width: 100%;
+        margin-left: 0;
+        overflow-x: visible;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding-bottom: 4px;
+      }
+      .sonido-nav-link {
+        font-size: 10px;
+        padding: 5px 9px;
+        flex-shrink: 0;
+      }
+      .sonido-main { padding: 14px 12px 64px; }
       .sonido-grid, #sv-home .sonido-grid { grid-template-columns: 1fr; gap: 12px; }
     }
 
@@ -1482,52 +1500,27 @@
     /* ── Studio photo gallery ───────────────────────────────── */
     .studio-gallery {
       display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 230px;
       gap: 6px;
       margin-bottom: 36px;
+      width: 100%;
     }
-    .studio-gallery__main {
+    .studio-cell {
       position: relative;
       border-radius: 8px;
       overflow: hidden;
-      aspect-ratio: 16/7;
     }
-    .studio-gallery__main img {
+    .studio-cell:nth-child(1) { grid-column: span 2; }
+    .studio-cell img {
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
-      filter: brightness(0.88);
+      filter: brightness(0.84);
       transition: filter 0.3s;
       cursor: zoom-in;
     }
-    .studio-gallery__main:hover img { filter: brightness(1); }
-    .studio-gallery__side {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-    .studio-gallery__side-item,
-    .studio-gallery__row-item {
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      aspect-ratio: 16/10;
-    }
-    .studio-gallery__side-item img,
-    .studio-gallery__row-item img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: brightness(0.82);
-      transition: filter 0.3s;
-      cursor: zoom-in;
-    }
-    .studio-gallery__side-item:hover img,
-    .studio-gallery__row-item:hover img { filter: brightness(1); }
-    .studio-gallery__row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-    }
+    .studio-cell:hover img { filter: brightness(1); }
     .studio-caption {
       position: absolute;
       left: 12px; bottom: 10px;
@@ -1576,8 +1569,8 @@
     }
 
     @media (max-width: 720px) {
-      .studio-gallery__side { grid-template-columns: 1fr; }
-      .studio-gallery__row  { grid-template-columns: 1fr 1fr; }
+      .studio-gallery { grid-template-columns: 1fr 1fr; grid-auto-rows: 160px; }
+      .studio-cell:nth-child(1) { grid-column: span 2; }
       .rider-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
@@ -2379,35 +2372,31 @@
             <span class="sonido-platform-tag">Apple Music</span><span class="sonido-platform-tag">Prime Video</span>
           </div>
 
-          <!-- STUDIO PHOTO GALLERY — editorial grid -->
+          <!-- STUDIO PHOTO GALLERY — mosaic grid -->
           <div class="studio-gallery">
-            <div class="studio-gallery__main">
+            <div class="studio-cell">
               <img src="/images/studio/studio-01-control-wide.jpg" alt="Segno Sound — Control Room" loading="lazy">
               <span class="studio-caption">Sala de control · Dolby Atmos + 5.1 Genelec</span>
             </div>
-            <div class="studio-gallery__side">
-              <div class="studio-gallery__side-item">
-                <img src="/images/studio/studio-02-control-desk.jpg" alt="Segno Sound — Mixing Desk" loading="lazy">
-                <span class="studio-caption">Estación de mezcla · Mac Pro M4</span>
-              </div>
-              <div class="studio-gallery__side-item">
-                <img src="/images/studio/studio-03-vocal-booth.jpg" alt="Segno Sound — Vocal Booth" loading="lazy">
-                <span class="studio-caption">Cabina de grabación · Neumann U87i</span>
-              </div>
+            <div class="studio-cell">
+              <img src="/images/studio/studio-02-control-desk.jpg" alt="Segno Sound — Mixing Desk" loading="lazy">
+              <span class="studio-caption">Estación de mezcla · Mac Pro M4</span>
             </div>
-            <div class="studio-gallery__row">
-              <div class="studio-gallery__row-item">
-                <img src="/images/studio/studio-04-live-room.jpg" alt="Segno Sound — Live Room" loading="lazy">
-                <span class="studio-caption">Sala live · Sistema surround 7.1</span>
-              </div>
-              <div class="studio-gallery__row-item">
-                <img src="/images/studio/studio-05-lounge.jpg" alt="Segno Sound — Kitchenette" loading="lazy">
-                <span class="studio-caption">Kitchenette</span>
-              </div>
-              <div class="studio-gallery__row-item">
-                <img src="/images/studio/studio-06-control-alt.jpg" alt="Segno Sound — Control Room Alt" loading="lazy">
-                <span class="studio-caption">Vista integrada · Control + Cabina</span>
-              </div>
+            <div class="studio-cell">
+              <img src="/images/studio/studio-03-vocal-booth.jpg" alt="Segno Sound — Vocal Booth" loading="lazy">
+              <span class="studio-caption">Cabina de grabación · Neumann U87i</span>
+            </div>
+            <div class="studio-cell">
+              <img src="/images/studio/studio-04-live-room.jpg" alt="Segno Sound — Live Room" loading="lazy">
+              <span class="studio-caption">Sala live · Sistema surround 7.1</span>
+            </div>
+            <div class="studio-cell">
+              <img src="/images/studio/studio-05-lounge.jpg" alt="Segno Sound — Kitchenette" loading="lazy">
+              <span class="studio-caption">Kitchenette</span>
+            </div>
+            <div class="studio-cell">
+              <img src="/images/studio/studio-06-control-alt.jpg" alt="Segno Sound — Control Room Alt" loading="lazy">
+              <span class="studio-caption">Vista integrada · Control + Cabina</span>
             </div>
           </div>
 
@@ -4014,7 +4003,7 @@
       document.addEventListener("click", e => {
         const img = e.target.closest(".studio-gallery img");
         if (!img) return;
-        const caption = img.closest("[class*='studio-gallery__']")
+        const caption = img.closest(".studio-cell")
           ?.querySelector(".studio-caption")?.textContent || "";
         openPhoto(img.src, caption);
       });
