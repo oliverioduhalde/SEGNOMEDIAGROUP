@@ -121,24 +121,24 @@
     }
 
     .segno-avatar {
+      display: none; /* pasivo — activar cuando se necesite */
       width: 80%;
       max-width: 80%;
       aspect-ratio: 1;
       height: auto;
       border-radius: 50%;
       margin-bottom: 28px;
-      opacity: 0.22;
       mix-blend-mode: screen;
-      filter: grayscale(0.5) saturate(0.5) contrast(1.1);
+      filter: contrast(3) brightness(0.42) saturate(1.6);
       pointer-events: auto;
       user-select: none;
       cursor: pointer;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transition: transform 0.2s ease, filter 0.2s ease;
     }
     .segno-avatar:focus { outline: none; }
     .segno-avatar:focus-visible { outline: none; }
     .segno-avatar:hover {
-      opacity: 0.36;
+      filter: contrast(2.4) brightness(0.55) saturate(1.8);
       transform: scale(1.06);
     }
     .segno-avatar:active {
@@ -147,19 +147,45 @@
 
     .brand {
       font-family: var(--mono);
-      font-size: clamp(52px, 19vw, 72px);
+      font-size: clamp(36px, 13vw, 60px);
       font-weight: 400;
       letter-spacing: 0;
       text-transform: uppercase;
-      text-align: left;
+      text-align: center;
       line-height: 1;
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      color: rgba(220, 226, 232, 0.78);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
       mix-blend-mode: screen;
-      text-shadow: 0 0 22px rgba(118, 243, 255, 0.14);
       margin-bottom: 28px;
+    }
+
+    .bl {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1;
+      transition: color 0.55s ease, text-shadow 0.55s ease;
+    }
+
+    /* O cruzada — el trazo no supera el óvalo */
+    .bl-cx {
+      position: relative;
+    }
+    .bl-cx::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 24%;
+      width: 52%;
+      height: 0;
+      border-top: 0.09em solid currentColor;
+      transform: translateY(-50%) rotate(-30deg);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .bl-cx[data-locked]::after {
+      opacity: 1;
     }
 
     .service-links {
@@ -167,13 +193,6 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 7px;
-      padding: 14px;
-      border: 1px solid rgba(220, 226, 232, 0.16);
-      border-radius: 10px;
-      background: rgba(10, 11, 13, 0.14);
-      box-shadow: 0 0 34px rgba(0, 0, 0, 0.16);
-      -webkit-backdrop-filter: blur(12px);
-      backdrop-filter: blur(12px);
       pointer-events: auto;
     }
 
@@ -195,16 +214,44 @@
       text-decoration: none;
       text-transform: uppercase;
       text-shadow: 0 0 18px rgba(0, 0, 0, 0.22);
-      transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+      transition: color 0.4s ease, border-color 0.4s ease, background 0.4s ease, box-shadow 0.18s ease;
+    }
+
+    /* Fondo claro — botones oscuros legibles */
+    .service-links.on-light a {
+      border-color: rgba(20, 25, 30, 0.22);
+      background: rgba(20, 25, 30, 0.06);
+      color: rgba(20, 25, 30, 0.62);
+      text-shadow: none;
+    }
+    .service-links.on-light a:hover,
+    .service-links.on-light a:focus-visible {
+      color: var(--link-color, rgba(20,25,30,0.92));
+      border-color: var(--link-color-mid, rgba(20,25,30,0.40));
+      background: var(--link-color-dim, rgba(20,25,30,0.10));
+    }
+    .service-links.on-light a.is-active {
+      color: var(--link-color, rgba(20,25,30,0.92));
+      border-color: var(--link-color-mid, rgba(20,25,30,0.40));
+      background: var(--link-color-dim, rgba(20,25,30,0.10));
     }
 
     .service-links a:hover,
     .service-links a:focus-visible {
-      color: rgba(255, 255, 255, 0.96);
-      border-color: rgba(255, 255, 255, 0.5);
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 0 24px rgba(255, 255, 255, 0.08);
+      color: var(--link-color, rgba(255,255,255,0.96));
+      border-color: var(--link-color-mid, rgba(255,255,255,0.5));
+      background: var(--link-color-dim, rgba(255,255,255,0.08));
+      box-shadow: 0 0 24px var(--link-color-dim, rgba(255,255,255,0.08));
+      text-shadow: 0 0 16px var(--link-color-mid, rgba(255,255,255,0.3));
       outline: none;
+    }
+
+    .service-links a.is-active {
+      color: var(--link-color, rgba(220, 226, 232, 0.92));
+      border-color: var(--link-color-mid, rgba(220, 226, 232, 0.35));
+      background: var(--link-color-dim, rgba(220, 226, 232, 0.07));
+      box-shadow: 0 0 22px var(--link-color-dim, rgba(220, 226, 232, 0.07));
+      text-shadow: 0 0 16px var(--link-color-mid, rgba(220, 226, 232, 0.35));
     }
 
     .portfolio-scroll {
@@ -1364,11 +1411,15 @@
     <section class="hero" id="top">
       <div class="brand-shell" id="brandShell">
         <img class="segno-avatar" src="https://static.wixstatic.com/media/fdedb3_ee6b0b4c4ccf47b1b5b8101dd6b8943e~mv2.jpg" alt="Segno" loading="eager" decoding="async">
-        <div class="brand" id="brand"><span id="brandLine1">SEGNO</span><span id="brandLine2">STUDIO</span></div>
+        <div class="brand" id="brand">
+          <span class="bl" data-letter="S">S</span><span class="bl" data-letter="E">E</span><span class="bl" data-letter="G">G</span><span class="bl" data-letter="N">N</span><span class="bl" data-letter="O">O</span>
+          <span class="bl" data-letter="S">S</span><span class="bl" data-letter="E">E</span><span class="bl" data-letter="N">N</span><span class="bl" data-letter="S">S</span><span class="bl" data-letter="E">E</span>
+          <span class="bl" data-letter="S">S</span><span class="bl" data-letter="T">T</span><span class="bl" data-letter="D">D</span><span class="bl" data-letter="I">I</span><span class="bl bl-cx" data-letter="O">O</span>
+        </div>
         <nav class="service-links" aria-label="Servicios">
           <a href="#instalaciones">Instalaciones &amp; Experiencias</a>
-          <a href="#sonido">Audiovisuales</a>
-          <a href="#apps">Apps &amp; web</a>
+          <a href="#sonido">Music + Sound Design</a>
+          <a href="#apps">Apps + Web Design</a>
           <a href="#workshops">Workshops</a>
         </nav>
       </div>
@@ -2552,32 +2603,59 @@
         });
       };
 
-      // Fit brand text to exact container width
+      // Fit brand grid — scale font so each char fills ~75% of its cell
       const _fitCanvas = Object.assign(document.createElement("canvas"), { width: 1, height: 1 }).getContext("2d");
       const fitBrand = () => {
         if (!brand || !brandShell) return;
         const containerW = brandShell.getBoundingClientRect().width;
         if (containerW === 0) return;
-        const fs = parseFloat(brand.style.fontSize) || 68;
-        const ff = getComputedStyle(brand).fontFamily;
+        const cellW = containerW / 5;
+        const fs = state.brandSize;
+        const ff = getComputedStyle(brand).fontFamily || "monospace";
         _fitCanvas.font = `400 ${fs}px ${ff}`;
-        // Fit each line independently so both occupy the same width
-        const line1 = document.getElementById("brandLine1");
-        const line2 = document.getElementById("brandLine2");
-        if (line1) {
-          const w1 = _fitCanvas.measureText("SEGNO").width;
-          line1.style.letterSpacing = Math.max(0, (containerW - w1) / 4) + "px"; // 5 chars → 4 gaps
-          line1.style.display = "block";
-        }
-        if (line2) {
-          const w2 = _fitCanvas.measureText("STUDIO").width;
-          line2.style.letterSpacing = Math.max(0, (containerW - w2) / 5) + "px"; // 6 chars → 5 gaps
-          line2.style.display = "block";
-        }
-        brand.style.letterSpacing = "";
+        const charW = _fitCanvas.measureText("S").width || fs * 0.6;
+        const newFs = Math.max(10, Math.round(fs * (cellW * 0.90) / charW));
+        brand.style.fontSize = `${newFs}px`;
+        brand.style.letterSpacing = "0";
+        // Ancho de botones = 5 × ancho real del carácter al nuevo font-size
+        // → alinea exactamente con el borde izquierdo de la S y derecho de la O
+        _fitCanvas.font = `400 ${newFs}px ${ff}`;
+        const charWNew = _fitCanvas.measureText("S").width;
+        const sl = document.querySelector(".service-links");
+        if (sl && charWNew > 0) sl.style.width = Math.round(charWNew * 5) + "px";
       };
       new ResizeObserver(fitBrand).observe(brandShell);
       document.fonts.ready.then(fitBrand);
+
+      // ── Letter-grid color helpers ────────────────────────────────
+      const rgb2hsl = (r, g, b) => {
+        const max = Math.max(r,g,b), min = Math.min(r,g,b), l = (max+min)/2;
+        if (max === min) return [0, 0, l];
+        const d = max - min, s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+        const h = max===r ? ((g-b)/d+(g<b?6:0))/6 : max===g ? ((b-r)/d+2)/6 : ((r-g)/d+4)/6;
+        return [h, s, l];
+      };
+      const hsl2rgb = (h, s, l) => {
+        if (s === 0) return [l, l, l];
+        const q = l<0.5 ? l*(1+s) : l+s-l*s, p = 2*l-q;
+        const hue = t => { t=((t%1)+1)%1; return t<1/6?p+(q-p)*6*t:t<0.5?q:t<2/3?p+(q-p)*(2/3-t)*6:p; };
+        return [hue(h+1/3), hue(h), hue(h-1/3)];
+      };
+      // N unique colors per palette — fg→accent hue arc, muted sat, varied lightness
+      const letterColorsN = (pal, n) => {
+        const [h1, s1] = rgb2hsl(pal.fg[0],     pal.fg[1],     pal.fg[2]);
+        const [h2]     = rgb2hsl(pal.accent[0], pal.accent[1], pal.accent[2]);
+        let dh = ((h2 - h1 + 1.5) % 1) - 0.5;
+        if (Math.abs(dh) > 0.14) dh = Math.sign(dh) * 0.14;
+        const sat = Math.min(0.52, Math.max(0.18, s1 * 0.55));
+        return Array.from({length: n}, (_, i) => {
+          const t   = i / Math.max(n - 1, 1);
+          const hue = (h1 + dh * t + 1) % 1;
+          const lit = 0.46 + ((i * 7 + Math.floor(i / 5) * 3) % 11) * 0.03;
+          const [r, g, b] = hsl2rgb(hue, sat, lit);
+          return `rgb(${(r*255)|0},${(g*255)|0},${(b*255)|0})`;
+        });
+      };
 
       const syncUi = () => {
         document.querySelectorAll("[data-key]").forEach((input) => {
@@ -2602,7 +2680,42 @@
         document.documentElement.style.setProperty("--hot", pal.hot || "#76f3ff");
         const lum = pal.bg[0] * 0.299 + pal.bg[1] * 0.587 + pal.bg[2] * 0.114;
         brand.style.mixBlendMode = lum > 0.55 ? "multiply" : "screen";
-        brand.style.color = lum > 0.55 ? "rgba(34, 38, 42, 0.76)" : "rgba(220, 226, 232, 0.78)";
+
+        // Avatar blend — sin opacity para que mix-blend-mode funcione al 100%
+        // screen: negro = 100% transparente sobre fondo oscuro
+        // multiply + invert: blanco = 100% transparente sobre fondo claro
+        const avatar = document.querySelector(".segno-avatar");
+        if (lum > 0.55) {
+          avatar.style.mixBlendMode = "multiply";
+          avatar.style.filter = "invert(1) contrast(3) brightness(0.42) saturate(1.6)";
+        } else {
+          avatar.style.mixBlendMode = "screen";
+          avatar.style.filter = "contrast(3) brightness(0.42) saturate(1.6)";
+        }
+
+        // Color the letter grid — unique color per cell, no repetition
+        const cells = document.querySelectorAll(".bl");
+        const lc = letterColorsN(pal, cells.length);
+        cells.forEach((el, i) => {
+          el.style.color = lc[i];
+          el.style.textShadow = `0 0 14px ${lc[i]}55`;
+        });
+
+        // Color the service-links — cada link toma un color de la paleta
+        const serviceLinks = document.querySelector(".service-links");
+        serviceLinks.classList.toggle("on-light", lum > 0.55);
+        const menuLinks = serviceLinks.querySelectorAll("a");
+        const mlc = letterColorsN(pal, menuLinks.length);
+        menuLinks.forEach((a, i) => {
+          const m = mlc[i].match(/\d+/g);
+          if (!m) return;
+          let [r, g, b] = m.map(Number);
+          // Fondo claro: oscurecer los colores para contraste
+          if (lum > 0.55) { r = Math.round(r*0.35); g = Math.round(g*0.35); b = Math.round(b*0.35); }
+          a.style.setProperty("--link-color",     `rgba(${r},${g},${b},0.92)`);
+          a.style.setProperty("--link-color-mid",  `rgba(${r},${g},${b},0.40)`);
+          a.style.setProperty("--link-color-dim",  `rgba(${r},${g},${b},0.11)`);
+        });
         renderScenes();
       };
 
@@ -2625,6 +2738,9 @@
         } catch {}
       };
       loadPalette();
+      // Siempre arranca con paleta random — ignora lo guardado
+      state.palette = "random";
+      state.randomPalette = randomPalette();
 
       const applyChange = (key, value) => {
         if (key === "palette" && value === "random") {
@@ -3010,6 +3126,64 @@
       syncUi();
       resize();
       requestAnimationFrame(draw);
+      requestAnimationFrame(fitBrand); // asegura ancho correcto tras primer layout
+
+      // ── Flap animation ───────────────────────────────────────────
+      (() => {
+        const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const cells   = Array.from(document.querySelectorAll('.bl'));
+        const targets = cells.map(c => c.textContent);
+
+        // Lock times — doubled duration, biased by row
+        const lockTimes = cells.map((_, i) => {
+          const row     = Math.floor(i / 5);
+          const rowBias = row * 1200;
+          return 800 + rowBias + Math.random() * 2800;
+        });
+        // Shuffle within each row (no left-to-right order)
+        for (let r = 0; r < 3; r++) {
+          const slice = lockTimes.slice(r * 5, r * 5 + 5);
+          slice.sort(() => Math.random() - 0.5);
+          lockTimes.splice(r * 5, 5, ...slice);
+        }
+
+        const totalDuration = Math.max(...lockTimes) + 500;
+        const locked = new Array(cells.length).fill(false);
+        const startTime = performance.now();
+        const rnd = () => CHARS[Math.floor(Math.random() * CHARS.length)];
+
+        cells.forEach(c => { c.textContent = rnd(); });
+
+        const tick = () => {
+          const elapsed  = performance.now() - startTime;
+          const progress = Math.min(elapsed / totalDuration, 1);
+          // Interval: 55ms (fast) → 320ms (slow) over full duration
+          const interval = 55 + progress * 265;
+
+          let anyAlive = false;
+          cells.forEach((cell, i) => {
+            if (locked[i]) return;
+            anyAlive = true;
+            const timeToLock = lockTimes[i] - elapsed;
+
+            if (timeToLock <= 0) {
+              locked[i] = true;
+              cell.textContent = targets[i];
+              // Reveal cross on the O of STDIO once locked
+              if (cell.classList.contains('bl-cx')) cell.dataset.locked = '1';
+            } else if (timeToLock < 380) {
+              const bias = 1 - timeToLock / 380;
+              cell.textContent = Math.random() < bias ? targets[i] : rnd();
+            } else {
+              cell.textContent = rnd();
+            }
+          });
+
+          if (anyAlive) setTimeout(tick, interval);
+        };
+
+        setTimeout(tick, 80);
+      })();
 
       // ============================================================
       // SEGNO SOUND — router + video data
@@ -3168,6 +3342,12 @@
         const parts = hash.replace("#", "").split("/");
         const rawSection = parts[0] || "";
         const rawView    = parts[1] || "home";
+
+        // Marca el link activo en el menú principal
+        document.querySelectorAll(".service-links a").forEach(a => {
+          const section = a.getAttribute("href").replace("#", "").split("/")[0];
+          a.classList.toggle("is-active", section === rawSection && rawSection !== "");
+        });
         const pageShell  = document.querySelector(".page-shell");
 
         const inSonido = rawSection === "sonido";
