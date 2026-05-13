@@ -121,8 +121,9 @@
     }
 
     .segno-avatar {
-      width: auto;
-      max-width: 180px;
+      width: 100%;
+      max-width: 100%;
+      aspect-ratio: 1;
       height: auto;
       border-radius: 50%;
       opacity: 0.22;
@@ -147,10 +148,10 @@
       font-family: var(--mono);
       font-size: clamp(52px, 19vw, 72px);
       font-weight: 400;
-      letter-spacing: 0.34em;
+      letter-spacing: 0;
       text-transform: uppercase;
-      text-align: center;
-      line-height: 1.05;
+      text-align: left;
+      line-height: 1;
       width: 100%;
       color: rgba(220, 226, 232, 0.78);
       mix-blend-mode: screen;
@@ -2561,15 +2562,15 @@
         const line2 = document.getElementById("brandLine2");
         if (line1) {
           const w1 = _fitCanvas.measureText("SEGNO").width;
-          line1.style.letterSpacing = Math.max(0, (containerW - w1) / 5) + "px";
+          line1.style.letterSpacing = Math.max(0, (containerW - w1) / 4) + "px"; // 5 chars → 4 gaps
           line1.style.display = "block";
         }
         if (line2) {
           const w2 = _fitCanvas.measureText("STUDIO").width;
-          line2.style.letterSpacing = Math.max(0, (containerW - w2) / 6) + "px";
+          line2.style.letterSpacing = Math.max(0, (containerW - w2) / 5) + "px"; // 6 chars → 5 gaps
           line2.style.display = "block";
         }
-        brand.style.letterSpacing = ""; // reset global, each line handles its own
+        brand.style.letterSpacing = "";
       };
       new ResizeObserver(fitBrand).observe(brandShell);
       document.fonts.ready.then(fitBrand);
