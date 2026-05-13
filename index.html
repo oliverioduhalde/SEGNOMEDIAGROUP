@@ -165,6 +165,7 @@
       align-items: center;
       justify-content: center;
       aspect-ratio: 1;
+      overflow: hidden;
       transition: color 0.55s ease, text-shadow 0.55s ease;
     }
 
@@ -1012,12 +1013,11 @@
       }
 
       .brand-shell {
-        width: min(300px, calc(100vw - 28px));
+        width: min(360px, calc(100vw - 20px));
         gap: 12px;
       }
 
       .service-links {
-        padding: 10px;
         gap: 6px;
       }
 
@@ -2614,7 +2614,9 @@
         const ff = getComputedStyle(brand).fontFamily || "monospace";
         _fitCanvas.font = `400 ${fs}px ${ff}`;
         const charW = _fitCanvas.measureText("S").width || fs * 0.6;
-        const newFs = Math.max(10, Math.round(fs * (cellW * 0.90) / charW));
+        // Cap by cell height (aspect-ratio:1 → cell height = cellW) to prevent row overlap on mobile
+        const maxFsByH = Math.floor(cellW * 0.88);
+        const newFs = Math.max(10, Math.min(Math.round(fs * (cellW * 0.90) / charW), maxFsByH));
         brand.style.fontSize = `${newFs}px`;
         brand.style.letterSpacing = "0";
         // Ancho de botones = 5 × ancho real del carácter al nuevo font-size
