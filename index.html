@@ -1276,10 +1276,10 @@
 
     .sonido-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(480px,1fr));
+      gap: 16px;
     }
-    #sv-home .sonido-grid { grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); }
+    #sv-home .sonido-grid { grid-template-columns: repeat(auto-fill, minmax(480px,1fr)); }
 
     .sonido-card { cursor: pointer; }
     .sonido-grid .film-card { min-height: 0; }
@@ -1408,7 +1408,7 @@
       .sonido-topbar { padding: 9px 14px; gap: 8px; }
       .sonido-brand { display: none; }
       .sonido-main { padding: 16px 14px 64px; }
-      .sonido-grid, #sv-home .sonido-grid { grid-template-columns: repeat(auto-fill,minmax(145px,1fr)); gap: 8px; }
+      .sonido-grid, #sv-home .sonido-grid { grid-template-columns: 1fr; gap: 12px; }
     }
   </style>
 </head>
