@@ -2699,10 +2699,13 @@
         });
       };
 
-      // ── Palette tween (degradé 5s) ───────────────────────────────
+      // ── Palette tween (degradé suave UI + WebGL background) ──────
       const _parseRgb  = s => { const m = (s||'').match(/\d+/g); return m ? [+m[0],+m[1],+m[2]] : [220,226,232]; };
       const _lerpC     = (a, b, t) => Math.round(a + (b - a) * t);
+      const _lerpF     = (a, b, t) => a + (b - a) * t;
       const _easeInOut = t => t < 0.5 ? 2*t*t : -1 + (4 - 2*t) * t;
+      const _lerpRgb01 = (a, b, t) => [_lerpF(a[0],b[0],t), _lerpF(a[1],b[1],t), _lerpF(a[2],b[2],t)];
+      const _clonePal  = p => ({ bg: [...p.bg], fg: [...p.fg], accent: [...p.accent], hot: p.hot });
       let _tweenRaf = null;
 
       const tweenPalette = (newPal, duration = 15000) => {
@@ -2711,11 +2714,14 @@
         const cells = [...document.querySelectorAll('.bl')];
         const links = [...document.querySelectorAll('.service-links a')];
 
-        // Snapshot colores actuales
+        // Snapshot colores actuales UI
         const oldCellRgb = cells.map(c => _parseRgb(getComputedStyle(c).color));
         const oldLinkRgb = links.map(a => _parseRgb(a.style.getPropertyValue('--link-color') || 'rgb(220,226,232)'));
 
-        // Colores destino
+        // Snapshot paleta actual para WebGL (lo que ven los shaders ahora)
+        const oldPal = _clonePal(paletteForState());
+
+        // Colores destino UI
         const newLum = newPal.bg[0]*0.299 + newPal.bg[1]*0.587 + newPal.bg[2]*0.114;
         const newCellColors = letterColorsN(newPal, cells.length);
         const newCellRgb    = newCellColors.map(_parseRgb);
@@ -2726,13 +2732,20 @@
           return [r,g,b];
         });
 
-        // Actualizar estado (WebGL canvas snapea, UI hace degradé)
-        state.randomPalette = newPal;
+        // Asegurar que el estado use "random" y crear paleta interpolada que el draw() lee cada frame
+        state.palette = "random";
+        state.randomPalette = _clonePal(oldPal); // arrancar desde la actual
 
         const start = performance.now();
         const tick = now => {
           const raw = Math.min((now - start) / duration, 1);
           const t   = _easeInOut(raw);
+
+          // Interpolar la paleta WebGL frame a frame
+          state.randomPalette.bg     = _lerpRgb01(oldPal.bg,     newPal.bg,     t);
+          state.randomPalette.fg     = _lerpRgb01(oldPal.fg,     newPal.fg,     t);
+          state.randomPalette.accent = _lerpRgb01(oldPal.accent, newPal.accent, t);
+          state.randomPalette.hot    = t < 0.5 ? oldPal.hot : newPal.hot;
 
           cells.forEach((cell, i) => {
             const [or,og,ob] = oldCellRgb[i], [nr,ng,nb] = newCellRgb[i];
@@ -2753,7 +2766,8 @@
             _tweenRaf = requestAnimationFrame(tick);
           } else {
             _tweenRaf = null;
-            syncUi(); // snap final — sincroniza HUD, blend-mode, etc.
+            state.randomPalette = _clonePal(newPal); // fijar destino exacto
+            syncUi(); // sincroniza HUD, blend-mode, etc.
           }
         };
         _tweenRaf = requestAnimationFrame(tick);
