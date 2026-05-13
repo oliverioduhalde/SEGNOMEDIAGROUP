@@ -3440,15 +3440,19 @@
       let vrPanInterval = null;
       let currentPlaylist = [];
       let currentPlaylistIdx = -1;
+      let endCardTimer = null;
 
       const videoEndCard = document.getElementById("videoEndCard");
       const vecPrev = document.getElementById("vecPrev");
       const vecNext = document.getElementById("vecNext");
       const vecMenu = document.getElementById("vecMenu");
 
+      function clearEndTimer() {
+        if (endCardTimer) { clearTimeout(endCardTimer); endCardTimer = null; }
+      }
       function hideEndCard() {
+        clearEndTimer();
         videoEndCard.setAttribute("aria-hidden", "true");
-        // restore iframe interactivity for next video
         if (activeModalFrame) activeModalFrame.style.pointerEvents = "";
       }
       function showEndCard() {
@@ -3590,13 +3594,14 @@
           vrControls.setAttribute("aria-hidden", "true");
         }
 
-        // fetch oEmbed for native dimensions
-        let nativeW = 1920, nativeH = 1080;
+        // fetch oEmbed for native dimensions + duration
+        let nativeW = 1920, nativeH = 1080, videoDuration = 0;
         try {
           const r = await fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${id}&width=1920`);
           if (r.ok) {
             const d = await r.json();
             if (d.width && d.height) { nativeW = d.width; nativeH = d.height; }
+            if (d.duration > 0) videoDuration = d.duration;
           }
         } catch {}
 
@@ -3628,6 +3633,13 @@
           // visual fade-in only — postMessage commands wait for Vimeo "ready"
           requestAnimationFrame(() => activeModalFrame.classList.add("is-loaded"));
         }, { once: true });
+
+        // Timer-based end detection — independent of postMessage API
+        clearEndTimer();
+        if (videoDuration > 2) {
+          // fire ~0.8 s before true end so overlay appears before Vimeo end screen
+          endCardTimer = setTimeout(showEndCard, (videoDuration - 0.8) * 1000);
+        }
       }
 
       // 360 controls
