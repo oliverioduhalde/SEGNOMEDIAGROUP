@@ -3841,10 +3841,33 @@
         setTimeout(tick, 40);
       }
 
-      // Flap all .sonido-view-title + .sonido-kicker inside a container
+      // Flap all text elements inside a container
       function flapViewHeaders(container) {
-        container.querySelectorAll('.sonido-view-title, .sonido-kicker, .rider-cat').forEach((el, i) => {
-          setTimeout(() => flapText(el, 700 + i * 60), i * 90);
+        const targets = container.querySelectorAll(
+          '.sonido-view-title, .sonido-kicker, .rider-cat, ' +
+          '.sonido-service-block h3, .ws-card h3, .ws-section-title, ' +
+          '.sonido-view-header h2'
+        );
+        targets.forEach((el, i) => {
+          setTimeout(() => flapText(el, 680 + i * 40), i * 75);
+        });
+      }
+
+      // Flap nav links inside a section topbar
+      function flapNav(section) {
+        section.querySelectorAll('.sonido-nav-link').forEach((el, i) => {
+          setTimeout(() => flapText(el, 480), i * 55);
+        });
+        const back = section.querySelector('.sonido-back-btn span, #sonidoBack span');
+        if (back) setTimeout(() => flapText(back, 520), 0);
+        const brand = section.querySelector('.sonido-brand');
+        if (brand) setTimeout(() => flapText(brand, 600), 80);
+      }
+
+      // Flap hero service-links on load and on return
+      function flapHeroLinks() {
+        document.querySelectorAll('.service-links a').forEach((el, i) => {
+          setTimeout(() => flapText(el, 600), 120 + i * 100);
         });
       }
 
@@ -3914,11 +3937,14 @@
 
         if (inSonido) {
           showSonidoView(rawView);
-          flapText(sonidoSection.querySelector('.sonido-brand'), 600);
+          flapNav(sonidoSection);
         } else if (inSpa) {
           showSpaView(rawSection, rawView);
           const activeSec = SPA_SECTIONS[rawSection];
-          if (activeSec) flapText(activeSec.el.querySelector('.sonido-brand'), 600);
+          if (activeSec) flapNav(activeSec.el);
+        } else {
+          // Volvió al hero
+          flapHeroLinks();
         }
       }
 
@@ -3946,6 +3972,10 @@
 
       window.addEventListener("hashchange", routeHash);
       routeHash();
+      // Flap hero links on first load (only if landing on hero)
+      if (!location.hash || location.hash === '#') {
+        setTimeout(flapHeroLinks, 900); // after brand flap settles
+      }
 
       window.setTimeout(() => {
         const w = window.innerWidth;
