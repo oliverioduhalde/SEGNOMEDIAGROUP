@@ -1410,6 +1410,106 @@
       .sonido-main { padding: 16px 14px 64px; }
       .sonido-grid, #sv-home .sonido-grid { grid-template-columns: 1fr; gap: 12px; }
     }
+
+    /* ── Studio photo gallery ───────────────────────────────── */
+    .studio-gallery {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 36px;
+    }
+    .studio-gallery__main {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 16/7;
+    }
+    .studio-gallery__main img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.88);
+      transition: filter 0.3s;
+    }
+    .studio-gallery__main:hover img { filter: brightness(1); }
+    .studio-gallery__side {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .studio-gallery__side-item,
+    .studio-gallery__row-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 16/10;
+    }
+    .studio-gallery__side-item img,
+    .studio-gallery__row-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.82);
+      transition: filter 0.3s;
+    }
+    .studio-gallery__side-item:hover img,
+    .studio-gallery__row-item:hover img { filter: brightness(1); }
+    .studio-gallery__row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .studio-caption {
+      position: absolute;
+      left: 12px; bottom: 10px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      pointer-events: none;
+    }
+
+    /* ── Technical rider ───────────────────────────────────── */
+    .rider-section { margin-top: 8px; }
+    .rider-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .rider-block {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(220,226,232,0.09);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .rider-cat {
+      margin: 0 0 10px;
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(118,243,255,0.7);
+    }
+    .rider-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 5px;
+    }
+    .rider-list li {
+      font-size: 11px;
+      color: rgba(220,226,232,0.62);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 720px) {
+      .studio-gallery__side { grid-template-columns: 1fr; }
+      .studio-gallery__row  { grid-template-columns: 1fr 1fr; }
+      .rider-grid { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -2181,38 +2281,207 @@
       </div>
 
       <div class="sonido-view" id="sv-services" hidden>
-        <div class="sonido-text-page">
+        <div class="sonido-text-page" style="max-width:980px">
+
+          <!-- INTRO STATS -->
           <div class="sonido-view-header">
-            <p class="sonido-kicker">What we do</p>
+            <p class="sonido-kicker">Crafted for broadcast. Built for every screen.</p>
             <h2 class="sonido-view-title">Services</h2>
           </div>
-          <div class="sonido-service-block" data-kicker="Original Music">
-            <h3>Music Composition &amp; Supervision</h3>
-            <p>We help artists and brands soar to new heights and cultivate a more personalized musical identity through attentive listening, collaborative work, and creative conception.</p>
-          </div>
-          <div class="sonido-service-block" data-kicker="Sound Design">
-            <h3>Audio Post Production</h3>
-            <p>Sound design, dubbing, mixing and audio experimentation for film, series, advertising and interactive media. We just love sound.</p>
-          </div>
-          <div class="sonido-service-block" data-kicker="Voice">
-            <h3>Voiceovers, Voice Actors &amp; Dubbing</h3>
-            <p>Extensive network of professionally acclaimed voiceover artists, voice actors, and dubbing talents. Native English and Latin American Spanish speakers, supported by professional translators and scriptwriters.</p>
-          </div>
-          <div class="sonido-service-block" data-kicker="Post Production">
-            <h3>Mixing / Mastering</h3>
-            <p>Where everything fits together. Upgrade your sound experience to the next level — Stereo, Ambisonics, Surround sound, Dolby Atmos.</p>
-          </div>
-          <div class="sonido-stat-row">
-            <div class="sonido-stat"><strong>300+</strong><span>Projects</span></div>
+          <div class="sonido-stat-row" style="margin-bottom:28px">
+            <div class="sonido-stat"><strong>300+</strong><span>Projects delivered</span></div>
             <div class="sonido-stat"><strong>20+</strong><span>Countries</span></div>
-            <div class="sonido-stat"><strong>5</strong><span>Categories</span></div>
+            <div class="sonido-stat"><strong>Dolby Atmos</strong><span>Certified mix</span></div>
           </div>
-          <div class="sonido-platforms">
+          <div class="sonido-platforms" style="margin-bottom:36px">
             <span class="sonido-platform-tag">Netflix</span><span class="sonido-platform-tag">Disney+</span>
             <span class="sonido-platform-tag">HBO</span><span class="sonido-platform-tag">ESPN</span>
             <span class="sonido-platform-tag">Apple TV+</span><span class="sonido-platform-tag">Spotify</span>
-            <span class="sonido-platform-tag">Apple Music</span>
+            <span class="sonido-platform-tag">Apple Music</span><span class="sonido-platform-tag">Prime Video</span>
           </div>
+
+          <!-- STUDIO PHOTO GALLERY — editorial grid -->
+          <div class="studio-gallery">
+            <div class="studio-gallery__main">
+              <img src="/images/studio/studio-01-control-wide.jpg" alt="Segno Sound — Control Room" loading="lazy">
+              <span class="studio-caption">Sala de control · Dolby Atmos + 5.1 Genelec</span>
+            </div>
+            <div class="studio-gallery__side">
+              <div class="studio-gallery__side-item">
+                <img src="/images/studio/studio-02-control-desk.jpg" alt="Segno Sound — Mixing Desk" loading="lazy">
+                <span class="studio-caption">Estación de mezcla · Mac Pro M4</span>
+              </div>
+              <div class="studio-gallery__side-item">
+                <img src="/images/studio/studio-03-vocal-booth.jpg" alt="Segno Sound — Vocal Booth" loading="lazy">
+                <span class="studio-caption">Cabina de grabación · Neumann U87i</span>
+              </div>
+            </div>
+            <div class="studio-gallery__row">
+              <div class="studio-gallery__row-item">
+                <img src="/images/studio/studio-04-live-room.jpg" alt="Segno Sound — Live Room" loading="lazy">
+                <span class="studio-caption">Sala live · Sistema surround 7.1</span>
+              </div>
+              <div class="studio-gallery__row-item">
+                <img src="/images/studio/studio-05-lounge.jpg" alt="Segno Sound — Lounge" loading="lazy">
+                <span class="studio-caption">Sala de escucha y reunión</span>
+              </div>
+              <div class="studio-gallery__row-item">
+                <img src="/images/studio/studio-06-control-alt.jpg" alt="Segno Sound — Control Room Alt" loading="lazy">
+                <span class="studio-caption">Vista integrada · Control + Cabina</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SERVICES BLOCKS -->
+          <div class="sonido-service-block" data-kicker="Original Music">
+            <h3>Music Composition &amp; Supervision</h3>
+            <p>Creamos identidades sonoras originales para series, campañas y marcas que necesitan música que no suene a biblioteca. Desde la composición hasta la supervisión musical, trabajamos integrados al brief creativo y a los tiempos de producción.</p>
+          </div>
+          <div class="sonido-service-block" data-kicker="Sound Design">
+            <h3>Sound Design &amp; Audio Post Production</h3>
+            <p>Diseño sonoro, edición de diálogos, efectos y mezcla para cine, series, publicidad y experiencias interactivas. Cada entrega cumple los estándares técnicos de las plataformas más exigentes — sin compromisos en el camino.</p>
+          </div>
+          <div class="sonido-service-block" data-kicker="Recording">
+            <h3>Grabación de voces e instrumentos</h3>
+            <p>Cabina acondicionada acústicamente con Neumann U87i, Rode NT2-A y Shure SM7B. Sesiones de voces en off, doblaje, coros, instrumentos acústicos y field recording portátil con Zoom H4 Ambisonics y Tascam.</p>
+          </div>
+          <div class="sonido-service-block" data-kicker="Voice &amp; Dubbing">
+            <h3>Voiceovers, Doblaje &amp; Locución</h3>
+            <p>Red de actores de voz profesionales en inglés nativo y español latinoamericano, con dirección en sala, traducción y adaptación de guiones. Entrega lista para broadcast — sin idas y vueltas.</p>
+          </div>
+          <div class="sonido-service-block" data-kicker="Mixing · Mastering · Atmos">
+            <h3>Mezcla &amp; Mastering</h3>
+            <p>Sistema de monitoreo Dolby Atmos, 5.1 Genelec, 2.0 Event 20/20 BAS y Yamaha NS-10M. Entregamos en Stereo, Surround, Ambisonics y Dolby Atmos — el formato que tu plataforma exige, sin negociar la referencia.</p>
+          </div>
+          <div class="sonido-service-block" data-kicker="Sonic Branding">
+            <h3>Sonic Branding &amp; Identidad sonora</h3>
+            <p>Diseñamos el universo sonoro de tu marca: logo sonoro, sistema de audio para puntos de contacto, música para eventos corporativos y campañas. Clientes en Argentina, Uruguay y más de 20 países.</p>
+          </div>
+
+          <!-- TECHNICAL RIDER -->
+          <div class="rider-section">
+            <p class="sonido-kicker" style="margin:36px 0 16px">Rider técnico</p>
+            <div class="rider-grid">
+
+              <div class="rider-block">
+                <h4 class="rider-cat">Monitoreo</h4>
+                <ul class="rider-list">
+                  <li>Sistema Dolby Atmos</li>
+                  <li>Sistema 5.1 Genelec</li>
+                  <li>Sistema 2.0 Event 20/20 BAS</li>
+                  <li>Yamaha NS-10M</li>
+                </ul>
+              </div>
+
+              <div class="rider-block">
+                <h4 class="rider-cat">DAW &amp; Software</h4>
+                <ul class="rider-list">
+                  <li>Mac Pro M4</li>
+                  <li>Pro Tools Ultimate</li>
+                  <li>Logic Pro</li>
+                  <li>Ableton Live</li>
+                  <li>Max/MSP</li>
+                </ul>
+              </div>
+
+              <div class="rider-block">
+                <h4 class="rider-cat">Plugins &amp; Bundles</h4>
+                <ul class="rider-list">
+                  <li>Waves Ultimate</li>
+                  <li>Native Instruments Komplete Ultimate</li>
+                  <li>iZotope Full Bundle</li>
+                  <li>FabFilter Bundle</li>
+                  <li>Avid Pro Ultimate Bundle</li>
+                  <li>NUGEN Audio Bundle</li>
+                  <li>Valhalla Bundle</li>
+                  <li>Krotos Studio</li>
+                  <li>Melodyne Pro</li>
+                  <li>Plugin Alliance Ultimate</li>
+                </ul>
+              </div>
+
+              <div class="rider-block">
+                <h4 class="rider-cat">Interfaces &amp; Ruteo</h4>
+                <ul class="rider-list">
+                  <li>RME Fireface UFX</li>
+                  <li>MOTU 2408mkIII</li>
+                  <li>MOTU MTP AV</li>
+                </ul>
+              </div>
+
+              <div class="rider-block">
+                <h4 class="rider-cat">Procesamiento &amp; Control</h4>
+                <ul class="rider-list">
+                  <li>PreSonus Central Station</li>
+                  <li>Avalon 737 Black Edition</li>
+                  <li>Yamaha GC2020 BII Compressor/Limiter</li>
+                  <li>TC Electronic Loudness Control</li>
+                  <li>NAD Stereo Amplifier</li>
+                  <li>BK Precision Oscilloscope</li>
+                </ul>
+              </div>
+
+              <div class="rider-block">
+                <h4 class="rider-cat">Consolas</h4>
+                <ul class="rider-list">
+                  <li>Yamaha 03D</li>
+                  <li>Yamaha 01V</li>
+                </ul>
+              </div>
+
+              <div class="rider-block">
+                <h4 class="rider-cat">Micrófonos</h4>
+                <ul class="rider-list">
+                  <li>Neumann U87i</li>
+                  <li>Rode NT2-A</li>
+                  <li>Shure SM7B</li>
+                  <li>Shure SM58 / SM57</li>
+                  <li>Audio-Technica AT250 / AT2020</li>
+                  <li>AKG C2</li>
+                </ul>
+              </div>
+
+              <div class="rider-block">
+                <h4 class="rider-cat">Instrumentos &amp; Controladores</h4>
+                <ul class="rider-list">
+                  <li>ROLI 40</li>
+                  <li>Moog Theremini</li>
+                  <li>Kawai P7SE Controller</li>
+                  <li>Martin electroacústica</li>
+                  <li>Ableton Push 2</li>
+                  <li>Korg nanoPAD2</li>
+                </ul>
+              </div>
+
+              <div class="rider-block">
+                <h4 class="rider-cat">Field Recording &amp; Portátil</h4>
+                <ul class="rider-list">
+                  <li>Zoom H4 Ambisonic Field Recorder</li>
+                  <li>Tascam Field Recorder</li>
+                </ul>
+              </div>
+
+              <div class="rider-block">
+                <h4 class="rider-cat">Auriculares</h4>
+                <ul class="rider-list">
+                  <li>AKG K701 Mastering</li>
+                  <li>Sony MDR-7509 / MDR-7506</li>
+                  <li>Audio-Technica ATH-M50</li>
+                </ul>
+              </div>
+
+              <div class="rider-block">
+                <h4 class="rider-cat">Amenities</h4>
+                <ul class="rider-list">
+                  <li>Kitchenette · Nespresso</li>
+                  <li>Heladera</li>
+                  <li>Toilette</li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </div>
 
