@@ -1573,6 +1573,62 @@
       .studio-cell:nth-child(1) { grid-column: span 2; }
       .rider-grid { grid-template-columns: 1fr 1fr; }
     }
+    /* ── Video end card ─────────────────────────────────────── */
+    .video-end-card {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      background: rgba(3,5,8,0.90);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      border-radius: 8px 8px 0 0;
+      transition: opacity 0.2s;
+    }
+    .video-end-card[aria-hidden="true"] { display: none; }
+    .vec-kicker {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(118,243,255,0.55);
+    }
+    .vec-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .vec-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 18px;
+      border: 1px solid rgba(220,226,232,0.2);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.04);
+      color: rgba(220,226,232,0.72);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .vec-btn svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 2.2; fill: none; }
+    .vec-btn:hover { color: #fff; border-color: rgba(220,226,232,0.5); background: rgba(255,255,255,0.08); }
+    .vec-btn--menu { border-color: rgba(118,243,255,0.28); color: rgba(118,243,255,0.8); }
+    .vec-btn--menu:hover { color: #76f3ff; border-color: rgba(118,243,255,0.7); background: rgba(118,243,255,0.07); }
+    .vec-btn:disabled { opacity: 0.28; cursor: default; pointer-events: none; }
+    @media (max-width: 720px) {
+      .vec-btn { padding: 9px 13px; font-size: 9px; }
+    }
   </style>
 </head>
 <body>
@@ -2238,7 +2294,26 @@
           </svg>
         </button>
       </div>
-      <div class="video-lightbox__frame" id="videoFrameHost"></div>
+      <div class="video-lightbox__frame" id="videoFrameHost">
+        <!-- end card — covers Vimeo's end screen, prev/next/menu -->
+        <div class="video-end-card" id="videoEndCard" aria-hidden="true">
+          <p class="vec-kicker">Fin del video</p>
+          <div class="vec-actions">
+            <button class="vec-btn" id="vecPrev" aria-label="Video anterior">
+              <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+              Anterior
+            </button>
+            <button class="vec-btn vec-btn--menu" id="vecMenu" aria-label="Volver al menú">
+              <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+              Menú
+            </button>
+            <button class="vec-btn" id="vecNext" aria-label="Video siguiente">
+              Siguiente
+              <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="vr-controls" id="vrControls" aria-hidden="true">
         <button class="vr-btn" id="vrUp" aria-label="Mirar arriba">
           <svg viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg>
@@ -3346,6 +3421,35 @@
       let activeModalFrame = null;
       let vrCamera = { yaw: 0, pitch: 0, fov: 90 };
       let vrPanInterval = null;
+      let currentPlaylist = [];
+      let currentPlaylistIdx = -1;
+
+      const videoEndCard = document.getElementById("videoEndCard");
+      const vecPrev = document.getElementById("vecPrev");
+      const vecNext = document.getElementById("vecNext");
+      const vecMenu = document.getElementById("vecMenu");
+
+      function hideEndCard() {
+        videoEndCard.setAttribute("aria-hidden", "true");
+      }
+      function showEndCard() {
+        vecPrev.disabled = currentPlaylistIdx <= 0;
+        vecNext.disabled = currentPlaylistIdx >= currentPlaylist.length - 1;
+        videoEndCard.setAttribute("aria-hidden", "false");
+      }
+      vecMenu.addEventListener("click", closeVideo);
+      vecPrev.addEventListener("click", () => {
+        if (currentPlaylistIdx > 0) {
+          hideEndCard();
+          openVideo(currentPlaylist[currentPlaylistIdx - 1]);
+        }
+      });
+      vecNext.addEventListener("click", () => {
+        if (currentPlaylistIdx < currentPlaylist.length - 1) {
+          hideEndCard();
+          openVideo(currentPlaylist[currentPlaylistIdx + 1]);
+        }
+      });
 
       const postVimeo = (frame, method, value) => {
         if (!frame?.contentWindow) return;
@@ -3367,7 +3471,9 @@
         stopVrPan();
         videoLightbox.classList.remove("is-open");
         videoLightbox.setAttribute("aria-hidden", "true");
-        videoFrameHost.replaceChildren();
+        // remove iframes but keep the end card DOM node
+        videoFrameHost.querySelectorAll("iframe").forEach(f => f.remove());
+        hideEndCard();
         videoFrameHost.removeAttribute("style");
         videoWrap.removeAttribute("style");
         vrControls.setAttribute("aria-hidden", "true");
@@ -3377,6 +3483,8 @@
         activeFilmCard = null;
         activeModalFrame = null;
         vrCamera = { yaw: 0, pitch: 0, fov: 90 };
+        currentPlaylist = [];
+        currentPlaylistIdx = -1;
       }
 
       function applyFrameSize(w, h) {
@@ -3398,15 +3506,27 @@
         return { w, h };
       }
 
+      function getVisibleCards() {
+        // only cards whose ancestors are all visible
+        return filmCards.filter(c => c.offsetParent !== null && !c.closest("[hidden]"));
+      }
+
       async function openVideo(card) {
         const id = card.dataset.vimeoId;
         const hash = card.dataset.vimeoHash;
         const is360 = card.dataset.vr === "true";
         if (!id) return;
 
+        // build playlist from currently visible cards
+        currentPlaylist = getVisibleCards();
+        currentPlaylistIdx = currentPlaylist.indexOf(card);
+
         filmCards.forEach(muteFilm);
         card.classList.add("is-audible");
         activeFilmCard = card;
+
+        // hide end card before loading new video
+        hideEndCard();
 
         // populate info strip
         let client, type, cat;
@@ -3455,15 +3575,18 @@
         const params = new URLSearchParams({
           autoplay: "1", muted: "0", loop: "0",
           playsinline: "1", api: "1",
-          title: "0", byline: "0", portrait: "0"
+          title: "0", byline: "0", portrait: "0", dnt: "1"
         });
         if (hash) params.set("h", hash);
+
+        // remove old iframes without touching the end card node
+        videoFrameHost.querySelectorAll("iframe").forEach(f => f.remove());
 
         activeModalFrame = document.createElement("iframe");
         activeModalFrame.allow = "autoplay; fullscreen; picture-in-picture; xr-spatial-tracking";
         activeModalFrame.allowFullscreen = true;
         activeModalFrame.src = `https://player.vimeo.com/video/${id}?${params.toString()}`;
-        videoFrameHost.replaceChildren(activeModalFrame);
+        videoFrameHost.appendChild(activeModalFrame);
         videoLightbox.classList.add("is-open");
         videoLightbox.setAttribute("aria-hidden", "false");
 
@@ -3532,7 +3655,7 @@
         if (typeof data === "string") {
           try { data = JSON.parse(data); } catch { return; }
         }
-        if (data?.event === "ended") closeVideo();
+        if (data?.event === "ended") showEndCard();
       });
 
       filmCards.forEach((card) => {
