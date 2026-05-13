@@ -117,15 +117,16 @@
       pointer-events: none;
       display: grid;
       justify-items: center;
-      gap: 16px;
+      row-gap: 0;
     }
 
     .segno-avatar {
-      width: 100%;
-      max-width: 100%;
+      width: 80%;
+      max-width: 80%;
       aspect-ratio: 1;
       height: auto;
       border-radius: 50%;
+      margin-bottom: 28px;
       opacity: 0.22;
       mix-blend-mode: screen;
       filter: grayscale(0.5) saturate(0.5) contrast(1.1);
@@ -153,9 +154,12 @@
       text-align: left;
       line-height: 1;
       width: 100%;
+      display: flex;
+      flex-direction: column;
       color: rgba(220, 226, 232, 0.78);
       mix-blend-mode: screen;
       text-shadow: 0 0 22px rgba(118, 243, 255, 0.14);
+      margin-bottom: 28px;
     }
 
     .service-links {
@@ -1360,7 +1364,7 @@
     <section class="hero" id="top">
       <div class="brand-shell" id="brandShell">
         <img class="segno-avatar" src="https://static.wixstatic.com/media/fdedb3_ee6b0b4c4ccf47b1b5b8101dd6b8943e~mv2.jpg" alt="Segno" loading="eager" decoding="async">
-        <div class="brand" id="brand"><span id="brandLine1">SEGNO</span><br><span id="brandLine2">STUDIO</span></div>
+        <div class="brand" id="brand"><span id="brandLine1">SEGNO</span><span id="brandLine2">STUDIO</span></div>
         <nav class="service-links" aria-label="Servicios">
           <a href="#instalaciones">Instalaciones &amp; Experiencias</a>
           <a href="#sonido">Audiovisuales</a>
