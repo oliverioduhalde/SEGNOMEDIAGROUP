@@ -1359,7 +1359,7 @@
     <section class="hero" id="top">
       <div class="brand-shell" id="brandShell">
         <img class="segno-avatar" src="https://static.wixstatic.com/media/fdedb3_ee6b0b4c4ccf47b1b5b8101dd6b8943e~mv2.jpg" alt="Segno" loading="eager" decoding="async">
-        <div class="brand" id="brand">SEGNO<br>MEDIA<br>GROUP</div>
+        <div class="brand" id="brand"><span id="brandLine1">SEGNO</span><br><span id="brandLine2">STUDIO</span></div>
         <nav class="service-links" aria-label="Servicios">
           <a href="#instalaciones">Instalaciones &amp; Experiencias</a>
           <a href="#sonido">Audiovisuales</a>
@@ -2556,9 +2556,20 @@
         const fs = parseFloat(brand.style.fontSize) || 68;
         const ff = getComputedStyle(brand).fontFamily;
         _fitCanvas.font = `400 ${fs}px ${ff}`;
-        const textW = _fitCanvas.measureText("SEGNO").width; // all words are 5 chars
-        const ls = Math.max(0, (containerW - textW) / 5);
-        brand.style.letterSpacing = ls + "px";
+        // Fit each line independently so both occupy the same width
+        const line1 = document.getElementById("brandLine1");
+        const line2 = document.getElementById("brandLine2");
+        if (line1) {
+          const w1 = _fitCanvas.measureText("SEGNO").width;
+          line1.style.letterSpacing = Math.max(0, (containerW - w1) / 5) + "px";
+          line1.style.display = "block";
+        }
+        if (line2) {
+          const w2 = _fitCanvas.measureText("STUDIO").width;
+          line2.style.letterSpacing = Math.max(0, (containerW - w2) / 6) + "px";
+          line2.style.display = "block";
+        }
+        brand.style.letterSpacing = ""; // reset global, each line handles its own
       };
       new ResizeObserver(fitBrand).observe(brandShell);
       document.fonts.ready.then(fitBrand);
