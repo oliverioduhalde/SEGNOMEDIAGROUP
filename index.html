@@ -3079,6 +3079,18 @@
       window.addEventListener('resize', () => { detectDevice(); requestAnimationFrame(fitBrand); });
       window.addEventListener('orientationchange', () => { detectDevice(); requestAnimationFrame(fitBrand); });
 
+      // ── Mobile/tablet: enter fullscreen on the first user tap ──────
+      // browsers require a user gesture — can't be forced on load.
+      // (iOS Safari has no fullscreen API for pages → silently no-ops.)
+      const tryEnterFullscreen = () => {
+        const dev = document.body.dataset.device;
+        if (dev !== 'mobile' && dev !== 'tablet') return;
+        const el = document.documentElement;
+        const req = el.requestFullscreen || el.webkitRequestFullscreen;
+        if (req) { try { req.call(el); } catch {} }
+      };
+      window.addEventListener('pointerdown', tryEnterFullscreen, { once: true });
+
       // Fit brand grid — scale font so each char fills ~75% of its cell
       const _fitCanvas = Object.assign(document.createElement("canvas"), { width: 1, height: 1 }).getContext("2d");
       const fitBrand = () => {
