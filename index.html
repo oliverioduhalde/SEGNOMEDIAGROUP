@@ -3101,6 +3101,18 @@
           return `rgb(${(r*255)|0},${(g*255)|0},${(b*255)|0})`;
         });
       };
+      // brand letters — last 2 (the "IO" of STDIO) get the most vivid
+      // version of their own hue so they stand out from the rest
+      const brandColorsN = (pal, n) => {
+        return letterColorsN(pal, n).map((c, i) => {
+          if (i < n - 2) return c;
+          const m = c.match(/\d+/g);
+          if (!m) return c;
+          const [h] = rgb2hsl(+m[0]/255, +m[1]/255, +m[2]/255);
+          const [r, g, b] = hsl2rgb(h, 0.98, 0.58);
+          return `rgb(${(r*255)|0},${(g*255)|0},${(b*255)|0})`;
+        });
+      };
 
       // ── Palette tween (degradé suave UI + WebGL background) ──────
       const _parseRgb  = s => { const m = (s||'').match(/\d+/g); return m ? [+m[0],+m[1],+m[2]] : [220,226,232]; };
@@ -3126,7 +3138,7 @@
 
         // Colores destino UI
         const newLum = newPal.bg[0]*0.299 + newPal.bg[1]*0.587 + newPal.bg[2]*0.114;
-        const newCellColors = letterColorsN(newPal, cells.length);
+        const newCellColors = brandColorsN(newPal, cells.length);
         const newCellRgb    = newCellColors.map(_parseRgb);
         const mlc = letterColorsN(newPal, links.length);
         const newLinkRgb = mlc.map(c => {
@@ -3212,9 +3224,9 @@
           avatar.style.filter = "contrast(3) brightness(0.42) saturate(1.6)";
         }
 
-        // Color the letter grid — one unique color PER LETTER
+        // Color the letter grid — one unique color PER LETTER, vivid IO
         const cells = document.querySelectorAll(".bl");
-        const lc = letterColorsN(pal, cells.length);
+        const lc = brandColorsN(pal, cells.length);
         cells.forEach((el, i) => {
           const c = lc[i];
           el.style.color = c;
