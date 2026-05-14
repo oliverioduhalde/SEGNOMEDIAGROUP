@@ -3124,7 +3124,7 @@
           const m = c.match(/\d+/g);
           if (!m) return c;
           const [h] = rgb2hsl(+m[0]/255, +m[1]/255, +m[2]/255);
-          const [r, g, b] = hsl2rgb(h, 0.98, 0.58);
+          const [r, g, b] = hsl2rgb(h, 0.62, 0.56);
           return `rgb(${(r*255)|0},${(g*255)|0},${(b*255)|0})`;
         });
       };
@@ -3180,8 +3180,12 @@
           cells.forEach((cell, i) => {
             const [or,og,ob] = oldCellRgb[i], [nr,ng,nb] = newCellRgb[i];
             const rc=_lerpC(or,nr,t), gc=_lerpC(og,ng,t), bc=_lerpC(ob,nb,t);
-            cell.style.color      = `rgb(${rc},${gc},${bc})`;
-            cell.style.textShadow = `0 0 14px rgb(${rc},${gc},${bc})55`;
+            const col = `rgb(${rc},${gc},${bc})`;
+            cell.style.color = col;
+            // last 2 letters (IO) get a stronger glow halo
+            cell.style.textShadow = i >= cells.length - 2
+              ? `0 0 10px ${col}, 0 0 24px ${col}aa`
+              : `0 0 14px ${col}55`;
           });
 
           links.forEach((a, i) => {
@@ -3239,13 +3243,16 @@
           avatar.style.filter = "contrast(3) brightness(0.42) saturate(1.6)";
         }
 
-        // Color the letter grid — one unique color PER LETTER, vivid IO
+        // Color the letter grid — one unique color PER LETTER, IO highlighted
         const cells = document.querySelectorAll(".bl");
         const lc = brandColorsN(pal, cells.length);
         cells.forEach((el, i) => {
           const c = lc[i];
           el.style.color = c;
-          el.style.textShadow = `0 0 14px ${c}55`;
+          // last 2 letters (IO) get a stronger glow halo
+          el.style.textShadow = i >= cells.length - 2
+            ? `0 0 10px ${c}, 0 0 24px ${c}aa`
+            : `0 0 14px ${c}55`;
         });
 
         // Color the service-links — cada link toma un color de la paleta
