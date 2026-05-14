@@ -3180,12 +3180,8 @@
           cells.forEach((cell, i) => {
             const [or,og,ob] = oldCellRgb[i], [nr,ng,nb] = newCellRgb[i];
             const rc=_lerpC(or,nr,t), gc=_lerpC(og,ng,t), bc=_lerpC(ob,nb,t);
-            const col = `rgb(${rc},${gc},${bc})`;
-            cell.style.color = col;
-            // last 2 letters (IO) get a stronger glow halo
-            cell.style.textShadow = i >= cells.length - 2
-              ? `0 0 10px ${col}, 0 0 24px ${col}aa`
-              : `0 0 14px ${col}55`;
+            cell.style.color      = `rgb(${rc},${gc},${bc})`;
+            cell.style.textShadow = `0 0 14px rgb(${rc},${gc},${bc})55`;
           });
 
           links.forEach((a, i) => {
@@ -3249,10 +3245,7 @@
         cells.forEach((el, i) => {
           const c = lc[i];
           el.style.color = c;
-          // last 2 letters (IO) get a stronger glow halo
-          el.style.textShadow = i >= cells.length - 2
-            ? `0 0 10px ${c}, 0 0 24px ${c}aa`
-            : `0 0 14px ${c}55`;
+          el.style.textShadow = `0 0 14px ${c}55`;
         });
 
         // Color the service-links — cada link toma un color de la paleta
