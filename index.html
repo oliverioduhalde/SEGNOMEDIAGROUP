@@ -3631,9 +3631,10 @@
         if (modalPlayer) { try { modalPlayer.destroy(); } catch {} modalPlayer = null; }
         videoFrameHost.querySelectorAll("iframe").forEach(f => f.remove());
 
-        // loop=1 → video loops forever, Vimeo's end screen can NEVER appear
+        // loop=0 → video ends naturally so the SDK "ended" event fires.
+        // We pre-empt Vimeo's end screen via timeupdate ~1s before the end.
         const params = new URLSearchParams({
-          autoplay: "1", muted: "0", loop: "1",
+          autoplay: "1", muted: "0", loop: "0",
           playsinline: "1", title: "0", byline: "0", portrait: "0", dnt: "1"
         });
         if (hash) params.set("h", hash);
@@ -3646,33 +3647,49 @@
         videoLightbox.classList.add("is-open");
         videoLightbox.setAttribute("aria-hidden", "false");
 
-        activeModalFrame.addEventListener("load", () => {
-          requestAnimationFrame(() => activeModalFrame.classList.add("is-loaded"));
-        }, { once: true });
-
-        // === Official Vimeo Player SDK — reliable cross-origin events ===
         const thisFrame = activeModalFrame;
         const want360 = is360;
-        if (window.Vimeo && window.Vimeo.Player) {
-          modalPlayer = new Vimeo.Player(thisFrame);
-          modalPlayer.setVolume(0.85).catch(() => {});
-          if (want360) {
-            modalPlayer.setCameraProps({ yaw: 0, pitch: 0, roll: 0, fov: 90 }).catch(() => {});
-          }
-          // primary end-detection: timeupdate fires ~4×/sec with real duration
-          modalPlayer.on("timeupdate", (d) => {
-            if (endCardShown) return;
-            if (d && d.duration > 2 && d.seconds >= d.duration - 0.5) {
-              showEndCard();
-            }
-          });
-          // safety net in case loop fails
-          modalPlayer.on("ended", () => showEndCard());
-        }
 
-        // Backup timer from oEmbed duration — fires if SDK never loads
+        activeModalFrame.addEventListener("load", () => {
+          requestAnimationFrame(() => thisFrame.classList.add("is-loaded"));
+
+          // === Official Vimeo Player SDK — built once the iframe is loaded ===
+          if (window.Vimeo && window.Vimeo.Player) {
+            try {
+              modalPlayer = new Vimeo.Player(thisFrame);
+              modalPlayer.ready().then(() => {
+                modalPlayer.setVolume(0.85).catch(() => {});
+                if (want360) {
+                  modalPlayer.setCameraProps({ yaw: 0, pitch: 0, roll: 0, fov: 90 }).catch(() => {});
+                }
+                // pull the real duration → precise pre-emptive timer
+                return modalPlayer.getDuration();
+              }).then((dur) => {
+                if (dur > 2 && !endCardShown) {
+                  clearEndTimer();
+                  // fire 1s before true end so our overlay beats Vimeo's end screen
+                  endCardTimer = setTimeout(showEndCard, (dur - 1) * 1000);
+                }
+              }).catch(() => {});
+
+              // continuous check — most reliable, carries live seconds+duration
+              modalPlayer.on("timeupdate", (d) => {
+                if (endCardShown) return;
+                if (d && d.duration > 2 && d.seconds >= d.duration - 1) {
+                  showEndCard();
+                }
+              });
+              // guaranteed backstop
+              modalPlayer.on("ended", () => showEndCard());
+            } catch (e) {
+              console.warn("Vimeo SDK init failed", e);
+            }
+          }
+        }, { once: true });
+
+        // Ultimate fallback — oEmbed duration timer (works even if SDK fails)
         if (videoDuration > 2) {
-          endCardTimer = setTimeout(showEndCard, (videoDuration + 1.5) * 1000);
+          endCardTimer = setTimeout(showEndCard, (videoDuration - 1) * 1000);
         }
       }
 
