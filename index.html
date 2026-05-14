@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SEGNOMEDIAGROUP</title>
+  <script src="https://player.vimeo.com/api/player.js"></script>
   <style>
     :root {
       color-scheme: dark;
@@ -3442,6 +3443,7 @@
       let currentPlaylistIdx = -1;
       let endCardTimer = null;
       let endCardShown = false;
+      let modalPlayer = null; // official Vimeo.Player SDK instance
 
       const videoEndCard = document.getElementById("videoEndCard");
       const vecPrev = document.getElementById("vecPrev");
@@ -3466,8 +3468,10 @@
           activeModalFrame.classList.remove("is-loaded");
           activeModalFrame.style.opacity = "0";
           activeModalFrame.style.pointerEvents = "none";
-          postVimeo(activeModalFrame, "pause");
-          postVimeo(activeModalFrame, "setVolume", 0);
+        }
+        if (modalPlayer) {
+          modalPlayer.pause().catch(() => {});
+          modalPlayer.setVolume(0).catch(() => {});
         }
         vecPrev.disabled = currentPlaylistIdx <= 0;
         vecNext.disabled = currentPlaylistIdx >= currentPlaylist.length - 1;
@@ -3506,8 +3510,8 @@
       };
 
       function closeVideo() {
-        if (activeModalFrame) postVimeo(activeModalFrame, "pause");
         stopVrPan();
+        if (modalPlayer) { try { modalPlayer.destroy(); } catch {} modalPlayer = null; }
         videoLightbox.classList.remove("is-open");
         videoLightbox.setAttribute("aria-hidden", "true");
         // remove iframes but keep the end card DOM node
@@ -3620,16 +3624,19 @@
         const { w, h } = calcSize(nativeW, nativeH);
         applyFrameSize(w, h);
 
+        endCardShown = false;
+        clearEndTimer();
+
+        // tear down any previous SDK player + iframe
+        if (modalPlayer) { try { modalPlayer.destroy(); } catch {} modalPlayer = null; }
+        videoFrameHost.querySelectorAll("iframe").forEach(f => f.remove());
+
         // loop=1 → video loops forever, Vimeo's end screen can NEVER appear
         const params = new URLSearchParams({
           autoplay: "1", muted: "0", loop: "1",
-          playsinline: "1", api: "1",
-          title: "0", byline: "0", portrait: "0", dnt: "1"
+          playsinline: "1", title: "0", byline: "0", portrait: "0", dnt: "1"
         });
         if (hash) params.set("h", hash);
-
-        // remove old iframes without touching the end card node
-        videoFrameHost.querySelectorAll("iframe").forEach(f => f.remove());
 
         activeModalFrame = document.createElement("iframe");
         activeModalFrame.allow = "autoplay; fullscreen; picture-in-picture; xr-spatial-tracking";
@@ -3639,23 +3646,31 @@
         videoLightbox.classList.add("is-open");
         videoLightbox.setAttribute("aria-hidden", "false");
 
-        endCardShown = false;
-        clearEndTimer();
-
         activeModalFrame.addEventListener("load", () => {
-          // visual fade-in
           requestAnimationFrame(() => activeModalFrame.classList.add("is-loaded"));
-          // backup: re-send listeners 1.2 s after load in case the "ready"
-          // event was missed (Vimeo sometimes fires it before our handler)
-          setTimeout(() => {
-            if (!activeModalFrame) return;
-            postVimeo(activeModalFrame, "addEventListener", "timeupdate");
-            postVimeo(activeModalFrame, "addEventListener", "ended");
-            postVimeo(activeModalFrame, "setVolume", 0.85);
-          }, 1200);
         }, { once: true });
 
-        // Backup timer from oEmbed duration — fires if timeupdate never arrives
+        // === Official Vimeo Player SDK — reliable cross-origin events ===
+        const thisFrame = activeModalFrame;
+        const want360 = is360;
+        if (window.Vimeo && window.Vimeo.Player) {
+          modalPlayer = new Vimeo.Player(thisFrame);
+          modalPlayer.setVolume(0.85).catch(() => {});
+          if (want360) {
+            modalPlayer.setCameraProps({ yaw: 0, pitch: 0, roll: 0, fov: 90 }).catch(() => {});
+          }
+          // primary end-detection: timeupdate fires ~4×/sec with real duration
+          modalPlayer.on("timeupdate", (d) => {
+            if (endCardShown) return;
+            if (d && d.duration > 2 && d.seconds >= d.duration - 0.5) {
+              showEndCard();
+            }
+          });
+          // safety net in case loop fails
+          modalPlayer.on("ended", () => showEndCard());
+        }
+
+        // Backup timer from oEmbed duration — fires if SDK never loads
         if (videoDuration > 2) {
           endCardTimer = setTimeout(showEndCard, (videoDuration + 1.5) * 1000);
         }
@@ -3671,7 +3686,9 @@
         const step = () => {
           vrCamera.yaw = (vrCamera.yaw + dyaw + 360) % 360;
           vrCamera.pitch = Math.max(-85, Math.min(85, vrCamera.pitch + dpitch));
-          postVimeo(activeModalFrame, "setCameraProps", { yaw: vrCamera.yaw, pitch: vrCamera.pitch, roll: 0, fov: vrCamera.fov });
+          if (modalPlayer) {
+            modalPlayer.setCameraProps({ yaw: vrCamera.yaw, pitch: vrCamera.pitch, roll: 0, fov: vrCamera.fov }).catch(() => {});
+          }
         };
         step();
         vrPanInterval = setInterval(step, 80);
@@ -3694,7 +3711,9 @@
 
       document.getElementById("vrReset")?.addEventListener("click", () => {
         vrCamera = { yaw: 0, pitch: 0, fov: 90 };
-        postVimeo(activeModalFrame, "setCameraProps", { yaw: 0, pitch: 0, roll: 0, fov: 90 });
+        if (modalPlayer) {
+          modalPlayer.setCameraProps({ yaw: 0, pitch: 0, roll: 0, fov: 90 }).catch(() => {});
+        }
       });
 
       videoClose.addEventListener("click", closeVideo);
@@ -3709,38 +3728,7 @@
         if (request) request.call(target);
       });
 
-      window.addEventListener("message", (event) => {
-        if (!activeModalFrame || event.source !== activeModalFrame.contentWindow) return;
-        let data = event.data;
-        if (typeof data === "string") {
-          try { data = JSON.parse(data); } catch { return; }
-        }
-        if (!data) return;
-
-        // "ready" = Vimeo player fully initialised — safe to send commands
-        if (data.event === "ready") {
-          postVimeo(activeModalFrame, "setMuted", false);
-          postVimeo(activeModalFrame, "setVolume", 0.85);
-          postVimeo(activeModalFrame, "addEventListener", "timeupdate");
-          postVimeo(activeModalFrame, "addEventListener", "ended");
-          const is360 = activeFilmCard?.dataset.vr === "true";
-          if (is360) {
-            vrCamera = { yaw: 0, pitch: 0, fov: 90 };
-            postVimeo(activeModalFrame, "setCameraProps", vrCamera);
-          }
-        }
-
-        // primary end-detection: timeupdate fires constantly with real duration
-        if (data.event === "timeupdate" && !endCardShown) {
-          const t = data.data || {};
-          if (t.duration > 2 && t.seconds >= t.duration - 0.45) {
-            showEndCard();
-          }
-        }
-
-        // extra safety net — if loop=1 fails and the video truly ends
-        if (data.event === "ended") showEndCard();
-      });
+      // (Vimeo modal events are handled by the official SDK in openVideo)
 
       filmCards.forEach((card) => {
         const video = card.querySelector("video");
