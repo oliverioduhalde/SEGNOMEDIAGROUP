@@ -2964,6 +2964,12 @@
       let startedAt = performance.now();
       let toastTimer = 0;
 
+      // ── Adaptive polyphony — droplet count auto-scales to device FPS ──
+      let autoPoly = true;                  // off once the slider is touched
+      let adaptivePoly = state.polyphony;   // live count, ramps with FPS
+      const POLY_MIN = 3, POLY_MAX = 28;
+      let _fpsFrames = 0, _fpsT0 = performance.now();
+
       const loadScenes = () => {
         try {
           const value = JSON.parse(localStorage.getItem(storeKey) || "null");
@@ -3296,6 +3302,8 @@
         if (key === "palette" && value !== "random") {
           state.randomPalette = null;
         }
+        // touching the Voices slider switches polyphony to manual control
+        if (key === "polyphony") { autoPoly = false; adaptivePoly = value; }
         state[key] = value;
         if (key === "palette") savePalette();
         syncUi();
@@ -3787,7 +3795,23 @@
       const draw = () => {
         resize();
         const t = (performance.now() - startedAt) / 1000;
-        const poly = Math.max(1, Math.min(MAX_CLICKS, Math.floor(state.polyphony)));
+
+        // adaptive polyphony — sample FPS once per second, scale droplet count
+        _fpsFrames++;
+        const _fpsElapsed = performance.now() - _fpsT0;
+        if (_fpsElapsed >= 1000) {
+          const fps = (_fpsFrames * 1000) / _fpsElapsed;
+          if (autoPoly) {
+            if (fps < 48)      adaptivePoly = Math.max(POLY_MIN, adaptivePoly - 2);
+            else if (fps > 57) adaptivePoly = Math.min(POLY_MAX, adaptivePoly + 1);
+            state.polyphony = adaptivePoly;
+          }
+          _fpsFrames = 0;
+          _fpsT0 = performance.now();
+        }
+
+        const polyTarget = autoPoly ? adaptivePoly : state.polyphony;
+        const poly = Math.max(1, Math.min(MAX_CLICKS, Math.floor(polyTarget)));
         clicks = clicks.filter((click) => t - click.t < state.lifetime).slice(-poly);
 
         const packed = new Float32Array(MAX_CLICKS * 4);
