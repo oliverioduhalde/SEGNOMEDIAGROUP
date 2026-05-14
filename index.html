@@ -3441,6 +3441,7 @@
       let currentPlaylist = [];
       let currentPlaylistIdx = -1;
       let endCardTimer = null;
+      let endCardShown = false;
 
       const videoEndCard = document.getElementById("videoEndCard");
       const vecPrev = document.getElementById("vecPrev");
@@ -3452,15 +3453,21 @@
       }
       function hideEndCard() {
         clearEndTimer();
+        endCardShown = false;
         videoEndCard.setAttribute("aria-hidden", "true");
         if (activeModalFrame) activeModalFrame.style.pointerEvents = "";
       }
       function showEndCard() {
-        // immediately hide iframe so Vimeo end screen can never be seen or clicked
+        if (endCardShown) return;
+        endCardShown = true;
+        clearEndTimer();
+        // immediately hide + silence iframe so Vimeo screen can never be seen/heard/clicked
         if (activeModalFrame) {
           activeModalFrame.classList.remove("is-loaded");
           activeModalFrame.style.opacity = "0";
           activeModalFrame.style.pointerEvents = "none";
+          postVimeo(activeModalFrame, "pause");
+          postVimeo(activeModalFrame, "setVolume", 0);
         }
         vecPrev.disabled = currentPlaylistIdx <= 0;
         vecNext.disabled = currentPlaylistIdx >= currentPlaylist.length - 1;
@@ -3595,9 +3602,11 @@
         }
 
         // fetch oEmbed for native dimensions + duration
+        // unlisted videos need the hash in the URL for oEmbed to work
         let nativeW = 1920, nativeH = 1080, videoDuration = 0;
+        const vimeoUrl = hash ? `https://vimeo.com/${id}/${hash}` : `https://vimeo.com/${id}`;
         try {
-          const r = await fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${id}&width=1920`);
+          const r = await fetch(`https://vimeo.com/api/oembed.json?url=${encodeURIComponent(vimeoUrl)}&width=1920`);
           if (r.ok) {
             const d = await r.json();
             if (d.width && d.height) { nativeW = d.width; nativeH = d.height; }
@@ -3611,8 +3620,9 @@
         const { w, h } = calcSize(nativeW, nativeH);
         applyFrameSize(w, h);
 
+        // loop=1 → video loops forever, Vimeo's end screen can NEVER appear
         const params = new URLSearchParams({
-          autoplay: "1", muted: "0", loop: "0",
+          autoplay: "1", muted: "0", loop: "1",
           playsinline: "1", api: "1",
           title: "0", byline: "0", portrait: "0", dnt: "1"
         });
@@ -3629,16 +3639,25 @@
         videoLightbox.classList.add("is-open");
         videoLightbox.setAttribute("aria-hidden", "false");
 
+        endCardShown = false;
+        clearEndTimer();
+
         activeModalFrame.addEventListener("load", () => {
-          // visual fade-in only — postMessage commands wait for Vimeo "ready"
+          // visual fade-in
           requestAnimationFrame(() => activeModalFrame.classList.add("is-loaded"));
+          // backup: re-send listeners 1.2 s after load in case the "ready"
+          // event was missed (Vimeo sometimes fires it before our handler)
+          setTimeout(() => {
+            if (!activeModalFrame) return;
+            postVimeo(activeModalFrame, "addEventListener", "timeupdate");
+            postVimeo(activeModalFrame, "addEventListener", "ended");
+            postVimeo(activeModalFrame, "setVolume", 0.85);
+          }, 1200);
         }, { once: true });
 
-        // Timer-based end detection — independent of postMessage API
-        clearEndTimer();
+        // Backup timer from oEmbed duration — fires if timeupdate never arrives
         if (videoDuration > 2) {
-          // fire ~0.8 s before true end so overlay appears before Vimeo end screen
-          endCardTimer = setTimeout(showEndCard, (videoDuration - 0.8) * 1000);
+          endCardTimer = setTimeout(showEndCard, (videoDuration + 1.5) * 1000);
         }
       }
 
@@ -3696,10 +3715,13 @@
         if (typeof data === "string") {
           try { data = JSON.parse(data); } catch { return; }
         }
+        if (!data) return;
+
         // "ready" = Vimeo player fully initialised — safe to send commands
-        if (data?.event === "ready") {
+        if (data.event === "ready") {
           postVimeo(activeModalFrame, "setMuted", false);
           postVimeo(activeModalFrame, "setVolume", 0.85);
+          postVimeo(activeModalFrame, "addEventListener", "timeupdate");
           postVimeo(activeModalFrame, "addEventListener", "ended");
           const is360 = activeFilmCard?.dataset.vr === "true";
           if (is360) {
@@ -3707,7 +3729,17 @@
             postVimeo(activeModalFrame, "setCameraProps", vrCamera);
           }
         }
-        if (data?.event === "ended") showEndCard();
+
+        // primary end-detection: timeupdate fires constantly with real duration
+        if (data.event === "timeupdate" && !endCardShown) {
+          const t = data.data || {};
+          if (t.duration > 2 && t.seconds >= t.duration - 0.45) {
+            showEndCard();
+          }
+        }
+
+        // extra safety net — if loop=1 fails and the video truly ends
+        if (data.event === "ended") showEndCard();
       });
 
       filmCards.forEach((card) => {
