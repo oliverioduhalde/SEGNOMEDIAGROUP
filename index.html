@@ -1622,8 +1622,6 @@
       color: #fff;
       transform: scale(1.14);
     }
-    .vec-btn--menu { color: rgba(118,243,255,0.8); }
-    .vec-btn--menu:hover { color: #76f3ff; transform: scale(1.14); }
     .vec-btn:disabled { opacity: 0.22; cursor: default; pointer-events: none; transform: none; }
   </style>
 </head>
@@ -2296,19 +2294,19 @@
             <!-- left triangle = anterior -->
             <button class="vec-btn" id="vecPrev" aria-label="Video anterior">
               <svg viewBox="0 0 24 24" aria-hidden="true">
-                <polygon points="16,4 16,20 5,12" fill="currentColor"/>
+                <polygon points="19,4 19,20 5,12" fill="currentColor"/>
               </svg>
             </button>
             <!-- down triangle = volver al menú -->
             <button class="vec-btn vec-btn--menu" id="vecMenu" aria-label="Volver al menú">
               <svg viewBox="0 0 24 24" aria-hidden="true">
-                <polygon points="4,6 20,6 12,19" fill="currentColor"/>
+                <polygon points="4,5 20,5 12,19" fill="currentColor"/>
               </svg>
             </button>
             <!-- right triangle = siguiente -->
             <button class="vec-btn" id="vecNext" aria-label="Video siguiente">
               <svg viewBox="0 0 24 24" aria-hidden="true">
-                <polygon points="8,4 8,20 19,12" fill="currentColor"/>
+                <polygon points="5,4 5,20 19,12" fill="currentColor"/>
               </svg>
             </button>
           </div>
@@ -3452,6 +3450,39 @@
         vecPrev.disabled = currentPlaylistIdx <= 0;
         vecNext.disabled = currentPlaylistIdx >= currentPlaylist.length - 1;
         videoEndCard.setAttribute("aria-hidden", "false");
+        flipTriangles();
+      }
+
+      // ── End-card triangle flip — 1s spin through up/right/down/left ──
+      const TRI = {
+        up:    "12,4 4,20 20,20",
+        right: "5,4 5,20 19,12",
+        down:  "4,5 20,5 12,19",
+        left:  "19,4 19,20 5,12",
+      };
+      const TRI_FINAL = { vecPrev: "left", vecMenu: "down", vecNext: "right" };
+      function flipTriangles() {
+        const seq = ["up", "right", "down", "left"];
+        const btns = ["vecPrev", "vecMenu", "vecNext"].map((id, i) => ({
+          poly: document.getElementById(id).querySelector("polygon"),
+          final: TRI_FINAL[id],
+          offset: i,
+        }));
+        const duration = 1000, stepMs = 90;
+        const start = performance.now();
+        const tick = () => {
+          const elapsed = performance.now() - start;
+          if (elapsed >= duration) {
+            btns.forEach(b => b.poly.setAttribute("points", TRI[b.final]));
+            return;
+          }
+          const idx = Math.floor(elapsed / stepMs);
+          btns.forEach(b => {
+            b.poly.setAttribute("points", TRI[seq[(idx + b.offset) % 4]]);
+          });
+          requestAnimationFrame(tick);
+        };
+        tick();
       }
       vecMenu.addEventListener("click", closeVideo);
       vecPrev.addEventListener("click", () => {
