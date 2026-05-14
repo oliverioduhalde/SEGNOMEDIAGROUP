@@ -2795,7 +2795,7 @@
       const defaults = {
         density: 2.4,
         speed: 0.115,
-        lifetime: 16,
+        lifetime: 26,
         thickness: 0.52,
         polyphony: 10,
         palette: "cyan",
@@ -4210,12 +4210,19 @@
         setTimeout(flapHeroLinks, 900); // after brand flap settles
       }
 
+      // two opening waves from random positions
+      const randPos = () => 0.12 + Math.random() * 0.76;
       window.setTimeout(() => {
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        dropWave(w * 0.44, h * 0.52, 0.9);
-        window.setTimeout(() => dropWave(w * 0.58, h * 0.47, 0.75), 360);
+        const w = window.innerWidth, h = window.innerHeight;
+        dropWave(w * randPos(), h * randPos(), 0.9);
+        window.setTimeout(() => dropWave(w * randPos(), h * randPos(), 0.75), 360);
       }, 240);
+
+      // one ambient wave from a random spot every 10 seconds
+      window.setInterval(() => {
+        const w = window.innerWidth, h = window.innerHeight;
+        dropWave(w * randPos(), h * randPos(), 0.55 + Math.random() * 0.35);
+      }, 10000);
 
       // ── Photo lightbox ────────────────────────────────────────
       const photoLightbox       = document.getElementById("photoLightbox");
