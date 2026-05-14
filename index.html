@@ -1599,54 +1599,31 @@
       border-radius: 8px 8px 0 0;
     }
     .video-end-card[aria-hidden="true"] { display: none; }
-    .vec-kicker {
-      margin: 0;
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(118,243,255,0.5);
-    }
     .vec-actions {
       display: flex;
-      gap: 18px;
+      gap: 32px;
       align-items: center;
     }
-    /* icon-only circular buttons */
+    /* bare icon buttons — no circle, all identical size */
     .vec-btn {
-      width: 62px;
-      height: 62px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(220,226,232,0.2);
-      background: rgba(255,255,255,0.05);
-      color: rgba(220,226,232,0.7);
-      cursor: pointer;
-      transition: color .15s, border-color .15s, background .15s, transform .15s;
-      padding: 0;
-    }
-    .vec-btn svg { width: 26px; height: 26px; }
-    .vec-btn:hover {
-      color: #fff;
-      border-color: rgba(220,226,232,0.55);
-      background: rgba(255,255,255,0.11);
-      transform: scale(1.08);
-    }
-    /* down-arrow (menu) is smaller, cyan */
-    .vec-btn--menu {
       width: 48px;
       height: 48px;
-      border-color: rgba(118,243,255,0.28);
-      color: rgba(118,243,255,0.75);
+      display: grid;
+      place-items: center;
+      border: none;
+      background: none;
+      color: rgba(220,226,232,0.7);
+      cursor: pointer;
+      transition: color .15s, transform .15s;
+      padding: 0;
     }
-    .vec-btn--menu svg { width: 20px; height: 20px; }
-    .vec-btn--menu:hover {
-      color: #76f3ff;
-      border-color: rgba(118,243,255,0.7);
-      background: rgba(118,243,255,0.08);
-      transform: scale(1.08);
+    .vec-btn svg { width: 38px; height: 38px; }
+    .vec-btn:hover {
+      color: #fff;
+      transform: scale(1.14);
     }
+    .vec-btn--menu { color: rgba(118,243,255,0.8); }
+    .vec-btn--menu:hover { color: #76f3ff; transform: scale(1.14); }
     .vec-btn:disabled { opacity: 0.22; cursor: default; pointer-events: none; transform: none; }
   </style>
 </head>
@@ -2315,7 +2292,6 @@
       <div class="video-lightbox__frame" id="videoFrameHost">
         <!-- end card — covers Vimeo's end screen, prev/next/menu -->
         <div class="video-end-card" id="videoEndCard" aria-hidden="true">
-          <p class="vec-kicker" id="vecKicker">Fin del video</p>
           <div class="vec-actions">
             <!-- left triangle = anterior -->
             <button class="vec-btn" id="vecPrev" aria-label="Video anterior">
@@ -3475,9 +3451,6 @@
         }
         vecPrev.disabled = currentPlaylistIdx <= 0;
         vecNext.disabled = currentPlaylistIdx >= currentPlaylist.length - 1;
-        // flap the kicker text
-        const kicker = document.getElementById("vecKicker");
-        if (kicker && typeof flapText === "function") flapText(kicker, 900);
         videoEndCard.setAttribute("aria-hidden", "false");
       }
       vecMenu.addEventListener("click", closeVideo);
