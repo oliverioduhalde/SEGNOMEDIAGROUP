@@ -525,8 +525,14 @@
       overflow: hidden;
       border: none;
       border-radius: 8px 8px 0 0;
-      background: transparent;
+      background: #000;
       box-shadow: 0 28px 90px rgba(0, 0, 0, 0.56);
+    }
+    /* fullscreen: everything that isn't the film must be black */
+    .video-lightbox__frame:fullscreen,
+    .video-lightbox__frame:-webkit-full-screen {
+      background: #000;
+      border-radius: 0;
     }
 
     .video-lightbox__frame iframe {
@@ -536,7 +542,7 @@
       height: 100%;
       border: 0;
       display: block;
-      background: transparent;
+      background: #000;
       z-index: 1; /* always below .video-end-card z-index:10 */
       opacity: 0;
       transition: opacity 0.35s ease;
@@ -556,21 +562,21 @@
     }
 
     .video-lightbox__tools button {
-      width: 34px;
-      min-height: 34px;
+      width: 26px;
+      min-height: 26px;
       display: grid;
       place-items: center;
       padding: 0;
-      border-color: rgba(255, 255, 255, 0.22);
-      background: rgba(8, 10, 12, 0.72);
-      color: rgba(255, 255, 255, 0.88);
+      border-color: rgba(255, 255, 255, 0.18);
+      background: rgba(8, 10, 12, 0.6);
+      color: rgba(255, 255, 255, 0.82);
     }
 
     .video-lightbox__tools svg {
-      width: 15px;
-      height: 15px;
+      width: 11px;
+      height: 11px;
       stroke: currentColor;
-      stroke-width: 1.7;
+      stroke-width: 1.8;
       fill: none;
     }
 
@@ -3589,8 +3595,10 @@
       }
 
       function getVisibleCards() {
-        // only cards whose ancestors are all visible
-        return filmCards.filter(c => c.offsetParent !== null && !c.closest("[hidden]"));
+        // query the DOM live — sonido cards are rendered dynamically and are
+        // NOT in the static `filmCards` snapshot taken at init
+        return [...document.querySelectorAll(".film-card")]
+          .filter(c => c.offsetParent !== null && !c.closest("[hidden]"));
       }
 
       async function openVideo(card) {
