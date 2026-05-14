@@ -154,6 +154,16 @@
       width: min(380px, calc(100vw - 60px));
     }
 
+    /* Mobile/tablet: brand sits in the upper area, not vertically centered */
+    body[data-device="mobile"] .hero,
+    body[data-device="tablet"] .hero {
+      align-items: start;
+    }
+    body[data-device="mobile"][data-orientation="portrait"] .hero { padding-top: 15vh; }
+    body[data-device="mobile"][data-orientation="landscape"] .hero { padding-top: 8vh; }
+    body[data-device="tablet"][data-orientation="portrait"] .hero { padding-top: 12vh; }
+    body[data-device="tablet"][data-orientation="landscape"] .hero { padding-top: 9vh; }
+
     .segno-avatar {
       display: none; /* pasivo — activar cuando se necesite */
       width: 80%;
