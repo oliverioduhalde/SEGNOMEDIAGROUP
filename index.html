@@ -2290,7 +2290,7 @@
         </div>
         <div class="control">
           <label for="polyphony">Voices</label>
-          <input id="polyphony" data-key="polyphony" type="range" min="1" max="32" step="1">
+          <input id="polyphony" data-key="polyphony" type="range" min="1" max="8" step="1">
           <span class="value" data-value="polyphony"></span>
         </div>
       </section>
@@ -2849,9 +2849,9 @@
       const defaults = {
         density: 2.4,
         speed: 0.115,
-        lifetime: 26,
+        lifetime: 15,
         thickness: 0.52,
-        polyphony: 10,
+        polyphony: 8,
         palette: "cyan",
         alpha: 0.36,
         brandSize: 68,
@@ -4303,19 +4303,8 @@
         setTimeout(flapHeroLinks, 900); // after brand flap settles
       }
 
-      // two opening waves from random positions
-      const randPos = () => 0.12 + Math.random() * 0.76;
-      window.setTimeout(() => {
-        const w = window.innerWidth, h = window.innerHeight;
-        dropWave(w * randPos(), h * randPos(), 0.9);
-        window.setTimeout(() => dropWave(w * randPos(), h * randPos(), 0.75), 360);
-      }, 240);
-
-      // one ambient wave from a random spot every 10 seconds
-      window.setInterval(() => {
-        const w = window.innerWidth, h = window.innerHeight;
-        dropWave(w * randPos(), h * randPos(), 0.55 + Math.random() * 0.35);
-      }, 10000);
+      // No automatic waves on load or after — everything is triggered
+      // exclusively by user pointer interaction.
 
       // ── Photo lightbox ────────────────────────────────────────
       const photoLightbox       = document.getElementById("photoLightbox");
