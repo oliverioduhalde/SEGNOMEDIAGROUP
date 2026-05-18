@@ -1248,21 +1248,24 @@
     .sonido-back-btn:hover { border-color: rgba(255,255,255,0.34); }
     .sonido-back-btn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2.2; fill: none; }
     /* Brand text inside back button — 4× larger than nav links, each
-       letter follows the landing palette arc (per-letter color via JS). */
+       letter follows the landing palette arc (per-letter color via JS).
+       Fixed-width letter boxes so spacing is perfectly even. */
     .sonido-back-btn > span {
       font-size: 4em;
-      letter-spacing: 0.04em;
+      letter-spacing: 0;
       line-height: 1;
       display: inline-flex;
       align-items: center;
     }
     .sonido-back-btn .bl-back {
       display: inline-block;
+      width: 0.66em;             /* uniform horizontal slot per letter */
+      text-align: center;
       transition: color 0.55s ease;
     }
     .sonido-back-btn .bl-back-space {
       display: inline-block;
-      width: 0.32em;
+      width: 0.45em;             /* slimmer gap for the word break */
     }
 
     .sonido-brand {
