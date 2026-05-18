@@ -4267,8 +4267,9 @@
         section.querySelectorAll('.sonido-nav-link').forEach((el, i) => {
           setTimeout(() => flapText(el, 1480), i * 55);
         });
-        const back = section.querySelector('.sonido-back-btn span, #sonidoBack span');
-        if (back) setTimeout(() => flapText(back, 1520), 0);
+        // back-btn "Segno Studio" is split into per-letter spans for the
+        // chromatic brand effect — flapping would wipe those children.
+        // Skip the flap here; the static colored letters land instantly.
         const brand = section.querySelector('.sonido-brand');
         if (brand) setTimeout(() => flapText(brand, 1600), 80);
       }
