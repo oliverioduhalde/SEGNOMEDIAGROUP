@@ -1247,6 +1247,14 @@
     }
     .sonido-back-btn:hover { color: rgba(255,255,255,0.88); border-color: rgba(255,255,255,0.34); }
     .sonido-back-btn svg { width: 11px; height: 11px; stroke: currentColor; stroke-width: 2.2; fill: none; }
+    /* Brand text inside back button — 2× larger than nav links, follows
+       the landing palette via JS (interpolated in tweenPalette). */
+    .sonido-back-btn span {
+      font-size: 2em;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      transition: color 0.55s ease;
+    }
 
     .sonido-brand {
       font-family: var(--mono);
@@ -3215,10 +3223,13 @@
 
         const cells = [...document.querySelectorAll('.bl')];
         const links = [...document.querySelectorAll('.service-links a')];
+        // back-button "Segno Studio" spans across all section topbars
+        const backSpans = [...document.querySelectorAll('.sonido-back-btn span')];
 
         // Snapshot colores actuales UI
         const oldCellRgb = cells.map(c => _parseRgb(getComputedStyle(c).color));
         const oldLinkRgb = links.map(a => _parseRgb(a.style.getPropertyValue('--link-color') || 'rgb(220,226,232)'));
+        const oldBackRgb = backSpans.map(s => _parseRgb(getComputedStyle(s).color));
 
         // Snapshot paleta actual para WebGL (lo que ven los shaders ahora)
         const oldPal = _clonePal(paletteForState());
@@ -3263,6 +3274,17 @@
             a.style.setProperty('--link-color-mid', `rgba(${rc},${gc},${bc},0.40)`);
             a.style.setProperty('--link-color-dim', `rgba(${rc},${gc},${bc},0.11)`);
           });
+
+          // back-button "Segno Studio" — track the vivid IO (last brand
+          // letter) color, interpolated frame-by-frame
+          const lastIdx = newCellRgb.length - 1;
+          if (lastIdx >= 0 && backSpans.length) {
+            const [olr,olg,olb] = oldBackRgb[0] || oldCellRgb[lastIdx] || [220,226,232];
+            const [nlr,nlg,nlb] = newCellRgb[lastIdx];
+            const rc=_lerpC(olr,nlr,t), gc=_lerpC(olg,nlg,t), bc=_lerpC(olb,nlb,t);
+            const col = `rgb(${rc},${gc},${bc})`;
+            backSpans.forEach(s => { s.style.color = col; });
+          }
 
           if (raw < 1) {
             _tweenRaf = requestAnimationFrame(tick);
@@ -3319,6 +3341,14 @@
           el.style.color = c;
           el.style.textShadow = `0 0 14px ${c}55`;
         });
+
+        // back-button "Segno Studio" — same color as the IO of the brand
+        if (lc.length) {
+          const ioColor = lc[lc.length - 1];
+          document.querySelectorAll('.sonido-back-btn span').forEach(s => {
+            s.style.color = ioColor;
+          });
+        }
 
         // Color the service-links — cada link toma un color de la paleta
         const serviceLinks = document.querySelector(".service-links");
