@@ -1685,6 +1685,7 @@
       display: flex;
       align-items: center;
       gap: 14px;
+      margin-left: auto;       /* pin right even when .identity is hidden */
       pointer-events: none;
     }
     .lang-toggle {
@@ -3530,7 +3531,10 @@
         brandShell.style.display = state.showBrand ? "grid" : "none";
         brand.style.fontSize = `${state.brandSize}px`;
         fitBrand();
-        document.querySelector(".topbar").style.display = state.showHud ? "flex" : "none";
+        // Topbar stays visible so the language selector is always reachable;
+        // toggling the HUD only hides the dev identity + voice-meter.
+        document.querySelector(".identity").style.display    = state.showHud ? "" : "none";
+        document.querySelector(".voice-meter").style.display = state.showHud ? "" : "none";
         sceneLabel.textContent = `${tr("topbar.scene")} ${activeScene + 1}`;
 
         const pal = paletteForState();
