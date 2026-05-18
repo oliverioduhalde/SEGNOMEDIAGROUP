@@ -1,25 +1,31 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SEGNO STUDIO — Instalaciones Interactivas, Experiencias Inmersivas, Diseño Sonoro</title>
-  <meta name="description" content="SEGNO STUDIO — instalaciones interactivas, experiencias inmersivas, música y sound design, apps & web, y workshops de innovación. 400+ proyectos para plataformas globales.">
+  <title>SEGNO STUDIO — Interactive Installations, Immersive Experiences, Sound Design</title>
+  <meta name="description" content="SEGNO STUDIO — interactive installations, immersive experiences, music and sound design, apps & web, and innovation workshops. 400+ projects for global platforms.">
   <link rel="canonical" href="https://segnostudio.com/">
+  <link rel="alternate" hreflang="en" href="https://segnostudio.com/">
+  <link rel="alternate" hreflang="es" href="https://segnostudio.com/es">
+  <link rel="alternate" hreflang="x-default" href="https://segnostudio.com/">
   <meta name="theme-color" content="#030507">
-  <!-- Open Graph -->
+  <!-- Open Graph (overwritten dynamically by applyLang) -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="SEGNO STUDIO">
   <meta property="og:title" content="SEGNO STUDIO">
-  <meta property="og:description" content="Instalaciones interactivas, experiencias inmersivas, música y sound design, apps & web, workshops.">
+  <meta property="og:description" content="Interactive installations, immersive experiences, music and sound design, apps & web, workshops.">
   <meta property="og:url" content="https://segnostudio.com/">
   <meta property="og:image" content="https://static.wixstatic.com/media/fdedb3_ee6b0b4c4ccf47b1b5b8101dd6b8943e~mv2.jpg">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="es_AR">
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="SEGNO STUDIO">
-  <meta name="twitter:description" content="Instalaciones interactivas, experiencias inmersivas, música y sound design, apps & web, workshops.">
+  <meta name="twitter:description" content="Interactive installations, immersive experiences, music and sound design, apps & web, workshops.">
   <meta name="twitter:image" content="https://static.wixstatic.com/media/fdedb3_ee6b0b4c4ccf47b1b5b8101dd6b8943e~mv2.jpg">
   <script src="https://player.vimeo.com/api/player.js"></script>
+  <script src="/translations.js"></script>
   <style>
     :root {
       color-scheme: dark;
@@ -1674,19 +1680,74 @@
       transform: scale(1.14);
     }
     .vec-btn:disabled { opacity: 0.22; cursor: default; pointer-events: none; transform: none; }
+    /* ── Language selector — top-right ENG/SPA pill ──────────── */
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      pointer-events: none;
+    }
+    .lang-toggle {
+      display: inline-flex;
+      align-items: stretch;
+      padding: 2px;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      background: rgba(8,10,12,0.55);
+      pointer-events: auto;
+      font-family: var(--mono);
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+    .lang-btn {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      padding: 4px 12px;
+      font: inherit;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(220,226,232,0.5);
+      cursor: pointer;
+      border-radius: 999px;
+      transition: color 0.18s ease, background 0.18s ease;
+    }
+    .lang-btn:hover { color: rgba(255,255,255,0.9); }
+    .lang-btn:focus-visible {
+      outline: 1px solid rgba(118,243,255,0.6);
+      outline-offset: 2px;
+    }
+    .lang-btn[aria-pressed="true"] {
+      color: rgba(255,255,255,0.96);
+      background: rgba(255,255,255,0.12);
+    }
+    @media (max-width: 480px) {
+      .lang-btn { padding: 4px 10px; font-size: 9px; letter-spacing: 0.12em; }
+    }
   </style>
 </head>
 <body>
-  <canvas id="stage" aria-label="SEGNOMEDIAGROUP visual"></canvas>
+  <canvas id="stage" aria-label="SEGNO STUDIO visual"></canvas>
 
   <header class="topbar">
     <div class="identity">
       <strong>SEGNO STUDIO</strong>
-      <span id="sceneLabel">Escena 1</span>
+      <span id="sceneLabel">Scene 1</span>
     </div>
-    <div class="voice-meter">
-      <span class="pulse-dot"></span>
-      <span id="voiceLabel">0 voces</span>
+    <div class="topbar-right">
+      <div class="voice-meter">
+        <span class="pulse-dot"></span>
+        <span id="voiceLabel">0 voices</span>
+      </div>
+      <div class="lang-toggle" role="group" data-i18n-aria-label="topbar.lang.aria" aria-label="Language">
+        <button type="button" class="lang-btn" data-lang="en"
+                aria-pressed="true"
+                data-i18n-aria-label="topbar.lang.en" aria-label="English">ENG</button>
+        <button type="button" class="lang-btn" data-lang="es"
+                aria-pressed="false"
+                data-i18n-aria-label="topbar.lang.es" aria-label="Spanish">SPA</button>
+      </div>
     </div>
   </header>
 
@@ -1699,19 +1760,19 @@
           <span class="bl" data-letter="S">S</span><span class="bl" data-letter="T">T</span><span class="bl" data-letter="D">D</span><span class="bl" data-letter="I">I</span><span class="bl bl-cx" data-letter="O">O</span>
         </div>
         <nav class="service-links" aria-label="Servicios">
-          <a href="#experiencias">Experiencias Inmersivas</a>
-          <a href="#sonido">Música + Diseño Sonoro</a>
-          <a href="#apps">Apps + Diseño Web</a>
-          <a href="#workshops">Talleres</a>
-          <a href="#instalaciones">Instalaciones Interactivas</a>
+          <a href="#experiencias" data-i18n="hero.experiences">Immersive Experiences</a>
+          <a href="#sonido" data-i18n="hero.sound">Music + Sound Design</a>
+          <a href="#apps" data-i18n="hero.apps">Apps + Web Design</a>
+          <a href="#workshops" data-i18n="hero.workshops">Workshops</a>
+          <a href="#instalaciones" data-i18n="hero.installations">Interactive Installations</a>
         </nav>
       </div>
     </section>
 
     <section class="portfolio-scroll" id="contacto-wrap">
 
-      <section class="service-block" id="contacto" data-kicker="Contacto">
-        <h2>Contacto</h2>
+      <section class="service-block" id="contacto" data-kicker="Contact" data-i18n-kicker="footer.contact.title">
+        <h2 data-i18n="footer.contact.title">Contact</h2>
         <div class="contact-strip">
           <a href="mailto:segnosound@gmail.com">segnosound@gmail.com<br>+54 911 4149 4885</a>
           <a href="mailto:estebanvivo@gmail.com">estebanvivo@gmail.com<br>+54 911 5564 9872</a>
@@ -1732,16 +1793,16 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
         <span>Segno Studio</span>
       </button>
-      <div class="sonido-brand">Experiencias Inmersivas</div>
+      <div class="sonido-brand" data-i18n="exp.brand">Immersive Experiences</div>
       <nav class="sonido-nav" aria-label="Experiencias Inmersivas">
-        <a href="#experiencias" class="sonido-nav-link" data-view="home">Proyectos</a>
+        <a href="#experiencias" class="sonido-nav-link" data-view="home" data-i18n="exp.nav.home">Projects</a>
       </nav>
     </header>
     <main class="sonido-main" id="spaMainExp">
       <div class="sonido-view" id="sv-experiencias-home" data-kicker="Experiencias Inmersivas" hidden>
         <div class="sonido-view-header">
-          <p class="sonido-kicker">Experiencias Inmersivas</p>
-          <h2 class="sonido-view-title">Proyectos</h2>
+          <p class="sonido-kicker" data-i18n="exp.kicker.home">Immersive Experiences</p>
+          <h2 class="sonido-view-title" data-i18n="exp.title.home">Projects</h2>
         </div>
         <div class="project-list project-list--2col">
           <article class="project-row">
@@ -1785,12 +1846,12 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
         <span>Segno Studio</span>
       </button>
-      <div class="sonido-brand">Instalaciones Interactivas</div>
+      <div class="sonido-brand" data-i18n="inst.brand">Interactive Installations</div>
       <nav class="sonido-nav" aria-label="Instalaciones Interactivas">
-        <a href="#instalaciones"              class="sonido-nav-link" data-view="home">Proyectos</a>
-        <a href="#instalaciones/interactive"  class="sonido-nav-link" data-view="interactive">Interactivas</a>
-        <a href="#instalaciones/corporate"    class="sonido-nav-link" data-view="corporate">Corporativo</a>
-        <a href="#instalaciones/events"       class="sonido-nav-link" data-view="events">Eventos</a>
+        <a href="#instalaciones"              class="sonido-nav-link" data-view="home" data-i18n="exp.nav.home">Projects</a>
+        <a href="#instalaciones/interactive"  class="sonido-nav-link" data-view="interactive" data-i18n="inst.nav.interactive">Interactive</a>
+        <a href="#instalaciones/corporate"    class="sonido-nav-link" data-view="corporate" data-i18n="inst.nav.corporate">Corporate</a>
+        <a href="#instalaciones/events"       class="sonido-nav-link" data-view="events" data-i18n="inst.nav.events">Events</a>
       </nav>
     </header>
     <main class="sonido-main" id="spaMainInst">
@@ -1798,8 +1859,8 @@
       <!-- WORKS: los 6 proyectos interactivos -->
       <div class="sonido-view" id="sv-instalaciones-home" data-kicker="Instalaciones Interactivas" hidden>
         <div class="sonido-view-header">
-          <p class="sonido-kicker">Instalaciones Interactivas</p>
-          <h2 class="sonido-view-title">Proyectos</h2>
+          <p class="sonido-kicker" data-i18n="inst.kicker.home">Interactive Installations</p>
+          <h2 class="sonido-view-title" data-i18n="exp.title.home">Projects</h2>
         </div>
         <div class="project-list project-list--2col">
           <article class="project-row">
@@ -1849,7 +1910,7 @@
 
       <!-- INTERACTIVE: Syngenta x2 -->
       <div class="sonido-view" id="sv-instalaciones-interactive" data-kicker="Interactivas" hidden>
-        <div class="sonido-view-header"><p class="sonido-kicker">Interactivas</p><h2 class="sonido-view-title">Interactivas</h2></div>
+        <div class="sonido-view-header"><p class="sonido-kicker" data-i18n="inst.kicker.interactive">Interactive</p><h2 class="sonido-view-title" data-i18n="inst.title.interactive">Interactive</h2></div>
         <div class="project-list">
           <article class="project-row">
             <div class="project-card"><h3>Syngenta, The Seedcare Institute Singapore</h3><p>Dinámicas interactivas y web app para facilitar acceso a información dentro del espacio.</p><span>Interactivo</span></div>
@@ -1870,7 +1931,7 @@
 
       <!-- CORPORATE: Bagó -->
       <div class="sonido-view" id="sv-instalaciones-corporate" data-kicker="Corporativo" hidden>
-        <div class="sonido-view-header"><p class="sonido-kicker">Corporativo</p><h2 class="sonido-view-title">Corporativo</h2></div>
+        <div class="sonido-view-header"><p class="sonido-kicker" data-i18n="inst.kicker.corporate">Corporate</p><h2 class="sonido-view-title" data-i18n="inst.title.corporate">Corporate</h2></div>
         <div class="project-list">
           <article class="project-row">
             <div class="project-card"><h3>Bagó</h3><p>Convención nacional de ventas con innovación en todas las etapas, team building y participación en tiempo real.</p><span>Eventos corporativos</span></div>
@@ -1884,7 +1945,7 @@
 
       <!-- EVENTS: Chevrolet + ADAMA + Bresh Party -->
       <div class="sonido-view" id="sv-instalaciones-events" data-kicker="Interactivas" hidden>
-        <div class="sonido-view-header"><p class="sonido-kicker">Eventos</p><h2 class="sonido-view-title">Eventos</h2></div>
+        <div class="sonido-view-header"><p class="sonido-kicker" data-i18n="inst.kicker.events">Events</p><h2 class="sonido-view-title" data-i18n="inst.title.events">Events</h2></div>
         <div class="project-list">
           <article class="project-row">
             <div class="project-card"><h3>Chevrolet, NOS, Lollapalooza</h3><p>Plataforma de personalización vehicular en tiempo real, proyectada sobre las paredes del stand.</p><span>Eventos masivos</span></div>
@@ -1920,17 +1981,17 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
         <span>Segno Studio</span>
       </button>
-      <div class="sonido-brand">Apps &amp; web</div>
+      <div class="sonido-brand" data-i18n="apps.brand">Apps &amp; Web</div>
       <nav class="sonido-nav" aria-label="Apps y web móviles">
-        <a href="#apps"        class="sonido-nav-link" data-view="home">Proyectos</a>
-        <a href="#apps/ar"     class="sonido-nav-link" data-view="ar">AR</a>
-        <a href="#apps/retail" class="sonido-nav-link" data-view="retail">Retail</a>
+        <a href="#apps"        class="sonido-nav-link" data-view="home" data-i18n="exp.nav.home">Projects</a>
+        <a href="#apps/ar"     class="sonido-nav-link" data-view="ar" data-i18n="apps.nav.ar">AR</a>
+        <a href="#apps/retail" class="sonido-nav-link" data-view="retail" data-i18n="apps.nav.retail">Retail</a>
       </nav>
     </header>
     <main class="sonido-main" id="spaMainApps">
 
       <div class="sonido-view" id="sv-apps-home" data-kicker="Apps & web" hidden>
-        <div class="sonido-view-header"><p class="sonido-kicker">Apps &amp; web</p><h2 class="sonido-view-title">Aplicaciones</h2></div>
+        <div class="sonido-view-header"><p class="sonido-kicker" data-i18n="apps.kicker.home">Apps &amp; Web</p><h2 class="sonido-view-title" data-i18n="apps.title.home">Applications</h2></div>
         <div class="project-list">
           <article class="project-row">
             <div class="project-card"><h3>Syngenta AR</h3><p>App de realidad aumentada activa en más de 20 países, con analytics, branding regional y modo offline para eventos de campo.</p><span>Realidad aumentada</span></div>
@@ -1964,7 +2025,7 @@
       </div>
 
       <div class="sonido-view" id="sv-apps-ar" data-kicker="Apps & web" hidden>
-        <div class="sonido-view-header"><p class="sonido-kicker">Realidad Aumentada</p><h2 class="sonido-view-title">AR</h2></div>
+        <div class="sonido-view-header"><p class="sonido-kicker" data-i18n="apps.kicker.ar">Augmented Reality</p><h2 class="sonido-view-title" data-i18n="apps.title.ar">AR</h2></div>
         <div class="project-list">
           <article class="project-row">
             <div class="project-card"><h3>Syngenta AR</h3><p>App de realidad aumentada activa en más de 20 países, con analytics, branding regional y modo offline para eventos de campo.</p><span>Realidad aumentada</span></div>
@@ -1977,7 +2038,7 @@
       </div>
 
       <div class="sonido-view" id="sv-apps-retail" data-kicker="Apps & web" hidden>
-        <div class="sonido-view-header"><p class="sonido-kicker">Retail</p><h2 class="sonido-view-title">Retail</h2></div>
+        <div class="sonido-view-header"><p class="sonido-kicker" data-i18n="apps.kicker.retail">Retail</p><h2 class="sonido-view-title" data-i18n="apps.title.retail">Retail</h2></div>
         <div class="project-list">
           <article class="project-row">
             <div class="project-card"><h3>AFA Studio Adidas</h3><p>Conexión mobile para visitantes del stand, infografía de camiseta y oportunidad fotográfica interactiva.</p><span>Retail</span></div>
@@ -2014,41 +2075,41 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
         <span>Segno Studio</span>
       </button>
-      <div class="sonido-brand">Workshops</div>
+      <div class="sonido-brand" data-i18n="wsh.brand">Workshops</div>
       <nav class="sonido-nav" aria-label="Workshops y laboratorios">
-        <a href="#workshops"                    class="sonido-nav-link" data-view="home">Inicio</a>
-        <a href="#workshops/banda-de-robots"    class="sonido-nav-link" data-view="banda-de-robots">Banda de Robots</a>
-        <a href="#workshops/micra"              class="sonido-nav-link" data-view="micra">MicRA</a>
-        <a href="#workshops/astrologio"         class="sonido-nav-link" data-view="astrologio">Astro.log.io</a>
-        <a href="#workshops/ciclomusic"         class="sonido-nav-link" data-view="ciclomusic">Ciclomusic</a>
+        <a href="#workshops"                    class="sonido-nav-link" data-view="home" data-i18n="wsh.nav.home">Home</a>
+        <a href="#workshops/banda-de-robots"    class="sonido-nav-link" data-view="banda-de-robots" data-i18n="wsh.nav.banda">Banda de Robots</a>
+        <a href="#workshops/micra"              class="sonido-nav-link" data-view="micra" data-i18n="wsh.nav.micra">MicRA</a>
+        <a href="#workshops/astrologio"         class="sonido-nav-link" data-view="astrologio" data-i18n="wsh.nav.astrologio">Astro.log.io</a>
+        <a href="#workshops/ciclomusic"         class="sonido-nav-link" data-view="ciclomusic" data-i18n="wsh.nav.ciclomusic">Ciclomusic</a>
       </nav>
     </header>
     <main class="sonido-main" id="spaMainWs">
 
       <!-- HOME -->
       <div class="sonido-view" id="sv-workshops-home" hidden>
-        <div class="sonido-view-header"><p class="sonido-kicker">Laboratorios creativos</p><h2 class="sonido-view-title">Talleres</h2></div>
+        <div class="sonido-view-header"><p class="sonido-kicker" data-i18n="wsh.kicker.home">Creative laboratories</p><h2 class="sonido-view-title" data-i18n="wsh.title.home">Workshops</h2></div>
         <p class="ws-desc">Diseñamos workshops y laboratorios para equipos que necesitan prototipar cruces entre experiencia, tecnología, imagen, sonido e interacción.</p>
         <div class="ws-card-grid">
           <a href="#workshops/banda-de-robots" class="ws-card">
             <h3>Banda de Robots</h3>
             <p>Proyecto de innovación educativa que combina ingeniería, electrónica, luthería, artes plásticas y música.</p>
-            <span class="ws-card-tag">Taller · Laboratorio</span>
+            <span class="ws-card-tag" data-i18n="wsh.card.tag.lab">Workshop · Laboratory</span>
           </a>
           <a href="#workshops/micra" class="ws-card">
             <h3>MicRA · Micropraxiscopio</h3>
             <p>Laboratorio de creación colectiva con microscopía, bioinstalaciones y sonido interaural.</p>
-            <span class="ws-card-tag">Laboratorio · Bioart</span>
+            <span class="ws-card-tag" data-i18n="wsh.card.tag.lab">Workshop · Laboratory</span>
           </a>
           <a href="#workshops/astrologio" class="ws-card">
             <h3>Astro.log.io</h3>
             <p>Información en desarrollo.</p>
-            <span class="ws-card-tag">Taller</span>
+            <span class="ws-card-tag" data-i18n="wsh.card.tag.workshop">Workshop</span>
           </a>
           <a href="#workshops/ciclomusic" class="ws-card">
             <h3>Ciclomusic</h3>
             <p>Información en desarrollo.</p>
-            <span class="ws-card-tag">Taller</span>
+            <span class="ws-card-tag" data-i18n="wsh.card.tag.workshop">Workshop</span>
           </a>
         </div>
       </div>
@@ -2056,8 +2117,8 @@
       <!-- BANDA DE ROBOTS -->
       <div class="sonido-view" id="sv-workshops-banda-de-robots" hidden>
         <div class="sonido-view-header">
-          <p class="sonido-kicker">Taller · Innovación educativa</p>
-          <h2 class="sonido-view-title">Banda de Robots</h2>
+          <p class="sonido-kicker" data-i18n="wsh.banda.kicker">Workshop · Educational innovation</p>
+          <h2 class="sonido-view-title" data-i18n="wsh.banda.title">Banda de Robots</h2>
         </div>
         <p class="ws-desc">Proyecto de innovación educativa que combina ingeniería, electrónica, programación, luthería, artes plásticas y música para crear una orquesta de robots. Edades 9–99. Tres niveles progresivos liderados por docentes universitarios con alcance inter-regional vía internet.</p>
         <div class="ws-tag-row">
@@ -2139,8 +2200,8 @@
       <!-- MICRA -->
       <div class="sonido-view" id="sv-workshops-micra" hidden>
         <div class="sonido-view-header">
-          <p class="sonido-kicker">Laboratorio de creación colectiva</p>
-          <h2 class="sonido-view-title">MicRA · Micropraxiscopio</h2>
+          <p class="sonido-kicker" data-i18n="wsh.micra.kicker">Collective creation laboratory</p>
+          <h2 class="sonido-view-title" data-i18n="wsh.micra.title">MicRA · Micropraxiscopio</h2>
         </div>
         <p class="ws-desc">Laboratorio de creación colectiva para el desarrollo de interfaces expresivas mediante experimentación microscópica y macroscópica con organismos vivos, materia inerte y reacciones químicas. El proyecto transforma fenómenos microscópicos en material artístico, cultivando en el público la curiosidad por mundos biológicos invisibles.</p>
         <blockquote class="ws-quote">"La experiencia más bella que podemos tener es la del misterio… quien no la conoce es como una lámpara apagada." — A. Einstein</blockquote>
@@ -2193,8 +2254,8 @@
       <!-- ASTRO.LOG.IO -->
       <div class="sonido-view" id="sv-workshops-astrologio" hidden>
         <div class="sonido-view-header">
-          <p class="sonido-kicker">Laboratorio · Arte + ciencia + tecnología</p>
-          <h2 class="sonido-view-title">Astro.log.io</h2>
+          <p class="sonido-kicker" data-i18n="wsh.astrologio.kicker">Laboratory · Art + science + technology</p>
+          <h2 class="sonido-view-title" data-i18n="wsh.astrologio.title">Astro.log.io</h2>
         </div>
         <p class="ws-desc">Astro.log.io integra arte, ciencia, tecnología y saber ancestral, expandiendo el concepto de la música de las esferas. Crea experiencias inmersivas personalizadas a partir de la interpretación de cartas natales individuales: combina inteligencia artificial, datos astronómicos y significados astrológicos para generar paisajes sonoros únicos que reflejan la posición, el movimiento y las características de los cuerpos celestes en una fecha y hora específicas.</p>
         <p class="ws-quote">Inspirado en la "música de las esferas" de Pitágoras y el Harmonices Mundi de Kepler — la idea de que los movimientos planetarios siguen proporciones armónicas. Una raíz medieval del Quadrivium: aritmética, geometría, música y astronomía.</p>
@@ -2248,7 +2309,7 @@
 
       <!-- CICLOMUSIC -->
       <div class="sonido-view" id="sv-workshops-ciclomusic" hidden>
-        <div class="sonido-view-header"><p class="sonido-kicker">Taller</p><h2 class="sonido-view-title">Ciclomusic</h2></div>
+        <div class="sonido-view-header"><p class="sonido-kicker" data-i18n="wsh.ciclomusic.kicker">Workshop</p><h2 class="sonido-view-title" data-i18n="wsh.ciclomusic.title">Ciclomusic</h2></div>
         <p class="ws-desc">Información en desarrollo. Próximamente se publicará contenido sobre este laboratorio.</p>
       </div>
 
@@ -2450,17 +2511,17 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
         <span>Segno Studio</span>
       </button>
-      <div class="sonido-brand">Segno Sound</div>
+      <div class="sonido-brand" data-i18n="snd.brand">Segno Sound</div>
       <nav class="sonido-nav" aria-label="Segno Sound">
-        <a href="#sonido"            class="sonido-nav-link" data-view="home">Proyectos</a>
-        <a href="#sonido/film"       class="sonido-nav-link" data-view="film">Cine / Series</a>
-        <a href="#sonido/animation"  class="sonido-nav-link" data-view="animation">Animación</a>
-        <a href="#sonido/sonic"      class="sonido-nav-link" data-view="sonic">Identidad Sonora</a>
-        <a href="#sonido/openings"   class="sonido-nav-link" data-view="openings">Aperturas</a>
-        <a href="#sonido/advertising" class="sonido-nav-link" data-view="advertising">Publicidad</a>
-        <a href="#sonido/services"   class="sonido-nav-link" data-view="services">Servicios</a>
-        <a href="#sonido/about"      class="sonido-nav-link" data-view="about">Nosotros</a>
-        <a href="#sonido/contact"    class="sonido-nav-link" data-view="contact">Contacto</a>
+        <a href="#sonido"            class="sonido-nav-link" data-view="home" data-i18n="exp.nav.home">Projects</a>
+        <a href="#sonido/film"       class="sonido-nav-link" data-view="film" data-i18n="snd.nav.film">Film / Series</a>
+        <a href="#sonido/animation"  class="sonido-nav-link" data-view="animation" data-i18n="snd.nav.animation">Animation</a>
+        <a href="#sonido/sonic"      class="sonido-nav-link" data-view="sonic" data-i18n="snd.nav.sonic">Sonic Brand</a>
+        <a href="#sonido/openings"   class="sonido-nav-link" data-view="openings" data-i18n="snd.nav.openings">Openings</a>
+        <a href="#sonido/advertising" class="sonido-nav-link" data-view="advertising" data-i18n="snd.nav.advertising">Advertising</a>
+        <a href="#sonido/services"   class="sonido-nav-link" data-view="services" data-i18n="snd.nav.services">Services</a>
+        <a href="#sonido/about"      class="sonido-nav-link" data-view="about" data-i18n="snd.nav.about">About</a>
+        <a href="#sonido/contact"    class="sonido-nav-link" data-view="contact" data-i18n="snd.nav.contact">Contact</a>
       </nav>
     </header>
 
@@ -2468,48 +2529,48 @@
 
       <div class="sonido-view" id="sv-home" hidden>
         <div class="sonido-view-header">
-          <p class="sonido-kicker">Portfolio</p>
-          <h2 class="sonido-view-title">Proyectos</h2>
+          <p class="sonido-kicker" data-i18n="snd.kicker.home">Portfolio</p>
+          <h2 class="sonido-view-title" data-i18n="snd.title.home">Projects</h2>
         </div>
         <div class="sonido-grid"></div>
       </div>
 
       <div class="sonido-view" id="sv-film" hidden>
         <div class="sonido-view-header">
-          <p class="sonido-kicker">Cine &amp; Series</p>
-          <h2 class="sonido-view-title">Cine / Series</h2>
+          <p class="sonido-kicker" data-i18n="snd.kicker.film">Film &amp; Series</p>
+          <h2 class="sonido-view-title" data-i18n="snd.title.film">Film / Series</h2>
         </div>
         <div class="sonido-grid"></div>
       </div>
 
       <div class="sonido-view" id="sv-animation" hidden>
         <div class="sonido-view-header">
-          <p class="sonido-kicker">Animación &amp; Juegos</p>
-          <h2 class="sonido-view-title">Animación / Juegos</h2>
+          <p class="sonido-kicker" data-i18n="snd.kicker.animation">Animation &amp; Gaming</p>
+          <h2 class="sonido-view-title" data-i18n="snd.title.animation">Animation / Gaming</h2>
         </div>
         <div class="sonido-grid"></div>
       </div>
 
       <div class="sonido-view" id="sv-sonic" hidden>
         <div class="sonido-view-header">
-          <p class="sonido-kicker">Identidad Sonora</p>
-          <h2 class="sonido-view-title">Identidad Sonora</h2>
+          <p class="sonido-kicker" data-i18n="snd.kicker.sonic">Sonic Brand</p>
+          <h2 class="sonido-view-title" data-i18n="snd.title.sonic">Sonic Brand</h2>
         </div>
         <div class="sonido-grid"></div>
       </div>
 
       <div class="sonido-view" id="sv-openings" hidden>
         <div class="sonido-view-header">
-          <p class="sonido-kicker">Aperturas</p>
-          <h2 class="sonido-view-title">Aperturas</h2>
+          <p class="sonido-kicker" data-i18n="snd.kicker.openings">Openings</p>
+          <h2 class="sonido-view-title" data-i18n="snd.title.openings">Openings</h2>
         </div>
         <div class="sonido-grid"></div>
       </div>
 
       <div class="sonido-view" id="sv-advertising" hidden>
         <div class="sonido-view-header">
-          <p class="sonido-kicker">Publicidad</p>
-          <h2 class="sonido-view-title">Publicidad</h2>
+          <p class="sonido-kicker" data-i18n="snd.kicker.advertising">Advertising</p>
+          <h2 class="sonido-view-title" data-i18n="snd.title.advertising">Advertising</h2>
         </div>
         <div class="sonido-grid"></div>
       </div>
@@ -2519,72 +2580,72 @@
 
           <!-- INTRO STATS -->
           <div class="sonido-view-header">
-            <p class="sonido-kicker">Hecho para broadcast. Pensado para cada pantalla.</p>
-            <h2 class="sonido-view-title">Servicios</h2>
+            <p class="sonido-kicker" data-i18n="snd.services.kicker">Made for broadcast. Built for every screen.</p>
+            <h2 class="sonido-view-title" data-i18n="snd.services.title">Services</h2>
           </div>
           <div class="sonido-stat-row" style="margin-bottom:36px">
-            <div class="sonido-stat"><strong>400+</strong><span>Proyectos entregados</span></div>
-            <div class="sonido-stat"><strong>20+</strong><span>Países</span></div>
-            <div class="sonido-stat"><strong>Dolby Atmos</strong><span>Mezcla certificada</span></div>
+            <div class="sonido-stat"><strong>400+</strong><span data-i18n="snd.stats.projects.label">Projects delivered</span></div>
+            <div class="sonido-stat"><strong>20+</strong><span data-i18n="snd.stats.countries.label">Countries</span></div>
+            <div class="sonido-stat"><strong>Dolby Atmos</strong><span data-i18n="snd.stats.atmos.label">Certified mix</span></div>
           </div>
 
           <!-- STUDIO PHOTO GALLERY — mosaic grid -->
           <div class="studio-gallery">
             <div class="studio-cell">
               <img src="/images/studio/studio-01-control-wide.jpg" alt="Segno Sound — Control Room" loading="lazy">
-              <span class="studio-caption">Sala de control · Dolby Atmos + 5.1 Genelec</span>
+              <span class="studio-caption" data-i18n="snd.studio.caption.control">Control room · Dolby Atmos + 5.1 Genelec</span>
             </div>
             <div class="studio-cell">
               <img src="/images/studio/studio-02-control-desk.jpg" alt="Segno Sound — Mixing Desk" loading="lazy">
-              <span class="studio-caption">Estación de mezcla · Mac Pro M4</span>
+              <span class="studio-caption" data-i18n="snd.studio.caption.desk">Mix station · Mac Pro M4</span>
             </div>
             <div class="studio-cell">
               <img src="/images/studio/studio-03-vocal-booth.jpg" alt="Segno Sound — Vocal Booth" loading="lazy">
-              <span class="studio-caption">Cabina de grabación · Neumann U87i</span>
+              <span class="studio-caption" data-i18n="snd.studio.caption.booth">Recording booth · Neumann U87i</span>
             </div>
             <div class="studio-cell">
               <img src="/images/studio/studio-04-live-room.jpg" alt="Segno Sound — Live Room" loading="lazy">
-              <span class="studio-caption">Sala live · Sistema surround 7.1</span>
+              <span class="studio-caption" data-i18n="snd.studio.caption.live">Live room · 7.1 surround system</span>
             </div>
             <div class="studio-cell">
               <img src="/images/studio/studio-05-lounge.jpg" alt="Segno Sound — Kitchenette" loading="lazy">
-              <span class="studio-caption">Kitchenette</span>
+              <span class="studio-caption" data-i18n="snd.studio.caption.lounge">Kitchenette</span>
             </div>
             <div class="studio-cell">
               <img src="/images/studio/studio-06-control-alt.jpg" alt="Segno Sound — Control Room Alt" loading="lazy">
-              <span class="studio-caption">Vista integrada · Control + Cabina</span>
+              <span class="studio-caption" data-i18n="snd.studio.caption.altview">Integrated view · Control + Booth</span>
             </div>
           </div>
 
           <!-- SERVICES BLOCKS -->
-          <div class="sonido-service-block" data-kicker="Música original">
-            <h3>Composición y Supervisión Musical</h3>
-            <p>Creamos identidades sonoras originales para series, campañas y marcas que necesitan música que no suene a biblioteca. Desde la composición hasta la supervisión musical, trabajamos integrados al brief creativo y a los tiempos de producción.</p>
+          <div class="sonido-service-block" data-kicker="Original Music" data-i18n-kicker="snd.svc.music.kicker">
+            <h3 data-i18n="snd.svc.music.title">Music Composition &amp; Supervision</h3>
+            <p data-i18n="snd.svc.music.body">We craft original sonic identities for series, campaigns and brands that need music that doesn't sound like a library. From composition to supervision, we work tight to the creative brief and the production timeline.</p>
           </div>
-          <div class="sonido-service-block" data-kicker="Diseño sonoro">
-            <h3>Diseño sonoro y Postproducción de Audio</h3>
-            <p>Diseño sonoro, edición de diálogos, efectos y mezcla para cine, series, publicidad y experiencias interactivas. Cada entrega cumple los estándares técnicos de las plataformas más exigentes — sin compromisos en el camino.</p>
+          <div class="sonido-service-block" data-kicker="Sound Design" data-i18n-kicker="snd.svc.design.kicker">
+            <h3 data-i18n="snd.svc.design.title">Sound Design &amp; Audio Post-Production</h3>
+            <p data-i18n="snd.svc.design.body">Sound design, dialog editing, FX and mix for film, series, advertising and interactive experiences. Every delivery meets the technical standards of the most demanding platforms — no compromises along the way.</p>
           </div>
-          <div class="sonido-service-block" data-kicker="Grabación">
-            <h3>Grabación de voces e instrumentos</h3>
-            <p>Cabina acondicionada acústicamente con Neumann U87i, Rode NT2-A y Shure SM7B. Sesiones de voces en off, doblaje, coros, instrumentos acústicos y field recording portátil con Zoom H4 Ambisonics y Tascam.</p>
+          <div class="sonido-service-block" data-kicker="Recording" data-i18n-kicker="snd.svc.recording.kicker">
+            <h3 data-i18n="snd.svc.recording.title">Voice &amp; Instrument Recording</h3>
+            <p data-i18n="snd.svc.recording.body">Acoustically treated booth with Neumann U87i, Rode NT2-A and Shure SM7B. Voiceover, dubbing, choir, acoustic instrument sessions and portable field recording with Zoom H4 Ambisonics and Tascam.</p>
           </div>
-          <div class="sonido-service-block" data-kicker="Voz y Doblaje">
-            <h3>Voiceover, Doblaje y Locución</h3>
-            <p>Red de actores de voz profesionales en inglés nativo y español latinoamericano, con dirección en sala, traducción y adaptación de guiones. Entrega lista para broadcast — sin idas y vueltas.</p>
+          <div class="sonido-service-block" data-kicker="Voice &amp; Dubbing" data-i18n-kicker="snd.svc.voice.kicker">
+            <h3 data-i18n="snd.svc.voice.title">Voiceover, Dubbing &amp; Voice Acting</h3>
+            <p data-i18n="snd.svc.voice.body">Network of professional voice actors in native English and Latin American Spanish, with in-booth direction, translation and script adaptation. Broadcast-ready delivery — no back-and-forth.</p>
           </div>
-          <div class="sonido-service-block" data-kicker="Mezcla · Mastering · Atmos">
-            <h3>Mezcla &amp; Mastering</h3>
-            <p>Sistema de monitoreo Dolby Atmos, 5.1 Genelec, 2.0 Event 20/20 BAS y Yamaha NS-10M. Entregamos en Stereo, Surround, Ambisonics y Dolby Atmos — el formato que tu plataforma exige, sin negociar la referencia.</p>
+          <div class="sonido-service-block" data-kicker="Mixing · Mastering · Atmos" data-i18n-kicker="snd.svc.mix.kicker">
+            <h3 data-i18n="snd.svc.mix.title">Mixing &amp; Mastering</h3>
+            <p data-i18n="snd.svc.mix.body">Monitoring system in Dolby Atmos, 5.1 Genelec, 2.0 Event 20/20 BAS and Yamaha NS-10M. We deliver in Stereo, Surround, Ambisonics and Dolby Atmos — the format your platform requires, without negotiating the reference.</p>
           </div>
-          <div class="sonido-service-block" data-kicker="Identidad sonora">
-            <h3>Identidad sonora</h3>
-            <p>Diseñamos el universo sonoro de tu marca: logo sonoro, sistema de audio para puntos de contacto, música para eventos corporativos y campañas. Clientes en Argentina, Uruguay y más de 20 países.</p>
+          <div class="sonido-service-block" data-kicker="Sonic Branding" data-i18n-kicker="snd.svc.sonic.kicker">
+            <h3 data-i18n="snd.svc.sonic.title">Sonic Identity</h3>
+            <p data-i18n="snd.svc.sonic.body">We design the sonic universe of your brand: sound logo, audio system for touchpoints, music for corporate events and campaigns. Clients across Argentina, Uruguay and 20+ countries.</p>
           </div>
 
           <!-- TECHNICAL RIDER -->
           <div class="rider-section">
-            <p class="sonido-kicker" style="margin:36px 0 16px">Rider técnico</p>
+            <p class="sonido-kicker" style="margin:36px 0 16px" data-i18n="snd.rider.title">Technical Rider</p>
             <div class="rider-grid">
 
               <div class="rider-block">
@@ -2712,21 +2773,21 @@
       <div class="sonido-view" id="sv-about" hidden>
         <div class="sonido-text-page">
           <div class="sonido-view-header">
-            <p class="sonido-kicker">Quiénes somos</p>
-            <h2 class="sonido-view-title">Nosotros</h2>
+            <p class="sonido-kicker" data-i18n="snd.about.kicker">Who we are</p>
+            <h2 class="sonido-view-title" data-i18n="snd.about.title">About</h2>
           </div>
-          <div class="sonido-service-block" data-kicker="Estudio">
-            <h3>Segno Sound</h3>
-            <p>Productora especializada en composición musical original, diseño sonoro, identidad sonora, edición de audio, doblaje y mezcla surround. Con más de 400 proyectos entregados para plataformas globales, aportamos precisión técnica y visión creativa a cada producción.</p>
+          <div class="sonido-service-block" data-kicker="Studio" data-i18n-kicker="snd.about.studio.kicker">
+            <h3 data-i18n="snd.about.studio.title">Segno Sound</h3>
+            <p data-i18n="snd.about.studio.body">Production company specializing in original music composition, sound design, sonic identity, audio editing, dubbing and surround mixing. With 400+ projects delivered for global platforms, we bring technical precision and creative vision to every production.</p>
           </div>
-          <div class="sonido-service-block" data-kicker="Industria">
-            <h3>Qué hacemos</h3>
-            <p>Musical productions, film, TV, advertising, sonic branding, video games, broadcasting and podcasts.</p>
+          <div class="sonido-service-block" data-kicker="Industry" data-i18n-kicker="snd.about.industry.kicker">
+            <h3 data-i18n="snd.about.industry.title">What we do</h3>
+            <p data-i18n="snd.about.industry.body">Music productions, film, TV, advertising, sonic identity, video games, broadcasting and podcasts.</p>
           </div>
           <div class="sonido-stat-row">
-            <div class="sonido-stat"><strong>400+</strong><span>Proyectos</span></div>
-            <div class="sonido-stat"><strong>10+</strong><span>Años</span></div>
-            <div class="sonido-stat"><strong>Global</strong><span>Alcance</span></div>
+            <div class="sonido-stat"><strong>400+</strong><span data-i18n="snd.about.stats.projects">Projects</span></div>
+            <div class="sonido-stat"><strong>10+</strong><span data-i18n="snd.about.stats.years">Years</span></div>
+            <div class="sonido-stat"><strong>Global</strong><span data-i18n="snd.about.stats.reach">Reach</span></div>
           </div>
           <div class="sonido-client-grid">
             <div class="sonido-client-card">
@@ -2820,20 +2881,20 @@
       <div class="sonido-view" id="sv-contact" hidden>
         <div class="sonido-text-page">
           <div class="sonido-view-header">
-            <p class="sonido-kicker">Ponete en contacto</p>
-            <h2 class="sonido-view-title">Contacto</h2>
+            <p class="sonido-kicker" data-i18n="snd.contact.kicker">Get in touch</p>
+            <h2 class="sonido-view-title" data-i18n="snd.contact.title">Contact</h2>
           </div>
           <div class="sonido-contact-strip">
             <div class="sonido-contact-item">
-              <p class="sonido-kicker" style="margin:0 0 10px">Correo</p>
+              <p class="sonido-kicker" style="margin:0 0 10px" data-i18n="snd.contact.email.label">Email</p>
               <a href="mailto:segnosound@gmail.com">segnosound@gmail.com</a>
             </div>
             <div class="sonido-contact-item">
-              <p class="sonido-kicker" style="margin:0 0 10px">Teléfono</p>
+              <p class="sonido-kicker" style="margin:0 0 10px" data-i18n="snd.contact.phone.label">Phone</p>
               <a href="tel:+5491141494885">+54 911 4149 4885</a>
             </div>
             <div class="sonido-contact-item">
-              <p class="sonido-kicker" style="margin:0 0 10px">Dirección</p>
+              <p class="sonido-kicker" style="margin:0 0 10px" data-i18n="snd.contact.address.label">Address</p>
               Tronador 2030<br>Buenos Aires, Argentina
             </div>
           </div>
@@ -3037,6 +3098,125 @@
       let activeScene = 0;
       let startedAt = performance.now();
       let toastTimer = 0;
+
+      // ════════════════════════════════════════════════════════════════
+      //   i18n ENGINE — bilingual EN/ES
+      //   Source of truth: window.I18N (translations.js)
+      //   Lang precedence: URL (/es) > localStorage > default 'en'
+      //   The selector preserves the current section/hash on change.
+      // ════════════════════════════════════════════════════════════════
+      const I18N_LS_KEY = 'SEGNOSTUDIO_LANG_V2';
+      const I18N = window.I18N || { en: {}, es: {} };
+
+      function detectInitialLang() {
+        const path = location.pathname.replace(/\/+$/, '');
+        if (path === '/es' || path.startsWith('/es/')) return 'es';
+        try {
+          const saved = localStorage.getItem(I18N_LS_KEY);
+          if (saved === 'en' || saved === 'es') return saved;
+        } catch {}
+        return 'en';
+      }
+      let currentLang = detectInitialLang();
+
+      function tr(key) {
+        return (I18N[currentLang] && I18N[currentLang][key])
+            || (I18N.en && I18N.en[key])
+            || key;
+      }
+
+      function applyLang(lang) {
+        if (lang !== 'en' && lang !== 'es') lang = 'en';
+        currentLang = lang;
+        try { localStorage.setItem(I18N_LS_KEY, lang); } catch {}
+
+        // <html lang>
+        document.documentElement.lang = lang;
+        document.body.dataset.lang = lang;
+
+        // visible text nodes
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.dataset.i18n;
+          const value = tr(key);
+          // allow inline markup like <br> or & entities by using innerHTML
+          // only when the translated value contains an HTML tag; otherwise
+          // textContent is safer and faster.
+          if (/[<&]/.test(value)) el.innerHTML = value;
+          else                    el.textContent = value;
+        });
+
+        // attribute translations (alt, title, aria-label, placeholder…)
+        document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+          el.setAttribute('aria-label', tr(el.dataset.i18nAriaLabel));
+        });
+        document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+          el.setAttribute('alt', tr(el.dataset.i18nAlt));
+        });
+        document.querySelectorAll('[data-i18n-title]').forEach(el => {
+          el.setAttribute('title', tr(el.dataset.i18nTitle));
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+          el.setAttribute('placeholder', tr(el.dataset.i18nPlaceholder));
+        });
+
+        // data-kicker (rendered via CSS ::before content) — looks up
+        // data-i18n-kicker key and assigns to data-kicker
+        document.querySelectorAll('[data-i18n-kicker]').forEach(el => {
+          el.dataset.kicker = tr(el.dataset.i18nKicker);
+        });
+
+        // page <title> + <meta name="description">
+        const newTitle = tr('meta.title');
+        if (newTitle && newTitle !== 'meta.title') document.title = newTitle;
+        const setMeta = (sel, val) => {
+          const m = document.querySelector(sel);
+          if (m && val) m.setAttribute('content', val);
+        };
+        setMeta('meta[name="description"]',  tr('meta.description'));
+        setMeta('meta[property="og:title"]',       tr('meta.og.title'));
+        setMeta('meta[property="og:description"]', tr('meta.og.desc'));
+        setMeta('meta[name="twitter:title"]',       tr('meta.og.title'));
+        setMeta('meta[name="twitter:description"]', tr('meta.og.desc'));
+        setMeta('meta[property="og:locale"]', lang === 'es' ? 'es_AR' : 'en_US');
+
+        // dynamic templated labels (rebuilt on demand)
+        const sl = document.getElementById('sceneLabel');
+        if (sl) sl.textContent = `${tr('topbar.scene')} ${activeScene + 1}`;
+        const vl = document.getElementById('voiceLabel');
+        if (vl) vl.textContent = `${(clicks||[]).length} ${tr('topbar.voices')}`;
+
+        // selector active state
+        document.querySelectorAll('.lang-btn').forEach(b => {
+          b.setAttribute('aria-pressed', b.dataset.lang === lang ? 'true' : 'false');
+        });
+
+        // expose for legacy code that reads window.__lang
+        window.__lang = lang;
+      }
+
+      function setLangAndUpdateUrl(lang) {
+        applyLang(lang);
+        // keep the user in the same section by preserving the hash
+        const hash = location.hash || '';
+        const search = location.search || '';
+        const want = (lang === 'es') ? '/es' : '/';
+        if (location.pathname !== want) {
+          history.replaceState(null, '', want + search + hash);
+        }
+      }
+
+      // selector wiring
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => setLangAndUpdateUrl(btn.dataset.lang));
+      });
+      // keyboard arrow nav between the two pills
+      document.querySelector('.lang-toggle')?.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          setLangAndUpdateUrl(currentLang === 'en' ? 'es' : 'en');
+          document.querySelector(`.lang-btn[data-lang="${currentLang}"]`)?.focus();
+        }
+      });
 
       // ── Adaptive polyphony — droplet count auto-scales to device FPS ──
       let autoPoly = true;                  // off once the slider is touched
@@ -3351,7 +3531,7 @@
         brand.style.fontSize = `${state.brandSize}px`;
         fitBrand();
         document.querySelector(".topbar").style.display = state.showHud ? "flex" : "none";
-        sceneLabel.textContent = `Escena ${activeScene + 1}`;
+        sceneLabel.textContent = `${tr("topbar.scene")} ${activeScene + 1}`;
 
         const pal = paletteForState();
         document.documentElement.style.setProperty("--hot", pal.hot || "#76f3ff");
@@ -3485,23 +3665,23 @@
         scenes[activeScene] = { ...state, randomPalette: state.randomPalette ? { ...state.randomPalette } : null };
         saveScenes();
         syncUi();
-        showToast(`Escena ${activeScene + 1} guardada`);
+        showToast(`${tr("topbar.scene")} ${activeScene + 1} ${currentLang==="en"?"saved":"guardada"}`);
       });
 
       document.getElementById("eraseScene").addEventListener("click", () => {
         scenes[activeScene] = null;
         saveScenes();
         syncUi();
-        showToast(`Escena ${activeScene + 1} borrada`);
+        showToast(`${tr("topbar.scene")} ${activeScene + 1} ${currentLang==="en"?"erased":"borrada"}`);
       });
 
       const loadScene = (index) => {
         activeScene = index;
         if (scenes[index]) {
           state = { ...defaults, ...scenes[index] };
-          showToast(`Escena ${index + 1} cargada`);
+          showToast(`${tr("topbar.scene")} ${index + 1} ${currentLang==="en"?"loaded":"cargada"}`);
         } else {
-          showToast(`Escena ${index + 1} vacía`);
+          showToast(`${tr("topbar.scene")} ${index + 1} ${currentLang==="en"?"empty":"vacía"}`);
         }
         syncUi();
       };
@@ -3974,7 +4154,7 @@
         gl.uniform3f(uniforms.accent, pal.accent[0], pal.accent[1], pal.accent[2]);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-        voiceLabel.textContent = `${clicks.length} voces`;
+        voiceLabel.textContent = `${clicks.length} ${tr("topbar.voices")}`;
         requestAnimationFrame(draw);
       };
 
@@ -4000,6 +4180,7 @@
       })();
 
       syncUi();
+      applyLang(currentLang); // hydrate UI text in the selected language
       resize();
       requestAnimationFrame(draw);
       requestAnimationFrame(fitBrand); // asegura ancho correcto tras primer layout
