@@ -303,6 +303,14 @@ window.I18N = {
     "video.type.latam_branding": "Latam Branding",
     "video.type.film": "Film",
     "video.type.gaming": "Gaming",
+
+    // ── Rider items (Spanish-only originals) ─────────────────
+    "rider.item.atmos_system": "Dolby Atmos system",
+    "rider.item.genelec": "5.1 Genelec system",
+    "rider.item.event_2020": "2.0 Event 20/20 BAS system",
+    "rider.item.martin": "Martin electroacoustic",
+    "rider.item.fridge": "Fridge",
+    "rider.item.toilet": "Toilet",
     // ── Page metadata ─────────────────────────────────────────
     "meta.title":       "SEGNO STUDIO — Interactive Installations, Immersive Experiences, Sound Design",
     "meta.description": "SEGNO STUDIO — interactive installations, immersive experiences, music and sound design, apps & web, and innovation workshops. 400+ projects for global platforms.",
@@ -589,6 +597,14 @@ window.I18N = {
     "video.type.latam_branding": "Branding Latam",
     "video.type.film": "Cine",
     "video.type.gaming": "Gaming",
+
+    // ── Rider items (Spanish-only originals) ─────────────────
+    "rider.item.atmos_system": "Sistema Dolby Atmos",
+    "rider.item.genelec": "Sistema 5.1 Genelec",
+    "rider.item.event_2020": "Sistema 2.0 Event 20/20 BAS",
+    "rider.item.martin": "Martin electroacústica",
+    "rider.item.fridge": "Heladera",
+    "rider.item.toilet": "Toilette",
     "meta.title":       "SEGNO STUDIO — Instalaciones Interactivas, Experiencias Inmersivas, Diseño Sonoro",
     "meta.description": "SEGNO STUDIO — instalaciones interactivas, experiencias inmersivas, música y diseño sonoro, apps & web, y talleres de innovación. Más de 400 proyectos para plataformas globales.",
     "meta.og.title":    "SEGNO STUDIO",
