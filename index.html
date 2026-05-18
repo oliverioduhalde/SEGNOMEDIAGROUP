@@ -1688,43 +1688,45 @@
       margin-left: auto;       /* pin right even when .identity is hidden */
       pointer-events: none;
     }
+    /* Minimal: just letters with a thin separator, active in bold. */
     .lang-toggle {
       display: inline-flex;
-      align-items: stretch;
-      padding: 2px;
-      border: 1px solid rgba(255,255,255,0.16);
-      border-radius: 999px;
-      background: rgba(8,10,12,0.55);
+      align-items: center;
       pointer-events: auto;
       font-family: var(--mono);
-      -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
     }
     .lang-btn {
       appearance: none;
       border: 0;
       background: transparent;
-      padding: 4px 12px;
+      padding: 2px 6px;
       font: inherit;
-      font-size: 10px;
+      font-size: 9px;
+      font-weight: 400;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: rgba(220,226,232,0.5);
       cursor: pointer;
-      border-radius: 999px;
-      transition: color 0.18s ease, background 0.18s ease;
+      transition: color 0.18s ease;
     }
     .lang-btn:hover { color: rgba(255,255,255,0.9); }
     .lang-btn:focus-visible {
       outline: 1px solid rgba(118,243,255,0.6);
       outline-offset: 2px;
+      border-radius: 2px;
     }
     .lang-btn[aria-pressed="true"] {
       color: rgba(255,255,255,0.96);
-      background: rgba(255,255,255,0.12);
+      font-weight: 700;
     }
-    @media (max-width: 480px) {
-      .lang-btn { padding: 4px 10px; font-size: 9px; letter-spacing: 0.12em; }
+    /* Thin vertical divider between the two pills */
+    .lang-btn + .lang-btn::before {
+      content: "|";
+      display: inline-block;
+      margin-right: 6px;
+      margin-left: -6px;
+      color: rgba(220,226,232,0.28);
+      font-weight: 400;
     }
   </style>
 </head>
