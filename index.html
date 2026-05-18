@@ -3205,9 +3205,32 @@
           return `rgb(${(r*255)|0},${(g*255)|0},${(b*255)|0})`;
         });
       };
-      // brand letters — last 2 (the "IO" of STDIO) get the most vivid
-      // version of their own hue so they stand out from the rest
+      // brand letters — each one a clearly distinct color along a wide
+      // hue arc anchored on the palette's fg→accent. Last 2 get a subtle
+      // vivid boost so they pop without screaming. Standalone (not derived
+      // from letterColorsN) so the wider spread doesn't affect menu links.
       const brandColorsN = (pal, n) => {
+        const [h1, s1] = rgb2hsl(pal.fg[0],     pal.fg[1],     pal.fg[2]);
+        const [h2]     = rgb2hsl(pal.accent[0], pal.accent[1], pal.accent[2]);
+        let dh = ((h2 - h1 + 1.5) % 1) - 0.5;
+        // enforce a minimum + maximum hue spread so letters are visibly
+        // different without becoming a rainbow
+        if (Math.abs(dh) < 0.20) dh = (dh >= 0 ? 1 : -1) * 0.20;
+        if (Math.abs(dh) > 0.40) dh = Math.sign(dh) * 0.40;
+        return Array.from({length: n}, (_, i) => {
+          const t   = i / Math.max(n - 1, 1);
+          const hue = (h1 + dh * t + 1) % 1;
+          // pronounced lightness modulation per letter
+          const lit = 0.50 + ((i * 11 + 5) % 13) * 0.028; // 0.50–0.84
+          const isIO = i >= n - 2;
+          const sat = isIO ? 0.72 : 0.58;
+          const finalLit = isIO ? 0.58 : lit;
+          const [r, g, b] = hsl2rgb(hue, sat, finalLit);
+          return `rgb(${(r*255)|0},${(g*255)|0},${(b*255)|0})`;
+        });
+      };
+      // (legacy second-pass helper — kept as no-op since brandColorsN is now self-contained)
+      const _brandColorsLegacyUnused = (pal, n) => {
         return letterColorsN(pal, n).map((c, i) => {
           if (i < n - 2) return c;
           const m = c.match(/\d+/g);
