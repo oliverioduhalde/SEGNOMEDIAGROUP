@@ -3415,22 +3415,29 @@
         const [h1]  = rgb2hsl(pal.fg[0],     pal.fg[1],     pal.fg[2]);
         const [h2]  = rgb2hsl(pal.accent[0], pal.accent[1], pal.accent[2]);
         let dh = ((h2 - h1 + 1.5) % 1) - 0.5;
-        // keep a minimum + maximum hue band so colours are in-family
-        if (Math.abs(dh) < 0.20) dh = (dh >= 0 ? 1 : -1) * 0.20;
-        if (Math.abs(dh) > 0.45) dh = Math.sign(dh) * 0.45;
-        // shared IO colour — accent end of the band, lifted to a high
-        // *perceived* luminance so IO always stands out above the rest
-        // regardless of hue (blue/violet read dim, so push lightness hard).
+        // NARROW hue band → letters stay clearly within the same colour
+        // family; just enough spread to tell them apart, never a rainbow.
+        if (Math.abs(dh) < 0.08) dh = (dh >= 0 ? 1 : -1) * 0.08;
+        if (Math.abs(dh) > 0.22) dh = Math.sign(dh) * 0.22;
+        // Contrast-aware lightness: on dark backgrounds the letters are light,
+        // on light backgrounds they are dark, so the brand always reads.
+        const bgLum   = pal.bg[0]*0.299 + pal.bg[1]*0.587 + pal.bg[2]*0.114;
+        const lightBg = bgLum > 0.55;
+        // shared IO colour — pushed to the lightness extreme that contrasts
+        // MOST with the background (brightest on dark, darkest on light) so
+        // IO always pops above the rest.
         const ioHue = (h1 + dh + 1) % 1;
-        const [ir, ig, ib] = hsl2rgb(ioHue, 0.62, 0.82);
+        const [ir, ig, ib] = hsl2rgb(ioHue, 0.66, lightBg ? 0.26 : 0.82);
         const ioColor = `rgb(${(ir*255)|0},${(ig*255)|0},${(ib*255)|0})`;
         // seed includes n so different-length runs (landing 10 vs back 11)
         // each get their own stable shuffle within the same cycle
         const rnd = _rng((state.brandSeed >>> 0) + n * 2654435761);
         return Array.from({length: n}, (_, i) => {
-          if (i >= n - 2) return ioColor;          // IO: same colour, brighter
+          if (i >= n - 2) return ioColor;          // IO: same colour
           const hue = (h1 + dh * rnd() + 1) % 1;   // random position in the band
-          const lit = 0.46 + rnd() * 0.16;         // 0.46–0.62, kept below IO
+          // mid-lightness band, flipped for light backgrounds and kept away
+          // from the IO extreme so IO stays the standout in both cases.
+          const lit = lightBg ? (0.34 + rnd()*0.14) : (0.50 + rnd()*0.16);
           const [r, g, b] = hsl2rgb(hue, 0.58, lit);
           return `rgb(${(r*255)|0},${(g*255)|0},${(b*255)|0})`;
         });
@@ -3445,7 +3452,7 @@
       const _clonePal  = p => ({ bg: [...p.bg], fg: [...p.fg], accent: [...p.accent], hot: p.hot });
       let _tweenRaf = null;
 
-      const tweenPalette = (newPal, duration = 15000) => {
+      const tweenPalette = (newPal, duration = 45000) => {
         if (_tweenRaf) cancelAnimationFrame(_tweenRaf);
 
         // Reshuffle the random letter order for this new palette. Set BEFORE
@@ -4214,7 +4221,7 @@
       requestAnimationFrame(draw);
       requestAnimationFrame(fitBrand); // asegura ancho correcto tras primer layout
 
-      // ── Auto-rotate paleta: ciclo 30s = 15s cross + 15s estable ──
+      // ── Auto-rotate paleta: ciclo 90s = 45s cross + 45s estable (3× más lento) ──
       // Nunca transiciones violentas: el tween de 15s es el único cambio visible
       let _autoRotateTimer = null;
       const resetAutoRotate = () => {
@@ -4222,7 +4229,7 @@
         _autoRotateTimer = setTimeout(() => {
           tweenPalette(randomPalette());
           resetAutoRotate();
-        }, 30000);
+        }, 90000);
       };
       resetAutoRotate();
 
