@@ -425,6 +425,25 @@
       text-transform: uppercase;
     }
 
+    /* ── Light-background contrast guard ──────────────────────────────
+       When the rotating palette lands on a light background, the default
+       light-grey text on cards/sections vanishes. Flip those to dark ink
+       so everything stays readable. Text sitting over video/media keeps
+       its own colours (.film-meta is intentionally excluded). */
+    body[data-bg="light"] .project-card { border-color: rgba(20,24,28,0.16); background: rgba(20,24,28,0.05); }
+    body[data-bg="light"] .project-card h3 { color: rgba(14,18,22,0.92); }
+    body[data-bg="light"] .project-card p  { color: rgba(20,26,32,0.74); }
+    body[data-bg="light"] .project-card span { color: rgba(20,26,32,0.58); }
+    body[data-bg="light"] .ws-desc,
+    body[data-bg="light"] .sonido-service-block p,
+    body[data-bg="light"] .service-block p,
+    body[data-bg="light"] .sonido-lead,
+    body[data-bg="light"] .sonido-section-intro { color: rgba(20,26,32,0.78); }
+    body[data-bg="light"] h2,
+    body[data-bg="light"] h3 { color: rgba(14,18,22,0.92); }
+    body[data-bg="light"] [data-kicker]::before,
+    body[data-bg="light"] .sonido-kicker { color: rgba(20,26,32,0.6); }
+
     .film-wall {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -3515,6 +3534,11 @@
           state.randomPalette.accent = _lerpRgb01(oldPal.accent, newPal.accent, t);
           state.randomPalette.hot    = t < 0.5 ? oldPal.hot : newPal.hot;
 
+          // keep text ink readable mid-tween as the bg crosses light/dark
+          const curBg = state.randomPalette.bg;
+          const curLum = curBg[0]*0.299 + curBg[1]*0.587 + curBg[2]*0.114;
+          document.body.dataset.bg = curLum > 0.55 ? "light" : "dark";
+
           cells.forEach((cell, i) => {
             const [or,og,ob] = oldCellRgb[i], [nr,ng,nb] = newCellRgb[i];
             const rc=_lerpC(or,nr,t), gc=_lerpC(og,ng,t), bc=_lerpC(ob,nb,t);
@@ -3577,6 +3601,9 @@
         document.documentElement.style.setProperty("--hot", pal.hot || "#76f3ff");
         const lum = pal.bg[0] * 0.299 + pal.bg[1] * 0.587 + pal.bg[2] * 0.114;
         brand.style.mixBlendMode = lum > 0.55 ? "multiply" : "screen";
+        // Flag light backgrounds so card/section text can flip to dark ink and
+        // stay readable (default text colours are tuned for dark backgrounds).
+        document.body.dataset.bg = lum > 0.55 ? "light" : "dark";
 
         // Avatar blend — sin opacity para que mix-blend-mode funcione al 100%
         // screen: negro = 100% transparente sobre fondo oscuro
