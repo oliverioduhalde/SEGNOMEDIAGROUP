@@ -1245,17 +1245,18 @@
     .ws-card h3 { font-size: 14px; margin: 0 0 7px; letter-spacing: 0.04em; }
     .ws-card p { font-size: 11px; color: var(--muted); margin: 0 0 12px; line-height: 1.5; }
     .ws-card-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.11em; text-transform: uppercase; color: var(--hot); }
-    /* Iconic glyph per workshop — minimal line icon, inherits text colour */
-    .ws-card-icon { display: block; width: 38px; height: 38px; margin: 2px 0 14px; }
-    .ws-card-icon svg { width: 100%; height: 100%; stroke: rgba(220,226,232,0.82); stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-    .ws-card:hover .ws-card-icon svg { stroke: var(--hot); }
-    body[data-bg="light"] .ws-card-icon svg { stroke: rgba(20,26,32,0.8); }
-    /* Minimal "in progress" marker for workshops still in development */
-    .ws-card-progress { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 8.5px; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(220,226,232,0.5); margin-top: 9px; }
-    .ws-card-progress::before { content: ""; width: 6px; height: 6px; border-radius: 50%; border: 1.4px solid currentColor; border-top-color: transparent; animation: ws-spin 1.1s linear infinite; }
-    body[data-bg="light"] .ws-card-progress { color: rgba(20,26,32,0.55); }
+    /* Still image per workshop — a selected frame/photo, 16:9 thumbnail */
+    .ws-card-still { display: block; width: 100%; aspect-ratio: 16 / 9; margin: 0 0 14px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.4); }
+    .ws-card-still img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.92) contrast(1.04); transition: transform 0.25s ease, filter 0.25s ease; }
+    .ws-card:hover .ws-card-still img { transform: scale(1.03); filter: saturate(1.05) contrast(1.06); }
+    /* Placeholder still for workshops still in development — same 16:9 box */
+    .ws-card-still--dev { display: grid; place-items: center; background: rgba(255,255,255,0.03); border: 1px dashed rgba(220,226,232,0.18); }
+    body[data-bg="light"] .ws-card-still--dev { background: rgba(20,24,28,0.04); border-color: rgba(20,26,32,0.2); }
+    .ws-card-still--dev .ws-dev-glyph { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(220,226,232,0.5); }
+    body[data-bg="light"] .ws-card-still--dev .ws-dev-glyph { color: rgba(20,26,32,0.55); }
+    .ws-card-still--dev .ws-dev-glyph::before { content: ""; width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid currentColor; border-top-color: transparent; animation: ws-spin 1.1s linear infinite; }
     @keyframes ws-spin { to { transform: rotate(360deg); } }
-    @media (prefers-reduced-motion: reduce) { .ws-card-progress::before { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .ws-card-still--dev .ws-dev-glyph::before { animation: none; } }
 
     .sonido-topbar {
       display: flex;
@@ -2134,30 +2135,28 @@
         <p class="ws-desc" data-i18n="wsh.home.intro">We design workshops and laboratories for teams that need to prototype crossings between experience, technology, image, sound and interaction.</p>
         <div class="ws-card-grid">
           <a href="#workshops/banda-de-robots" class="ws-card">
-            <span class="ws-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="6" y="9" width="12" height="9" rx="2"/><path d="M12 6V4M9 3.4h6"/><circle cx="9.5" cy="13" r="1.1"/><circle cx="14.5" cy="13" r="1.1"/><path d="M6 12.5H4M18 12.5h2"/></svg></span>
+            <span class="ws-card-still"><img loading="lazy" alt="Banda de Robots" src="https://static.wixstatic.com/media/fdedb3_55b70d9500cc4c48a516207fe9e31a64~mv2_d_5250_3143_s_4_2.jpg/v1/fill/w_400,h_225,al_c,q_80/file.jpg"></span>
             <h3>Banda de Robots</h3>
             <p data-i18n="wsh.cards.banda.desc">Educational innovation project combining engineering, electronics, lutherie, visual arts and music.</p>
             <span class="ws-card-tag" data-i18n="wsh.card.tag.lab">Workshop · Laboratory</span>
           </a>
           <a href="#workshops/micra" class="ws-card">
-            <span class="ws-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9.5 13.5 14 9l1.6 1.6-4.5 4.5z"/><path d="M14.4 8.1 16 6.5l1.5 1.5-1.6 1.6M7.5 19h9M9 19c-2.8-1-4-3.4-4-6"/><circle cx="9" cy="15.6" r="1"/></svg></span>
+            <span class="ws-card-still"><img loading="lazy" alt="MicRA · Micropraxiscopio" src="https://i.vimeocdn.com/video/1989933744-cab26900a8be2b50fb66c68ef98b7bb578c55672604cbd70529480c68b484c4f-d_400x225?r=crop"></span>
             <h3>MicRA · Micropraxiscopio</h3>
             <p data-i18n="wsh.cards.micra.desc">Collective creation laboratory with microscopy, bioinstallations and interaural sound.</p>
             <span class="ws-card-tag" data-i18n="wsh.card.tag.lab">Workshop · Laboratory</span>
           </a>
           <a href="#workshops/astrologio" class="ws-card">
-            <span class="ws-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><ellipse cx="12" cy="12" rx="9.5" ry="3.6" transform="rotate(-22 12 12)"/></svg></span>
+            <span class="ws-card-still"><img loading="lazy" alt="Astro.log.io" src="https://static.wixstatic.com/media/fdedb3_477fd380ddee4d63992200e9ec3d8580~mv2.jpg/v1/fill/w_400,h_225,al_c,q_80/file.jpg"></span>
             <h3>Astro.log.io</h3>
             <p data-i18n="wsh.cards.astro.desc">Content in development.</p>
             <span class="ws-card-tag" data-i18n="wsh.card.tag.workshop">Workshop</span>
-            <span class="ws-card-progress" data-i18n="wsh.card.inprogress">In progress</span>
           </a>
           <a href="#workshops/ciclomusic" class="ws-card">
-            <span class="ws-card-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 18a8 8 0 1 1 8-1.5"/><path d="M14 16.5v-6l4-1.2v6"/><circle cx="12.4" cy="16.6" r="1.6"/><circle cx="16.4" cy="15.4" r="1.6"/></svg></span>
+            <span class="ws-card-still ws-card-still--dev"><span class="ws-dev-glyph" data-i18n="wsh.card.inprogress">In progress</span></span>
             <h3>Ciclomusic</h3>
             <p data-i18n="wsh.cards.astro.desc">Content in development.</p>
             <span class="ws-card-tag" data-i18n="wsh.card.tag.workshop">Workshop</span>
-            <span class="ws-card-progress" data-i18n="wsh.card.inprogress">In progress</span>
           </a>
         </div>
       </div>
