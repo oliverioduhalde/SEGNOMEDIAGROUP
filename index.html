@@ -394,9 +394,10 @@
       align-content: space-between;
       gap: 18px;
       padding: 18px;
-      border: 1px solid rgba(220, 226, 232, 0.12);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.045);
+      /* No own box — it lives inside .project-row, which is the single
+         unified card. Border/background here would create a box-in-a-box. */
+      border: 0;
+      background: transparent;
     }
 
     .project-card h3 {
@@ -430,7 +431,7 @@
        light-grey text on cards/sections vanishes. Flip those to dark ink
        so everything stays readable. Text sitting over video/media keeps
        its own colours (.film-meta is intentionally excluded). */
-    body[data-bg="light"] .project-card { border-color: rgba(20,24,28,0.16); background: rgba(20,24,28,0.05); }
+    body[data-bg="light"] .project-row { border-color: rgba(20,24,28,0.16); background: rgba(20,24,28,0.05); }
     body[data-bg="light"] .project-card h3 { color: rgba(14,18,22,0.92); }
     body[data-bg="light"] .project-card p  { color: rgba(20,26,32,0.74); }
     body[data-bg="light"] .project-card span { color: rgba(20,26,32,0.58); }
@@ -1091,6 +1092,11 @@
     }
     .project-list--2col .film-meta span {
       font-size: 11px;
+    }
+    /* Film inside a project-row is part of the same unified card: drop its
+       outer margin so it sits flush, keeping only its rounded video frame. */
+    .project-row .film-card {
+      margin: 0;
     }
 
     @media (max-width: 720px) {
