@@ -85,6 +85,7 @@ window.I18N = {
     "wsh.kicker.home": "Creative laboratories",
     "wsh.card.tag.workshop": "Workshop",
     "wsh.card.tag.lab": "Workshop · Laboratory",
+    "wsh.card.inprogress": "In progress",
 
     // Banda de Robots detail
     "wsh.banda.kicker": "Workshop · Educational innovation",
@@ -385,6 +386,7 @@ window.I18N = {
     "wsh.kicker.home": "Laboratorios creativos",
     "wsh.card.tag.workshop": "Taller",
     "wsh.card.tag.lab": "Taller · Laboratorio",
+    "wsh.card.inprogress": "En progreso",
 
     "wsh.banda.kicker": "Taller · Innovación educativa",
     "wsh.banda.title": "Banda de Robots",
